@@ -3,10 +3,12 @@ package com.company.avlvisualizer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.company.avlvisualizer.ui.theme.AVLVisualizerTheme
 
@@ -17,7 +19,7 @@ class MainActivity : ComponentActivity() {
             AVLVisualizerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    ZoomableColumn(modifier = Modifier.fillMaxSize())
                 }
             }
         }
@@ -36,3 +38,4 @@ fun DefaultPreview() {
         Greeting("Android")
     }
 }
+
