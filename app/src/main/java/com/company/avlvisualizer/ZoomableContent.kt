@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
@@ -15,48 +16,18 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 
 @Composable
-fun ZoomableBox(
-    content: @Composable BoxScope.() -> Unit
+fun ZoomableListener(
+    pan: (Offset) -> Unit,
+    zoom: (Float) -> Unit
 ) {
-    var offsetX by remember {
-        mutableStateOf(1f)
-    }
-    var offsetY by remember {
-        mutableStateOf(1f)
-    }
-    var scale by remember {
-        mutableStateOf(1f)
-    }
-    var rotationState by remember {
-        mutableStateOf(1f)
-    }
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Cyan)
             .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, rotation ->
-                    offsetX += pan.x
-                    offsetY += pan.y
-                    scale *= zoom
-                    rotationState += rotation
+                detectTransformGestures { _, pan, zoom, _ ->
+                    pan(pan)
+                    zoom(zoom)
                 }
             }
-    ) {
-        Box(
-            modifier = Modifier
-                .graphicsLayer(
-                scaleX = maxOf(
-                    0.5f, minOf(3f, scale)
-                ),
-                scaleY = maxOf(
-                    0.5f, minOf(3f, scale)
-                ),
-                translationX = offsetX,
-                translationY = offsetY
-            )
-        ) {
-            content()
-        }
-    }
+    )
 }
