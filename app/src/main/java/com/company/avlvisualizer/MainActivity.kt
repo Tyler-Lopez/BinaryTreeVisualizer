@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
             AVLVisualizerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    ZoomableContent {
+                    ZoomableBox {
                         for (i in 0..20) {
                             Card(
                                 modifier = Modifier

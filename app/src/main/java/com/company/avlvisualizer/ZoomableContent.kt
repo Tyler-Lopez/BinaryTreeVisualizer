@@ -15,8 +15,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 
 @Composable
-fun ZoomableContent(
-    content: @Composable ColumnScope.() -> Unit
+fun ZoomableBox(
+    content: @Composable BoxScope.() -> Unit
 ) {
     var offsetX by remember {
         mutableStateOf(1f)
@@ -43,8 +43,9 @@ fun ZoomableContent(
                 }
             }
     ) {
-        Column(
-            modifier = Modifier.graphicsLayer(
+        Box(
+            modifier = Modifier
+                .graphicsLayer(
                 scaleX = maxOf(
                     0.5f, minOf(3f, scale)
                 ),
