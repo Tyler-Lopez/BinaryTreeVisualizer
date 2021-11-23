@@ -30,6 +30,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AVLVisualizerTheme {
+                val root = BSTNode(5)
+                val leftChild = BSTNode(10)
+                val leftleftChild = BSTNode(20)
+                val rightChild = BSTNode(15)
+                root.leftChild = leftChild
+                root.rightChild = rightChild
+                leftChild.leftChild = leftleftChild
+
+                val toPrint = StringBuilder()
+                root.forEachLevelOrder { toPrint.append(it) }
+                Text(toPrint.toString())
+                Text(root.toString())
+
+
+                /*
                 // A surface container using the 'background' color from the theme
                     var offsetX by remember {
                         mutableStateOf(1f)
@@ -64,6 +79,10 @@ class MainActivity : ComponentActivity() {
                     }
                 )
                 }
+        }
+        */
+
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.company.avlvisualizer
 
+import java.util.*
+
 
 typealias Visitor = (Int) -> Unit
 
@@ -17,6 +19,28 @@ class BSTNode(val value: Int) {
         } ?: -1
     }
 
+
+    // Breadth-first traversal
+    fun forEachLevelOrder(visit: Visitor) {
+        // First, iterate back the root we are on
+        visit(value)
+        // Then, initialize a queue and populate with all children
+        val queue = ArrayDeque<BSTNode>()
+        queue.addLast(this.leftChild)
+        queue.addLast(this.rightChild)
+
+        // Create a temporary node used to process the queue
+        // Dequeue first child
+        var node = queue.removeFirst()
+        while (node != null) {
+            // Iterate back the value
+            visit(node.value)
+            queue.addLast(node.leftChild)
+            queue.addLast(node.rightChild)
+            // Move on to either next child or next level w/e first
+            node = queue.removeFirst()
+        }
+    }
 
     fun traverseInOrder(visit: Visitor) {
         leftChild?.traverseInOrder(visit) // If left child is NOT null traverse to it
