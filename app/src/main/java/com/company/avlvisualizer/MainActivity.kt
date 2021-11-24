@@ -30,45 +30,33 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AVLVisualizerTheme {
-                val root = BSTNode(5)
-                val leftChild = BSTNode(10)
-                val leftleftChild = BSTNode(20)
-                val rightChild = BSTNode(15)
-                root.leftChild = leftChild
-                root.rightChild = rightChild
-                leftChild.leftChild = leftleftChild
-
-                val toPrint = StringBuilder()
-                root.forEachLevelOrder { toPrint.append(it) }
-                Text(toPrint.toString())
-                Text(root.toString())
 
 
-                /*
+
                 // A surface container using the 'background' color from the theme
-                    var offsetX by remember {
-                        mutableStateOf(1f)
-                    }
-                    var offsetY by remember {
-                        mutableStateOf(1f)
-                    }
-                    var scale by remember {
-                        mutableStateOf(1f)
-                    }
+                var offsetX by remember {
+                    mutableStateOf(1f)
+                }
+                var offsetY by remember {
+                    mutableStateOf(1f)
+                }
+                var scale by remember {
+                    mutableStateOf(1f)
+                }
 
 
-                    Box(
-                        modifier = Modifier
-                            .graphicsLayer(
-                                scaleX = scale,
-                                scaleY = scale,
-                                translationX = offsetX,
-                                translationY = offsetY
-                            )
-                            .background(Color.Magenta)
-                    ) {
-                        Tree()
-                    }
+                Box(
+                    modifier = Modifier
+                        .graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationX = offsetX,
+                            translationY = offsetY
+                        )
+                        .background(Color.Magenta)
+                ) {
+                    Tree()
+                }
                 ZoomableListener(
                     pan = { pan ->
                         offsetX += pan.x
@@ -78,12 +66,9 @@ class MainActivity : ComponentActivity() {
                         scale *= zoom
                     }
                 )
-                }
-        }
-        */
-
             }
         }
+
     }
 }
 

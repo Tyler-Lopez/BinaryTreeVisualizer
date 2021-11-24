@@ -18,17 +18,35 @@ import kotlin.math.pow
 fun Tree(
 
 ) {
-    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        for (i in 0..5) {
-            var nodeCount = 2.0.pow(i).toInt()
-            Row(modifier = Modifier.requiredWidth(2000.dp).background(Color.Magenta), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                for (j in 1..nodeCount) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val root = BSTNode(5)
+        val leftChild = BSTNode(10)
+        val leftleftChild = BSTNode(20)
+        val rightChild = BSTNode(15)
+        root.leftChild = leftChild
+        root.rightChild = rightChild
+        leftChild.leftChild = leftleftChild
+
+
+        val levelTraverse = mutableListOf<Int>()
+        root.forEachLevelOrder { levelTraverse.add(it) }
+
+        for (i in 0..levelTraverse.count()) {
+            Row(
+                modifier = Modifier
+                    .requiredWidth(2000.dp)
+                    .background(Color.Magenta),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                     Node(
-                        element = 1,
+                        element = levelTraverse[i],
                         height = 1,
                         balanceFactor = 1,
                     )
-                }
             }
         }
     }

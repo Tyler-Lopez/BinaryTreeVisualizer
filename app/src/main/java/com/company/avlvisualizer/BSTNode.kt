@@ -35,12 +35,19 @@ class BSTNode(val value: Int) {
         while (node != null) {
             // Iterate back the value
             visit(node.value)
-            queue.addLast(node.leftChild)
-            queue.addLast(node.rightChild)
+            if (node.leftChild != null) {
+                queue.addLast(node.leftChild)
+            } else visit(-1)
+            if (node.rightChild != null) {
+                queue.addLast(node.rightChild)
+            } else visit(-1)
             // Move on to either next child or next level w/e first
             node = queue.removeFirst()
         }
+
     }
+
+    // Breadth-first list
 
     fun traverseInOrder(visit: Visitor) {
         leftChild?.traverseInOrder(visit) // If left child is NOT null traverse to it
