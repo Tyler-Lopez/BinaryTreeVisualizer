@@ -42,7 +42,9 @@ class BSTNode(val value: Int) {
                 queue.addLast(node.rightChild)
             } else visit(-1)
             // Move on to either next child or next level w/e first
-            node = queue.removeFirst()
+            if (queue.isNotEmpty())
+                node = queue.removeFirst()
+            else break
         }
 
     }

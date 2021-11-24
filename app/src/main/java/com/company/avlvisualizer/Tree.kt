@@ -34,14 +34,16 @@ fun Tree(
         val levelTraverse = mutableListOf<Int>()
         root.forEachLevelOrder { levelTraverse.add(it) }
 
-        for (i in 0..levelTraverse.count()) {
-            Row(
+
+            Column(
                 modifier = Modifier
                     .requiredWidth(2000.dp)
+                    .requiredHeight(2000.dp)
                     .background(Color.Magenta),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                for (i in 0..levelTraverse.lastIndex) {
                     Node(
                         element = levelTraverse[i],
                         height = 1,
