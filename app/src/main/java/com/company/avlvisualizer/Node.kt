@@ -17,8 +17,6 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Node(
     element: Int,
-    height: Int,
-    balanceFactor: Int,
 ) {
     Box(
         modifier = Modifier
@@ -54,7 +52,7 @@ fun Node(
                 backgroundColor = Color.LightGray
             ) {
                 Text(
-                    text = balanceFactor.toString(),
+                    text = 1.toString(),
                     textAlign = TextAlign.Center
                 )
             }
@@ -65,7 +63,7 @@ fun Node(
                 backgroundColor = Color.LightGray
             ) {
                 Text(
-                    text = balanceFactor.toString(),
+                    text = 1.toString(),
                     textAlign = TextAlign.Center
                 )
             }
