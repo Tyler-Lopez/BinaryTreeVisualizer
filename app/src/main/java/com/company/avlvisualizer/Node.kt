@@ -23,7 +23,6 @@ fun Node(
     Box(
         modifier = Modifier
             .size(100.dp)
-
     ) {
         Card(
             modifier = Modifier
