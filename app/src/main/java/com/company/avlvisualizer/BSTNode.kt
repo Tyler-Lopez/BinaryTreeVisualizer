@@ -17,8 +17,8 @@ class BSTNode(
     fun height(node: BSTNode? = this): Int {
         return node?.let {
             1 + maxOf(
-                    height(node.leftChild),
-                    height(node.rightChild)
+                height(node.leftChild),
+                height(node.rightChild)
             )
         } ?: -1
     }
@@ -29,7 +29,7 @@ class BSTNode(
         // First, iterate back the root we are on
         visit(this)
         // Then, initialize a queue and populate with all children
-        val queue = ArrayDeque<BSTNode?>()
+        val queue = LinkedList<BSTNode?>()
         queue.addLast(this.leftChild)
         queue.addLast(this.rightChild)
 
@@ -40,17 +40,16 @@ class BSTNode(
             val node = queue.removeFirst()
             // Iterate back the value
             visit(node)
-            if (node != null) {
-                queue.addLast(node.leftChild)
-                queue.addLast(node.rightChild)
+            if (node == null) {
+                continue
             }
-            // Move on to either next child or next level w/e first
-            else break
+            queue.addLast(node.leftChild)
+            queue.addLast(node.rightChild)
         }
-
+        // Move on to either next child or next level w/e first
     }
 
-    // Breadth-first list
+// Breadth-first list
 
     fun traverseInOrder(visit: Visitor) {
         leftChild?.traverseInOrder(visit) // If left child is NOT null traverse to it
@@ -60,16 +59,23 @@ class BSTNode(
 
     override fun toString() = diagram(this)
 
-    private fun diagram(node: BSTNode?,
-                        top: String = "",
-                        root: String = "",
-                        bottom: String = ""): String {
+    private fun diagram(
+        node: BSTNode?,
+        top: String = "",
+        root: String = "",
+        bottom: String = ""
+    ): String {
         return node?.let {
             if (node.leftChild == null && node.rightChild == null) {
                 "$root${node.value}\n"
             } else {
                 diagram(node.rightChild, "$top ", "$top┌──", "$top│ ") +
-                        root + "${node.value}\n" + diagram(node.leftChild, "$bottom│ ", "$bottom└──", "$bottom ")
+                        root + "${node.value}\n" + diagram(
+                    node.leftChild,
+                    "$bottom│ ",
+                    "$bottom└──",
+                    "$bottom "
+                )
             }
         } ?: "${root}null\n"
     }

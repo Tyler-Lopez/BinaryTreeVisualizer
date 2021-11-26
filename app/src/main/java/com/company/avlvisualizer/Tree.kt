@@ -29,18 +29,21 @@ fun Tree(
         val nodes = mutableListOf<BSTNode?>()
         root.forEachLevelOrder { nodes.add(it) }
 
-        Column(
+        Box(
             modifier = Modifier
                 .requiredWidth(2000.dp)
                 .requiredHeight(2000.dp)
                 .background(Color.Magenta),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.TopCenter
         ) {
+            var i = 0
             for (node in nodes) {
-                Text("Test ${node?.value ?: -1}")
+                Text(
+                    text = "${node?.value ?: "null"}",
+                    modifier = Modifier.offset(y = (i * 100).dp)
+                    )
+                i++
             }
-
         }
     }
 }
