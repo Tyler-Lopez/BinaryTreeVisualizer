@@ -18,12 +18,12 @@ fun Tree(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val root = BSTNode(5, 0)
-        val leftChild = BSTNode(10, 1)
-        val leftleftChild = BSTNode(20, 2)
-        val rightChild = BSTNode(15, 1)
-        root.leftChild = leftChild
-        root.rightChild = rightChild
-        leftChild.leftChild = leftleftChild
+        root.insert(1)
+        root.insert(6)
+        root.insert(20)
+        root.insert(69)
+        root.insert(50)
+        root.insert(6)
 
 
         val nodes = mutableListOf<BSTNode?>()
@@ -37,12 +37,22 @@ fun Tree(
             contentAlignment = Alignment.TopCenter
         ) {
             var i = 0
+            var depth = 0
+            var xShift = 0
             for (node in nodes) {
                 Text(
                     text = "${node?.value ?: "null"}",
-                    modifier = Modifier.offset(y = (i * 100).dp)
+                    modifier = Modifier.offset(x = xShift.dp,y = (depth * 100).dp)
                     )
                 i++
+                if (
+                    i == 1 || i == 3 || i == 7
+                ) {
+                    depth++
+                    xShift = 0
+                } else {
+                    xShift += 100
+                }
             }
         }
     }

@@ -8,21 +8,21 @@ typealias Visitor = (BSTNode?) -> Unit
 
 class BSTNode(
     val value: Int,
-    var depth: Int = 1
+    var index: Int
 ) {
 
     var leftChild: BSTNode? = null
     var rightChild: BSTNode? = null
 
-    fun height(node: BSTNode? = this): Int {
-        return node?.let {
-            1 + maxOf(
-                height(node.leftChild),
-                height(node.rightChild)
-            )
-        } ?: -1
+    fun insert(element: Int): BSTNode {
+        this ?: return BSTNode(element, 60)
+        if (element < value) {
+            leftChild = leftChild?.insert(element) ?: BSTNode(value, 69)
+        } else {
+            rightChild = rightChild?.insert(element) ?: BSTNode(value, 69)
+        }
+        return this
     }
-
 
     // Breadth-first traversal
     fun forEachLevelOrder(visit: Visitor) {
