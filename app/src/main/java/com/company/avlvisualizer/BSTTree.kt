@@ -1,10 +1,13 @@
 package com.company.avlvisualizer
 
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.dp
 import java.util.*
 
 class BSTTree {
 
     var root: BSTNode? = null
+    var height = 0
     override fun toString() = root?.toString() ?: "Empty"
 
     fun insert(value: Int) {
@@ -26,6 +29,13 @@ class BSTTree {
     }
 
     fun traversePreOrder(offsetVisit: OffsetVisitor) {
+        traversePreOrder(offsetVisit, Offset(0f, 0f), root, 0)
+    }
+
+    private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BSTNode?, depth: Int) {
+        offsetVisit(offset, node)
+        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 100f, y = offset.y + 100f), node?.leftChild, depth + 1)
+        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 100f, y = offset.y + 100f), node?.rightChild, depth + 1)
 
     }
     // Breadth-first traversal
