@@ -7,7 +7,6 @@ import java.util.*
 class BSTTree {
 
     var root: BSTNode? = null
-    var height = 0
     override fun toString() = root?.toString() ?: "Empty"
 
     fun insert(value: Int) {
