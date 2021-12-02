@@ -4,9 +4,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import java.util.*
 
-class BSTTree {
+class BinaryTree {
 
-    var root: BSTNode? = null
+    var root: BinaryNode? = null
     override fun toString() = root?.toString() ?: "Empty"
 
     fun insert(value: Int) {
@@ -14,11 +14,11 @@ class BSTTree {
     }
 
     private fun insert(
-        node: BSTNode?,
+        node: BinaryNode?,
         value: Int,
         index: Int
-    ): BSTNode {
-        node ?: return BSTNode(value, index)
+    ): BinaryNode {
+        node ?: return BinaryNode(value, index)
         if (value < node.value) {
             node.leftChild = insert(node.leftChild, value, index)
         } else {
@@ -31,7 +31,7 @@ class BSTTree {
         traversePreOrder(offsetVisit, Offset(0f, 0f), root, 0)
     }
 
-    private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BSTNode?, depth: Int) {
+    private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int) {
         offsetVisit(offset, node)
         if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 100f, y = offset.y + 100f), node?.leftChild, depth + 1)
         if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 100f, y = offset.y + 100f), node?.rightChild, depth + 1)
@@ -42,7 +42,7 @@ class BSTTree {
         // First, iterate back the root we are on
         visit(root)
         // Then, initialize a queue and populate with all children
-        val queue = LinkedList<BSTNode?>()
+        val queue = LinkedList<BinaryNode?>()
         queue.addLast(root?.leftChild)
         queue.addLast(root?.rightChild)
 

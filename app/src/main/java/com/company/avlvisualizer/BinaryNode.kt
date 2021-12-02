@@ -1,25 +1,23 @@
 package com.company.avlvisualizer
 
 import androidx.compose.ui.geometry.Offset
-import java.util.*
 
+typealias Visitor = (BinaryNode?) -> Unit
+typealias OffsetVisitor = (Offset, BinaryNode?) -> Unit
 
-typealias Visitor = (BSTNode?) -> Unit
-typealias OffsetVisitor = (Offset, BSTNode?) -> Unit
-
-class BSTNode(
+data class BinaryNode(
     val value: Int,
-    var index: Int
+    var height: Int
 ) {
 
-    var leftChild: BSTNode? = null
-    var rightChild: BSTNode? = null
+    var leftChild: BinaryNode? = null
+    var rightChild: BinaryNode? = null
 
 
     override fun toString() = diagram(this)
 
     private fun diagram(
-        node: BSTNode?,
+        node: BinaryNode?,
         top: String = "",
         root: String = "",
         bottom: String = ""

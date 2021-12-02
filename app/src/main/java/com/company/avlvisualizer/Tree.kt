@@ -18,7 +18,7 @@ fun Tree(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val tree = BSTTree()
+        val tree = BinaryTree()
         tree.insert(69)
         tree.insert(30)
         tree.insert(100)
@@ -28,7 +28,7 @@ fun Tree(
         tree.insert(420)
 
 
-        val nodes = mutableListOf<BSTNode?>()
+        val nodes = mutableListOf<BinaryNode?>()
         val offsets = mutableListOf<Offset>()
         tree.traversePreOrder { offset, bstNode ->
             offsets.add(offset)
