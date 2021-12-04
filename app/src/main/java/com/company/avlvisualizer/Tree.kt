@@ -18,7 +18,7 @@ fun Tree(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        
+
         val tree = BinaryTree()
         tree.insert(69)
         tree.insert(30)
