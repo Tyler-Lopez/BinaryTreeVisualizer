@@ -29,47 +29,49 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AVLVisualizerTheme {
+                AVLVisualizerTheme {
 
 
-
-                // A surface container using the 'background' color from the theme
-                var offsetX by remember {
-                    mutableStateOf(1f)
-                }
-                var offsetY by remember {
-                    mutableStateOf(1f)
-                }
-                var scale by remember {
-                    mutableStateOf(1f)
-                }
-
-
-                Box(
-                    modifier = Modifier
-                        .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale,
-                            translationX = offsetX,
-                            translationY = offsetY
-                        )
-                        .background(Color.Magenta)
-                ) {
-                    Tree()
-                }
-                ZoomableListener(
-                    pan = { pan ->
-                        offsetX += pan.x
-                        offsetY += pan.y
-                    },
-                    zoom = { zoom ->
-                        scale *= zoom
+                    // A surface container using the 'background' color from the theme
+                    var offsetX by remember {
+                        mutableStateOf(1f)
                     }
-                )
+                    var offsetY by remember {
+                        mutableStateOf(1f)
+                    }
+                    var scale by remember {
+                        mutableStateOf(1f)
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Red)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .graphicsLayer(
+                                scaleX = scale,
+                                scaleY = scale,
+                                translationX = offsetX,
+                                translationY = offsetY
+                            )
+                            .background(Color.Magenta)
+                    ) {
+                        Tree()
+                    }
+                    ZoomableListener(
+                        pan = { pan ->
+                            offsetX += pan.x
+                            offsetY += pan.y
+                        },
+                        zoom = { zoom ->
+                            scale *= zoom
+                        }
+                    )
+                }
             }
         }
-
-    }
 }
 
 @Composable

@@ -15,12 +15,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Node(
+fun ComposableNode(
     element: Int,
+    offset: Offset
 ) {
     Box(
         modifier = Modifier
             .size(100.dp)
+            .offset(
+                x = offset.x.dp,
+                y = offset.y.dp
+            )
     ) {
         Card(
             modifier = Modifier

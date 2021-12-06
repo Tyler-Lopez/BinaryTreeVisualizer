@@ -4,6 +4,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import java.util.*
+import kotlin.math.pow
 
 class BinaryTree {
 
@@ -34,8 +35,8 @@ class BinaryTree {
 
     private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int) {
         offsetVisit(offset, node)
-        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - (100f * (node.height + 1)), y = offset.y + 100f), node?.leftChild, depth + 1)
-        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + (100f * (node.height + 1)), y = offset.y + 100f), node?.rightChild, depth + 1)
+        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 90f - ((node.height).toDouble().pow(5).toFloat()), y = offset.y + 300f), node?.leftChild, depth + 1)
+        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 90f + ((node.height).toDouble().pow(5).toFloat()), y = offset.y + 300f), node?.rightChild, depth + 1)
 
     }
     // Breadth-first traversal

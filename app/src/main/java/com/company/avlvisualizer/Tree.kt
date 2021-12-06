@@ -6,7 +6,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
@@ -20,16 +22,10 @@ fun Tree(
     ) {
 
         val tree = BinaryTree()
-        tree.insert(69)
-        tree.insert(30)
-        tree.insert(100)
-        tree.insert(150)
-        tree.insert(2)
-        tree.insert(31)
-        tree.insert(420)
-        tree.insert(1)
-        tree.insert(75)
-
+        tree.insert(50)
+        for (i in 0..25) {
+            tree.insert((Math.random() * 100).toInt())
+        }
 
         val nodes = mutableListOf<BinaryNode?>()
         val offsets = mutableListOf<Offset>()
@@ -45,13 +41,15 @@ fun Tree(
                 .background(Color.Magenta),
             contentAlignment = Alignment.TopCenter
         ) {
+
             for (i in 0..nodes.lastIndex) {
                 val currNode = nodes[i]
                 val currOffset = offsets[i]
-                Text(
-                    text = currNode?.value.toString() + " ${currNode?.height}",
-                    modifier = Modifier.offset(x = currOffset.x.dp, y = currOffset.y.dp)
+                ComposableNode(
+                    element = currNode?.value ?: -1,
+                    offset = Offset(x = currOffset.x, y = currOffset.y)
                 )
+
             }
         }
     }
