@@ -3,7 +3,7 @@ package com.company.avlvisualizer
 import androidx.compose.ui.geometry.Offset
 
 typealias Visitor = (BinaryNode?) -> Unit
-typealias OffsetVisitor = (Offset, BinaryNode?) -> Unit
+typealias OffsetVisitor = (Offset, BinaryNode?, Offset?) -> Unit
 
 data class BinaryNode(
     val value: Int

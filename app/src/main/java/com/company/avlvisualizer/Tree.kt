@@ -29,7 +29,9 @@ fun Tree(
 
         val nodes = mutableListOf<BinaryNode?>()
         val offsets = mutableListOf<Offset>()
-        tree.traversePreOrder { offset, bstNode ->
+        val parentOffsets = mutableListOf<Offset>()
+        tree.traversePreOrder { offset, bstNode, parentOffset ->
+            parentOffsets.add(parentOffset ?: Offset(0f, 0f))
             offsets.add(offset)
             nodes.add(bstNode)
         }
@@ -38,7 +40,14 @@ fun Tree(
             modifier = Modifier
                 .requiredWidth(2000.dp)
                 .requiredHeight(2000.dp)
-                .background(Color.Magenta),
+                .background(Color.Magenta)
+                .drawBehind {
+                    for (i in 0..offsets.lastIndex) {
+                        drawLine(color = Color.Black, strokeWidth = 40f, start = parentOffsets[i], end = offsets[i])
+                        drawCircle(color = Color.Blue, center = offsets[i], radius = 100f)
+
+                    }
+                },
             contentAlignment = Alignment.TopCenter
         ) {
 

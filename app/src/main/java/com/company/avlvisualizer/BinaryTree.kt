@@ -33,10 +33,10 @@ class BinaryTree {
         traversePreOrder(offsetVisit, Offset(0f, 0f), root, 0)
     }
 
-    private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int) {
-        offsetVisit(offset, node)
-        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 90f - ((node.height).toDouble().pow(5).toFloat()), y = offset.y + 300f), node?.leftChild, depth + 1)
-        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 90f + ((node.height).toDouble().pow(5).toFloat()), y = offset.y + 300f), node?.rightChild, depth + 1)
+    private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int, parentOffset: Offset? = null) {
+        offsetVisit(offset, node, parentOffset)
+        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 90f - ((node.height).toDouble().pow(4).toFloat()), y = offset.y + 300f), node?.leftChild, depth + 1, offset)
+        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 90f + ((node.height).toDouble().pow(4).toFloat()), y = offset.y + 300f), node?.rightChild, depth + 1, offset)
 
     }
     // Breadth-first traversal
