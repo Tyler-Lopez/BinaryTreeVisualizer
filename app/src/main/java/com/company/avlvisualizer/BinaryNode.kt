@@ -6,10 +6,9 @@ typealias Visitor = (BinaryNode?) -> Unit
 typealias OffsetVisitor = (Offset, BinaryNode?) -> Unit
 
 data class BinaryNode(
-    val value: Int,
-    var height: Int
+    val value: Int
 ) {
-
+    var height: Int = 0
     var leftChild: BinaryNode? = null
     var rightChild: BinaryNode? = null
 

@@ -27,6 +27,8 @@ fun Tree(
         tree.insert(2)
         tree.insert(31)
         tree.insert(420)
+        tree.insert(1)
+        tree.insert(75)
 
 
         val nodes = mutableListOf<BinaryNode?>()
@@ -47,7 +49,7 @@ fun Tree(
                 val currNode = nodes[i]
                 val currOffset = offsets[i]
                 Text(
-                    text = currNode?.value.toString(),
+                    text = currNode?.value.toString() + " ${currNode?.height}",
                     modifier = Modifier.offset(x = currOffset.x.dp, y = currOffset.y.dp)
                 )
             }

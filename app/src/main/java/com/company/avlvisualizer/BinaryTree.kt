@@ -2,6 +2,7 @@ package com.company.avlvisualizer
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import java.util.*
 
 class BinaryTree {
@@ -10,20 +11,20 @@ class BinaryTree {
     override fun toString() = root?.toString() ?: "Empty"
 
     fun insert(value: Int) {
-        root = insert(root, value, 0)
+        root = insert(root, value)
     }
 
     private fun insert(
         node: BinaryNode?,
-        value: Int,
-        index: Int
+        value: Int
     ): BinaryNode {
-        node ?: return BinaryNode(value, index)
+        node ?: return BinaryNode(value)
         if (value < node.value) {
-            node.leftChild = insert(node.leftChild, value, index)
+            node.leftChild = insert(node.leftChild, value)
         } else {
-            node.rightChild = insert(node.rightChild, value, index)
+            node.rightChild = insert(node.rightChild, value)
         }
+        node.height = 1 + maxOf(node.leftChild?.height ?: 0, node.rightChild?.height ?: 0)
         return node
     }
 
@@ -33,8 +34,8 @@ class BinaryTree {
 
     private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int) {
         offsetVisit(offset, node)
-        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 100f, y = offset.y + 100f), node?.leftChild, depth + 1)
-        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 100f, y = offset.y + 100f), node?.rightChild, depth + 1)
+        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - (100f * (node.height + 1)), y = offset.y + 100f), node?.leftChild, depth + 1)
+        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + (100f * (node.height + 1)), y = offset.y + 100f), node?.rightChild, depth + 1)
 
     }
     // Breadth-first traversal
