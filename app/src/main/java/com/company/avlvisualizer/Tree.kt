@@ -29,7 +29,7 @@ fun Tree(
 
         val tree = BinaryTree()
         tree.insert(50)
-        for (i in 0..200) {
+        for (i in 0..20) {
             tree.insert((Math.random() * 100).toInt())
         }
 
@@ -64,11 +64,13 @@ fun Tree(
                         )
                         scale(150f, Offset(offsets[i].x + 1000f, offsets[i].y)) {
                                 drawIntoCanvas {
+                                    val textPaint = Paint()
+                                    textPaint.setARGB(255, 255, 255, 255)
                                     it.nativeCanvas.drawText(
                                         "${nodes[i]?.value ?: -1}",
                                         offsets[i].x + 1005f,
                                         offsets[i].y,
-                                        Paint()
+                                        textPaint
                                     )
                                 }
                         }
