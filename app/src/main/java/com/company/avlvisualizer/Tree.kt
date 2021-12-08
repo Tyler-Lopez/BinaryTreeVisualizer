@@ -50,16 +50,6 @@ fun Tree(
                 },
             contentAlignment = Alignment.TopCenter
         ) {
-
-            for (i in 0..nodes.lastIndex) {
-                val currNode = nodes[i]
-                val currOffset = offsets[i]
-                ComposableNode(
-                    element = currNode?.value ?: -1,
-                    offset = Offset(x = currOffset.x, y = currOffset.y)
-                )
-
-            }
         }
     }
 }
