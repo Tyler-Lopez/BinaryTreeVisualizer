@@ -1,5 +1,8 @@
 package com.company.avlvisualizer
 
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -8,8 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -23,7 +29,7 @@ fun Tree(
 
         val tree = BinaryTree()
         tree.insert(50)
-        for (i in 0..25) {
+        for (i in 0..200) {
             tree.insert((Math.random() * 100).toInt())
         }
 
@@ -38,14 +44,34 @@ fun Tree(
 
         Box(
             modifier = Modifier
-                .requiredWidth(2000.dp)
-                .requiredHeight(2000.dp)
-                .background(Color.Magenta)
+                .width(2000.dp)
+                .height(2000.dp)
                 .drawBehind {
                     for (i in 0..offsets.lastIndex) {
-                        drawLine(color = Color.Black, strokeWidth = 40f, start = parentOffsets[i], end = offsets[i])
-                        drawCircle(color = Color.Blue, center = offsets[i], radius = 100f)
-
+                        drawLine(
+                            color = Color(217, 25, 255),
+                            strokeWidth = 1000f,
+                            start = Offset(parentOffsets[i].x + 1000, parentOffsets[i].y),
+                            end = Offset(offsets[i].x + 1000, offsets[i].y)
+                        )
+                    }
+                    // Add circles on top
+                    for (i in 0..offsets.lastIndex) {
+                        drawCircle(
+                            color = Color(191, 0, 230),
+                            center = Offset(offsets[i].x + 1000f, offsets[i].y),
+                            radius = 750f
+                        )
+                        scale(150f, Offset(offsets[i].x + 1000f, offsets[i].y)) {
+                                drawIntoCanvas {
+                                    it.nativeCanvas.drawText(
+                                        "${nodes[i]?.value ?: -1}",
+                                        offsets[i].x + 1005f,
+                                        offsets[i].y,
+                                        Paint()
+                                    )
+                                }
+                        }
                     }
                 },
             contentAlignment = Alignment.TopCenter

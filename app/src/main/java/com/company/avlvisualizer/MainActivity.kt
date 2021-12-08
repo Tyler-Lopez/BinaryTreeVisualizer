@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Red)
+                            .background(Color(40, 40, 40))
                     )
                     Box(
                         modifier = Modifier
@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
                                 translationX = offsetX,
                                 translationY = offsetY
                             )
-                            .background(Color.Magenta)
                     ) {
                         Tree()
                     }
