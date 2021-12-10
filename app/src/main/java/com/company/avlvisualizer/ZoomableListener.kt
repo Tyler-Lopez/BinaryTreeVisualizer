@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.Layout
 @Composable
 fun ZoomableListener(
     transformListener: (Offset, Offset, Float) -> Unit,
+    tapListener: (Offset) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -28,6 +29,13 @@ fun ZoomableListener(
                 detectTransformGestures { centroid, pan, zoom, _ ->
                     transformListener(centroid, pan, zoom)
                 }
+            }
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        tapListener(it)
+                    }
+                )
             }
     )
 }

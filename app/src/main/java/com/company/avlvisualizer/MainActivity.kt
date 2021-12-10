@@ -79,6 +79,10 @@ class MainActivity : ComponentActivity() {
                                         // This is necessary to ensure we zoom where fingers are pinching
                                     (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
                             },
+                            tapListener = {
+                                activeNode = "Offset = $offset OnTap = $it New = ${offset + it}"
+
+                            }
                         )
 
                         Tree(
