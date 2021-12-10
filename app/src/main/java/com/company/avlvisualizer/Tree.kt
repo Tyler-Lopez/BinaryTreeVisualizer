@@ -4,6 +4,8 @@ import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -12,11 +14,10 @@ import androidx.compose.ui.graphics.nativeCanvas
 
 @Composable
 fun Tree(
-
 ) {
     val tree = BinaryTree()
     tree.insert(50)
-    for (i in 0..100) {
+    for (i in 0..50) {
         tree.insert((Math.random() * 100).toInt())
     }
 

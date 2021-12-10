@@ -17,11 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.AVLVisualizerTheme
+import kotlin.math.atan
+import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
 
@@ -29,48 +32,46 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-                AVLVisualizerTheme {
+            AVLVisualizerTheme {
 
 
-                    // A surface container using the 'background' color from the theme
-                    var offsetX by remember {
-                        mutableStateOf(1f)
-                    }
-                    var offsetY by remember {
-                        mutableStateOf(1f)
-                    }
-                    var scale by remember {
-                        mutableStateOf(1f)
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color(40, 40, 40))
-                    )
-                    Box(
-                        modifier = Modifier
-                            .graphicsLayer(
-                                scaleX = scale,
-                                scaleY = scale,
-                                translationX = offsetX,
-                                translationY = offsetY
-                            )
-                    ) {
-                        Tree()
-                    }
-                    ZoomableListener(
-                        pan = { pan ->
-                            offsetX += pan.x
-                            offsetY += pan.y
-                        },
-                        zoom = { zoom ->
-                            scale *= zoom
-                        }
-                    )
+                // A surface container using the 'background' color from the theme
+                var offset by remember {
+                    mutableStateOf(Offset.Zero)
                 }
+                var scale by remember {
+                    mutableStateOf(1f)
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(40, 40, 40))
+                )
+                Box(
+                    modifier = Modifier
+                        .graphicsLayer(
+                            translationX = -offset.x * scale,
+                            translationY = -offset.y * scale,
+                            scaleX = scale,
+                            scaleY = scale,
+                            transformOrigin = TransformOrigin(0f, 0f)
+                        )
+                ) {
+                    Tree()
+                }
+                ZoomableListener(
+                    // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
+                    listener = { centroid, pan, zoom ->
+                        val oldScale = scale // Old Scale
+                        scale *= zoom // New Scale
+                        offset = // This is necessary to ensure we zoom where fingers are pinching
+                            (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+                    }
+                )
             }
         }
+    }
 }
 
 @Composable

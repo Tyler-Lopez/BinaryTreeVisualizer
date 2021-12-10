@@ -17,16 +17,14 @@ import androidx.compose.ui.layout.Layout
 
 @Composable
 fun ZoomableListener(
-    pan: (Offset) -> Unit,
-    zoom: (Float) -> Unit
+    listener: (Offset, Offset, Float) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, _ ->
-                    pan(pan)
-                    zoom(zoom)
+                detectTransformGestures { centroid, pan, zoom, _ ->
+                    listener(centroid, pan, zoom)
                 }
             }
     )
