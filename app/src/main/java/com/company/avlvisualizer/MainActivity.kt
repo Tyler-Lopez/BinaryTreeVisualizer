@@ -93,6 +93,7 @@ class MainActivity : ComponentActivity() {
                                 offset =
                                         // This is necessary to ensure we zoom where fingers are pinching
                                     (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+                                activeNode = offset.toString()
                             }
                         )
                     })
