@@ -5,12 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,45 +28,75 @@ class MainActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
+        val tree = BinaryTree()
+        tree.insert(50)
+        for (i in 0..50) {
+            tree.insert((Math.random() * 100).toInt())
+        }
+
+        val nodes = mutableListOf<BinaryNode?>()
+        val offsets = mutableListOf<Offset>()
+        val parentOffsets = mutableListOf<Offset>()
+        tree.traversePreOrder { offset, bstNode, parentOffset ->
+            parentOffsets.add(parentOffset ?: Offset(0f, 0f))
+            offsets.add(offset)
+            nodes.add(bstNode)
+        }
+
+        // End tree data structure
+
         super.onCreate(savedInstanceState)
         setContent {
             AVLVisualizerTheme {
-
-
-                // A surface container using the 'background' color from the theme
-                var offset by remember {
-                    mutableStateOf(Offset.Zero)
+                var activeNode by remember {
+                    mutableStateOf("None Selected")
                 }
-                var scale by remember {
-                    mutableStateOf(1f)
-                }
+                Scaffold(
+                    topBar = {
+                        TopAppBar(content = {
+                            Text(activeNode)
+                        })
+                    },
+                    content = {
+                        // A surface container using the 'background' color from the theme
+                        var offset by remember {
+                            mutableStateOf(Offset.Zero)
+                        }
+                        var scale by remember {
+                            mutableStateOf(1f)
+                        }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color(40, 40, 40))
-                )
-                Box(
-                    modifier = Modifier
-                        .graphicsLayer(
-                            translationX = -offset.x * scale,
-                            translationY = -offset.y * scale,
-                            scaleX = scale,
-                            scaleY = scale,
-                            transformOrigin = TransformOrigin(0f, 0f)
+
+
+                        Tree(
+                            modifier = Modifier.graphicsLayer(
+                                translationX = -offset.x * scale,
+                                translationY = -offset.y * scale,
+                                scaleX = scale,
+                                scaleY = scale,
+                                transformOrigin = TransformOrigin(0f, 0f)
+                            ).background(Color.Black).clickable(onClick = {
+                                activeNode = "TEST"
+                            }),
+                            nodes = nodes,
+                            offsets = offsets,
+                            parentOffsets = parentOffsets,
+                            nodeSelect = {
+                                activeNode = it
+                            })
+                        ZoomableListener(
+                            // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
+                            listener = { centroid, pan, zoom ->
+                                val oldScale = scale // Old Scale
+                                scale *= zoom // New Scale
+                                offset =
+                                        // This is necessary to ensure we zoom where fingers are pinching
+                                    (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+                            }
                         )
-                ) {
-                    Tree()
-                }
-                ZoomableListener(
-                    // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
-                    listener = { centroid, pan, zoom ->
-                        val oldScale = scale // Old Scale
-                        scale *= zoom // New Scale
-                        offset = // This is necessary to ensure we zoom where fingers are pinching
-                            (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-                    }
-                )
+                    })
             }
         }
     }

@@ -2,37 +2,32 @@ package com.company.avlvisualizer
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.unit.dp
+
 
 @Composable
 fun Tree(
+    modifier: Modifier,
+    nodes: List<BinaryNode?>,
+    offsets: List<Offset>,
+    parentOffsets: List<Offset>,
+    nodeSelect: (String) -> Unit
 ) {
-    val tree = BinaryTree()
-    tree.insert(50)
-    for (i in 0..200) {
-        tree.insert((Math.random() * 100).toInt())
-    }
 
-    val nodes = mutableListOf<BinaryNode?>()
-    val offsets = mutableListOf<Offset>()
-    val parentOffsets = mutableListOf<Offset>()
-    tree.traversePreOrder { offset, bstNode, parentOffset ->
-        parentOffsets.add(parentOffset ?: Offset(0f, 0f))
-        offsets.add(offset)
-        nodes.add(bstNode)
-    }
 
     Canvas(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
     ) {
         for (i in 0..offsets.lastIndex) {
             drawLine(
@@ -47,7 +42,7 @@ fun Tree(
             drawCircle(
                 color = Color(191, 0, 230),
                 center = Offset(offsets[i].x + 1000f, offsets[i].y),
-                radius = 750f
+                radius = 750f,
             )
             val paint = android.graphics.Paint()
             paint.textAlign = Paint.Align.CENTER
@@ -64,4 +59,9 @@ fun Tree(
             }
         }
     }
+
+    Button(modifier = Modifier.offset((offsets[0].x + 1000f).dp, offsets[0].y.dp), onClick = { nodeSelect("test")}) {
+        Text("Test")
+    }
+
 }
