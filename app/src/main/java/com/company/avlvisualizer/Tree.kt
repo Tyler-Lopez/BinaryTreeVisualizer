@@ -46,6 +46,7 @@ fun Tree(
             modifier = Modifier
                 .width(2000.dp)
                 .height(2000.dp)
+                    // Add as comp
                 .drawBehind {
                     for (i in 0..offsets.lastIndex) {
                         drawLine(
