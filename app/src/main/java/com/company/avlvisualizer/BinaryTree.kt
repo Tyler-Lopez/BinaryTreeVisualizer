@@ -35,8 +35,8 @@ class BinaryTree {
 
     private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int, parentOffset: Offset? = null) {
         offsetVisit(offset, node, parentOffset)
-        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 1500f - ((node.height + 2).toDouble().pow(5).toFloat()), y = offset.y + 100000f), node?.leftChild, depth + 1, offset)
-        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 1500f + ((node.height + 2).toDouble().pow(5).toFloat()), y = offset.y + 100000f), node?.rightChild, depth + 1, offset)
+        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 1000f - ((node.height * node.height).toDouble().pow(3).toFloat()), y = offset.y + 80000f), node?.leftChild, depth + 1, offset)
+        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 1000f + ((node.height * node.height).toDouble().pow(3).toFloat()), y = offset.y + 80000f), node?.rightChild, depth + 1, offset)
     }
     // Breadth-first traversal
     fun forEachLevelOrder(visit: Visitor) {
