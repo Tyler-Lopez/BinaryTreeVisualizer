@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,7 +70,16 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(1f)
                         }
 
-
+                        ZoomableListener(
+                            // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
+                            transformListener = { centroid, pan, zoom ->
+                                val oldScale = scale // Old Scale
+                                scale *= zoom // New Scale
+                                offset =
+                                        // This is necessary to ensure we zoom where fingers are pinching
+                                    (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+                            },
+                        )
 
                         Tree(
                             modifier = Modifier.graphicsLayer(
@@ -85,17 +96,7 @@ class MainActivity : ComponentActivity() {
                                 activeNode = it
                             }
                         )
-                        ZoomableListener(
-                            // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
-                            listener = { centroid, pan, zoom ->
-                                val oldScale = scale // Old Scale
-                                scale *= zoom // New Scale
-                                offset =
-                                        // This is necessary to ensure we zoom where fingers are pinching
-                                    (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-                                activeNode = offset.toString()
-                            }
-                        )
+
                     })
             }
         }

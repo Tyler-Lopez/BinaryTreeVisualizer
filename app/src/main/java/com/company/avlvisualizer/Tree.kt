@@ -3,6 +3,7 @@ package com.company.avlvisualizer
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 
@@ -59,9 +60,4 @@ fun Tree(
             }
         }
     }
-
-    Button(modifier = Modifier.offset((offsets[0].x + 1000f).dp, offsets[0].y.dp), onClick = { nodeSelect("test")}) {
-        Text("Test")
-    }
-
 }
