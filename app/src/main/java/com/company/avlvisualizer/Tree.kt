@@ -17,7 +17,7 @@ fun Tree(
 ) {
     val tree = BinaryTree()
     tree.insert(50)
-    for (i in 0..50) {
+    for (i in 0..200) {
         tree.insert((Math.random() * 100).toInt())
     }
 
