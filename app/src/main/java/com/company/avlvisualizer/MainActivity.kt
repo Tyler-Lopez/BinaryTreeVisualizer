@@ -77,15 +77,14 @@ class MainActivity : ComponentActivity() {
                                 scaleX = scale,
                                 scaleY = scale,
                                 transformOrigin = TransformOrigin(0f, 0f)
-                            ).background(Color.Black).clickable(onClick = {
-                                activeNode = "TEST"
-                            }),
+                            ),
                             nodes = nodes,
                             offsets = offsets,
                             parentOffsets = parentOffsets,
                             nodeSelect = {
                                 activeNode = it
-                            })
+                            }
+                        )
                         ZoomableListener(
                             // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
                             listener = { centroid, pan, zoom ->
