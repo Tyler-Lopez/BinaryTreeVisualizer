@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -70,17 +71,36 @@ class MainActivity : ComponentActivity() {
                         var scale by remember {
                             mutableStateOf(1f)
                         }
+                        // The Box contains the Composable Tree, and contains the pointerInput for dragging and zooming
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    // DRAG AND ZOOM
+                                    detectTransformGestures { centroid, pan, zoom, _ ->
+                                        val oldScale = scale // Old Scale
+                                        scale *= zoom // New Scale
+                                        offset =
+                                                // This is necessary to ensure we zoom where fingers are pinching
+                                            (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+                                    }
+                                }
                         ) {
+                            // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 modifier = Modifier
-                                    .fillMaxSize(),
-                                style = ComposableTreeStyle(
-                                    lineColor = Color.Magenta
-                                )
-                            )
+                                    .fillMaxSize()
+                                    .graphicsLayer {
+                                        // APPLY ZOOM
+                                        translationX = -offset.x * scale
+                                        translationY = -offset.y * scale
+                                        scaleX = scale
+                                        scaleY = scale
+                                        transformOrigin = TransformOrigin(0f, 0f)
+                                    }
+                            ) {
+                                activeNode = it
+                            }
                         }
 
                         // Commenting this out temporarily to find a better way to represent the tree

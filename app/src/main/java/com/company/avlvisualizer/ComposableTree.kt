@@ -2,54 +2,52 @@ package com.company.avlvisualizer
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
 fun ComposableTree(
     modifier: Modifier = Modifier,
-    style: ComposableTreeStyle = ComposableTreeStyle()
+    style: ComposableTreeStyle = ComposableTreeStyle(),
+    onNodeSelect: (String) -> Unit
 ) {
-    var scale by remember {
-        mutableStateOf(1f)
-    }
     var center by remember {
         mutableStateOf(Offset.Zero)
     }
-    var offset by remember {
-        mutableStateOf(Offset.Zero)
+    var isSelected by remember {
+        mutableStateOf(false)
     }
+    var rectList: MutableList<Rect> = mutableListOf()
     Canvas(modifier = modifier
         .pointerInput(Unit) {
-            detectTransformGestures { centroid, pan, zoom, _ ->
-                val oldScale = scale // Old Scale
-                scale *= zoom // New Scale
-                offset =
-                        // This is necessary to ensure we zoom where fingers are pinching
-                    (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-            }
-        }
-        .pointerInput(Unit) {
+            // NODE SELECT
             detectTapGestures(
                 onTap = {
+                        var found = false
+                        for (rect in rectList) {
+                            if (rect.contains(it)) {
+                                onNodeSelect("Node selected")
+                                isSelected = true
+                                found = true
+                            }
+                        }
+                        if (!found) {
+                            onNodeSelect("Not selected node")
+                            isSelected = false
+                        }
 
                 }
             )
-        }.graphicsLayer {
-            scaleX = scale
-            scaleY = scale
-            transformOrigin = TransformOrigin(0f, 0f)
-        }) {
+        }
+        ) {
         center = this.center
+        rectList.add(Rect(center = center, radius = 10f))
         drawCircle(
-            center = center - offset,
-            color = Color.Black,
+            center = center,
+            color = if (isSelected) style.selectedNodeColor else style.nodeColor,
             radius = 10f
         )
     }
