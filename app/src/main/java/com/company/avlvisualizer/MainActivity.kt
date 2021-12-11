@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -69,7 +70,21 @@ class MainActivity : ComponentActivity() {
                         var scale by remember {
                             mutableStateOf(1f)
                         }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+                            ComposableTree(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                style = ComposableTreeStyle(
+                                    lineColor = Color.Magenta
+                                )
+                            )
+                        }
 
+                        // Commenting this out temporarily to find a better way to represent the tree
+                        /*
                         ZoomableListener(
                             // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
                             transformListener = { centroid, pan, zoom ->
@@ -100,6 +115,7 @@ class MainActivity : ComponentActivity() {
                                 activeNode = it
                             }
                         )
+                        */
 
                     })
             }
