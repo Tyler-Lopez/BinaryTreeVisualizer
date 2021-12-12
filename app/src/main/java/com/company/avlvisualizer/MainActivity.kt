@@ -75,21 +75,22 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .pointerInput(Unit) {
-                                    // DRAG AND ZOOM
-                                    detectTransformGestures { centroid, pan, zoom, _ ->
-                                        val oldScale = scale // Old Scale
-                                        scale *= zoom // New Scale
-                                        offset =
-                                                // This is necessary to ensure we zoom where fingers are pinching
-                                            (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-                                    }
-                                }
                         ) {
                             // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 modifier = Modifier
-                                    .fillMaxSize()
+                                    .requiredSize(10000.dp) // Important for the pointer input modifier
+                                    .background(Color.DarkGray)
+                                    .pointerInput(Unit) {
+                                        // DRAG AND ZOOM
+                                        detectTransformGestures { centroid, pan, zoom, _ ->
+                                            val oldScale = scale // Old Scale
+                                            scale *= zoom // New Scale
+                                            offset =
+                                                    // This is necessary to ensure we zoom where fingers are pinching
+                                                (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+                                        }
+                                    }
                                     .graphicsLayer {
                                         // APPLY ZOOM
                                         translationX = -offset.x * scale
