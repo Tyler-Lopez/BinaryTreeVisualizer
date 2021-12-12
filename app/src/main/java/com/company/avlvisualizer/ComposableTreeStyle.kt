@@ -7,5 +7,6 @@ data class ComposableTreeStyle(
     val nodeColor: Color = Color.Magenta,
     val selectedNodeColor: Color = Color.Cyan,
     val selectedNodeBorderColor: Color = Color.White,
-    val nodeSize: Float = 100f
+    val nodeSize: Float = 100f,
+    val lineWidth: Float = 50f
 )

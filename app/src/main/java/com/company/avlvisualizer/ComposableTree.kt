@@ -12,9 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ScaleFactor
 import androidx.compose.ui.layout.times
+import kotlin.math.pow
 
 @Composable
 fun ComposableTree(
+    data: Pair<List<NodeComposableData>, Int>,
     modifier: Modifier = Modifier,
     style: ComposableTreeStyle = ComposableTreeStyle(),
     onNodeSelect: (String) -> Unit
@@ -56,16 +58,47 @@ fun ComposableTree(
 
         rectList.clear()
 
-        for (i in 0..3) {
+        // Iterate through data, drawing each node
+        val dataList = data.first
+        val height = data.second
 
-            center = this.center + Offset(0f, 400f * i)
+        var toDrawSelected: Offset? = null
+
+        for (i in 0..dataList.lastIndex) {
+
+            var xShift = 0f
+            var yShift = 0f
+
+            var parentPosition = Offset(0f, 0f)
+
+            var nodeHeight = height
+
+            val node = dataList[i]
+
+            for (child in node.path) {
+                parentPosition = Offset(xShift, yShift)
+                when (child) {
+                    BinaryNodeChild.LEFT -> xShift -= 50f * nodeHeight.toDouble().pow(2.0).toFloat()
+                    BinaryNodeChild.RIGHT -> xShift += 50f * nodeHeight.toDouble().pow(2.0).toFloat()
+                }
+                nodeHeight -= 1
+                yShift += 300f
+            }
+
+            center = this.center + Offset(xShift, yShift)
+
             val isSelected = i == selectedIndex
 
             rectList.add(Rect(center = center, radius = style.nodeSize))
 
 
             val color = if (isSelected) style.selectedNodeColor else style.nodeColor
-
+            drawLine(
+                color = style.nodeColor,
+                start = this.center + parentPosition,
+                end = center,
+                strokeWidth = style.lineWidth
+            )
             // Draw border circle behind circle at 1.1x size
             if (isSelected) {
                 drawArc(
@@ -81,6 +114,7 @@ fun ComposableTree(
                         )
                     )
                 )
+                toDrawSelected = center
             }
 
             drawCircle(
@@ -89,6 +123,30 @@ fun ComposableTree(
                 radius = style.nodeSize
             )
         }
+
+        // THIS IS A HACKY FIX to ensure the selected node is always above the line... come back to soon
+        if (toDrawSelected != null) {
+            drawArc(
+                color = style.selectedNodeBorderColor,
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                topLeft = toDrawSelected - Offset(style.nodeSize * 1.1f, style.nodeSize * 1.1f),
+                size = Size(style.nodeSize * 2, style.nodeSize * 2).times(
+                    ScaleFactor(
+                        1.1f,
+                        1.1f
+                    )
+                )
+            )
+            drawCircle(
+                center = toDrawSelected,
+                color = style.selectedNodeColor,
+                radius = style.nodeSize
+            )
+        }
+
+
     }
 }
 

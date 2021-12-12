@@ -3,6 +3,7 @@ package com.company.avlvisualizer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import org.w3c.dom.Node
 import java.util.*
 import kotlin.math.pow
 
@@ -32,6 +33,22 @@ class BinaryTree {
     fun traversePreOrder(offsetVisit: OffsetVisitor) {
         traversePreOrder(offsetVisit, Offset(0f, 0f), root, 0)
     }
+
+    // 2nd value is the max height of tree
+    fun returnComposableData(): Pair<List<NodeComposableData>, Int> {
+        val toReturn = mutableListOf<NodeComposableData>()
+        root?.traverseInOrderWithPath(
+            path = listOf(),
+            visit = {
+                toReturn.add(it)
+            }
+        )
+        return Pair(toReturn, root?.height ?: -1)
+    }
+
+
+
+
 
     private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int, parentOffset: Offset? = null) {
         offsetVisit(offset, node, parentOffset)

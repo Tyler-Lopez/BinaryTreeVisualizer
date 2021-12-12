@@ -3,6 +3,8 @@ package com.company.avlvisualizer
 import androidx.compose.ui.geometry.Offset
 
 typealias Visitor = (BinaryNode?) -> Unit
+typealias ComposableNodeVisitor = (NodeComposableData) -> Unit
+
 typealias OffsetVisitor = (Offset, BinaryNode?, Offset?) -> Unit
 
 data class BinaryNode(
@@ -35,4 +37,21 @@ data class BinaryNode(
             }
         } ?: "${root}null\n"
     }
+
+
+    fun traverseInOrderWithPath(path: List<BinaryNodeChild>, visit: ComposableNodeVisitor) {
+        leftChild?.traverseInOrderWithPath(clonePathWithInsert(path, BinaryNodeChild.LEFT), visit)
+        visit(NodeComposableData(path, value))
+        rightChild?.traverseInOrderWithPath(clonePathWithInsert(path, BinaryNodeChild.RIGHT), visit)
+    }
+
+    fun clonePathWithInsert(path: List<BinaryNodeChild>, newMove: BinaryNodeChild): List<BinaryNodeChild> {
+        val toReturn = mutableListOf<BinaryNodeChild>()
+        for (move in path) {
+            toReturn.add(move)
+        }
+        toReturn.add(newMove)
+        return toReturn
+    }
+
 }
