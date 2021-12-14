@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
         val tree = BinaryTree()
         tree.insert(50)
-        for (i in 0..5) {
+        for (i in 0..50) {
             tree.insert((Math.random() * 100).toInt())
         }
         val nodeComposableDataList = tree.returnComposableData()
@@ -76,12 +76,13 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .background(Color.Green)
                         ) {
                             // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 data = nodeComposableDataList,
                                 modifier = Modifier
-                                    .requiredSize(10000.dp) // Important for the pointer input modifier
+                                    .requiredSize(10000.dp)
                                     .background(Color.DarkGray)
                                     .pointerInput(Unit) {
                                         // DRAG AND ZOOM
