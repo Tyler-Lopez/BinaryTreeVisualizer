@@ -12,6 +12,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.DrawContext
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
@@ -90,12 +91,9 @@ fun ComposableTree(
 
     ) {
         selectionInfo.clear()
-
         // Iterate through data, drawing each node
         val dataList = data.first
         val height = data.second
-
-
 
         for (i in 0..dataList.lastIndex) {
 
@@ -107,19 +105,20 @@ fun ComposableTree(
             var nodeHeight = height
 
             val node = dataList[i]
+            val nodeSize = style.nodeSize
 
             for (child in node.path) {
                 parentPosition = Offset(xShift, yShift)
                 when (child) {
-                    BinaryNodeChild.LEFT -> xShift -= style.nodeSize * 0.07f * 2f.pow(
+                    BinaryNodeChild.LEFT -> xShift -= nodeSize * 0.07f * 2f.pow(
                         nodeHeight + 2
                     )
-                    BinaryNodeChild.RIGHT -> xShift += style.nodeSize * 0.07f * 2f.pow(
+                    BinaryNodeChild.RIGHT -> xShift += nodeSize * 0.07f * 2f.pow(
                         nodeHeight + 2
                     )
                 }
                 nodeHeight -= 1
-                yShift += style.nodeSize * 50f
+                yShift += nodeSize * 50f
             }
 
             center = this.center + Offset(xShift, yShift)
@@ -128,7 +127,7 @@ fun ComposableTree(
                 Pair(
                     Rect(
                         center = center,
-                        radius = style.nodeSize
+                        radius = nodeSize
                     ),
                     node
                 )
@@ -172,5 +171,6 @@ fun ComposableTree(
         }
     }
 }
+
 
 

@@ -73,34 +73,16 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(1f)
                         }
                         // The Box contains the Composable Tree, and contains the pointerInput for dragging and zooming
-                        Box(
+                        BoxWithConstraints(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .requiredSize(10000.dp)
+                                .background(Color.Green) // Just for debug
                         ) {
                             // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 data = nodeComposableDataList,
                                 modifier = Modifier
-                                    .requiredSize(10000.dp)
-                                // .pointerInput(Unit) {
-                                        // DRAG AND ZOOM
-                                      //  detectTransformGestures { centroid, pan, zoom, _ ->
-                                       //     val oldScale = scale // Old Scale
-                                       //     scale *= zoom // New Scale
-                                      //      offset =
-                                      //              // This is necessary to ensure we zoom where fingers are pinching
-                                       //         (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-                                      //  }
-                                 //   }
-                                  //  .graphicsLayer {
-                                  //      // APPLY ZOOM
-                                   //     translationX = -offset.x * scale
-                                   //     translationY = -offset.y * scale
-                                   //     scaleX = scale
-                                   //     scaleY = scale
-                                   //     transformOrigin = TransformOrigin(0f, 0f)
-                                   // }
-                                   // .background(Color.DarkGray)
+                                    .fillMaxSize()
                             ) {
                                 activeNode = it
                             }
