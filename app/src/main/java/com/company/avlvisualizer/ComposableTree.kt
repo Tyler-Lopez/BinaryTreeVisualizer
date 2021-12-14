@@ -16,6 +16,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ScaleFactor
 import androidx.compose.ui.layout.times
 import kotlin.math.pow
+import kotlin.random.Random
 
 @Composable
 fun ComposableTree(
@@ -58,7 +59,6 @@ fun ComposableTree(
             )
         }
     ) {
-
         selectionInfo.clear()
 
         // Iterate through data, drawing each node
@@ -79,12 +79,11 @@ fun ComposableTree(
             for (child in node.path) {
                 parentPosition = Offset(xShift, yShift)
                 when (child) {
-                    BinaryNodeChild.LEFT -> xShift -= 5f * nodeHeight.toDouble().pow(3.0).toFloat()
-                    BinaryNodeChild.RIGHT -> xShift += 5f * nodeHeight.toDouble().pow(3.0)
-                        .toFloat()
+                    BinaryNodeChild.LEFT -> xShift -= style.nodeSize * 0.07f * 2f.pow(nodeHeight + 2)
+                    BinaryNodeChild.RIGHT -> xShift += style.nodeSize * 0.07f * 2f.pow(nodeHeight + 2)
                 }
                 nodeHeight -= 1
-                yShift += 1000f
+                yShift += style.nodeSize * 50f
             }
 
             center = this.center + Offset(xShift, yShift)

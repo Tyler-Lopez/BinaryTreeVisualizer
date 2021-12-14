@@ -83,7 +83,6 @@ class MainActivity : ComponentActivity() {
                                 data = nodeComposableDataList,
                                 modifier = Modifier
                                     .requiredSize(10000.dp)
-                                    .background(Color.DarkGray)
                                     .pointerInput(Unit) {
                                         // DRAG AND ZOOM
                                         detectTransformGestures { centroid, pan, zoom, _ ->
@@ -102,6 +101,7 @@ class MainActivity : ComponentActivity() {
                                         scaleY = scale
                                         transformOrigin = TransformOrigin(0f, 0f)
                                     }
+                                    .background(Color.DarkGray)
                             ) {
                                 activeNode = it
                             }
