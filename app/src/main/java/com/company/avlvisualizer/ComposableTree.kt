@@ -4,13 +4,18 @@ import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ScaleFactor
@@ -31,10 +36,33 @@ fun ComposableTree(
     var selectedIndex: Int by remember {
         mutableStateOf(-1)
     }
+    var scale by remember {
+        mutableStateOf(1f)
+    }
+    var offset by remember {
+        mutableStateOf(Offset.Zero)
+    }
     // Used to
     var selectionInfo: MutableList<Pair<Rect, NodeComposableData>> = mutableListOf()
 
     Canvas(modifier = modifier
+        .pointerInput(Unit) {
+            // DRAG AND ZOOM
+            detectTransformGestures { centroid, pan, zoom, _ ->
+                val oldScale = scale // Old Scale
+                scale *= zoom // New Scale
+                offset = (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
+            }
+        }
+        .graphicsLayer {
+            // APPLY ZOOM
+            translationX = -offset.x * scale
+            translationY = -offset.y * scale
+            scaleX = scale
+            scaleY = scale
+            transformOrigin = TransformOrigin(0f, 0f)
+        }
+        .background(Color.DarkGray)
         .pointerInput(Unit) {
             // NODE SELECT
             detectTapGestures(
@@ -58,12 +86,16 @@ fun ComposableTree(
                 }
             )
         }
+
+
     ) {
         selectionInfo.clear()
 
         // Iterate through data, drawing each node
         val dataList = data.first
         val height = data.second
+
+
 
         for (i in 0..dataList.lastIndex) {
 
@@ -79,8 +111,12 @@ fun ComposableTree(
             for (child in node.path) {
                 parentPosition = Offset(xShift, yShift)
                 when (child) {
-                    BinaryNodeChild.LEFT -> xShift -= style.nodeSize * 0.07f * 2f.pow(nodeHeight + 2)
-                    BinaryNodeChild.RIGHT -> xShift += style.nodeSize * 0.07f * 2f.pow(nodeHeight + 2)
+                    BinaryNodeChild.LEFT -> xShift -= style.nodeSize * 0.07f * 2f.pow(
+                        nodeHeight + 2
+                    )
+                    BinaryNodeChild.RIGHT -> xShift += style.nodeSize * 0.07f * 2f.pow(
+                        nodeHeight + 2
+                    )
                 }
                 nodeHeight -= 1
                 yShift += style.nodeSize * 50f
@@ -88,7 +124,15 @@ fun ComposableTree(
 
             center = this.center + Offset(xShift, yShift)
 
-            selectionInfo.add(Pair(Rect(center = center, radius = style.nodeSize), node))
+            selectionInfo.add(
+                Pair(
+                    Rect(
+                        center = center,
+                        radius = style.nodeSize
+                    ),
+                    node
+                )
+            )
 
 
             drawLine(
@@ -106,25 +150,6 @@ fun ComposableTree(
 
             val isSelected = i == selectedIndex
 
-            /*
-            Temporarily commented out, this will give border to circle
-            if (isSelected) {
-                drawArc(
-                    color = style.selectedNodeBorderColor,
-                    startAngle = 0f,
-                    sweepAngle = 360f,
-                    useCenter = false,
-                    topLeft = ,
-                    size = Size(style.nodeSize * 2, style.nodeSize * 2).times(
-                        ScaleFactor(
-                            1.1f,
-                            1.1f
-                        )
-                    )
-                )
-            }
-            */
-
             drawCircle(
                 center = center,
                 color = if (isSelected) style.selectedNodeColor else style.nodeColor,
@@ -140,7 +165,7 @@ fun ComposableTree(
                 it.nativeCanvas.drawText(
                     "${node.value}",
                     center.x,
-                    center.y + (style.nodeSize/3),
+                    center.y + (style.nodeSize / 3),
                     paint
                 )
             }
