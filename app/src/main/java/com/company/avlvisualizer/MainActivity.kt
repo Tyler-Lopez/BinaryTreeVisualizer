@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.TransformOrigin
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
         // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
         val tree = BinaryTree()
         tree.insert(50)
-        for (i in 0..50) {
+        for (i in 0..1) {
             tree.insert((Math.random() * 100).toInt())
         }
         val nodeComposableDataList = tree.returnComposableData()
@@ -66,23 +67,16 @@ class MainActivity : ComponentActivity() {
                     },
                     content = {
                         // A surface container using the 'background' color from the theme
-                        var offset by remember {
-                            mutableStateOf(Offset.Zero)
-                        }
-                        var scale by remember {
-                            mutableStateOf(1f)
-                        }
                         // The Box contains the Composable Tree, and contains the pointerInput for dragging and zooming
-                        BoxWithConstraints(
+                        Box(
                             modifier = Modifier
-                                .requiredSize(10000.dp)
+                                .fillMaxSize()
                                 .background(Color.Green) // Just for debug
                         ) {
                             // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 data = nodeComposableDataList,
                                 modifier = Modifier
-                                    .fillMaxSize()
                             ) {
                                 activeNode = it
                             }
