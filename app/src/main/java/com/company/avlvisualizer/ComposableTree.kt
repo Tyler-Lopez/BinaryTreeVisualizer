@@ -95,19 +95,28 @@ fun ComposableTree(
                             if (found) continue
                             println("i is $i")
                             val rect = selectionInfo[i].first
-                            if (rect.contains(offsettedTap)) {
+                            val rectOffset = rect.center
+                            val offsetOfRectToCenter = Offset(
+                                x = (-this.size.width / 2f + rectOffset.x) * 2f,
+                                y = (-this.size.height / 2f + rectOffset.y) * 2f
+                            )
+                            val newOffset = Offset(selectionInfo[0].first.center.x + offsetOfRectToCenter.x, selectionInfo[0].first.center.y + offsetOfRectToCenter.y)
+                            val newRect = Rect(center = newOffset, radius = style.nodeSize * 3f)
+                            if (newRect.contains(offsettedTap)) {
                                 println("i is $i")
-                                onNodeSelect("NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i\n" +
-                                        "Found at $offsettedTap")
+                                onNodeSelect(
+                                    "NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i\n" +
+                                            "Found at $offsettedTap" + "\nActually $newOffset"
+                                )
                                 selectedIndex = i
                                 found = true
                             }
                         }
                         if (!found) {
                             onNodeSelect(
-                                        "Looking for ${selectionInfo[0].second.value} at ${selectionInfo[0].first.center}" +
+                                "Looking for ${selectionInfo[0].second.value} at ${selectionInfo[0].first.center}" +
                                         "\nLooking for ${selectionInfo[1].second.value} at ${selectionInfo[1].first.center}" +
-                                                "\nOffset Calculated: $offsettedTap" +
+                                        "\nOffset Calculated: $offsettedTap" +
                                         "\nCenter is: $it" +
                                         "\nActual offset var is $offset" + "\nLooking for ${selectionInfo[0].first.center}"
                             )

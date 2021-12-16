@@ -39,9 +39,9 @@ class MainActivity : ComponentActivity() {
         tree.insert(50)
         tree.insert(25)
         tree.insert(75)
-       // for (i in 0..1) {
-      //      tree.insert((Math.random() * 100).toInt())
-     //   }
+        for (i in 0..10) {
+            tree.insert((Math.random() * 100).toInt())
+        }
         val nodeComposableDataList = tree.returnComposableData()
 
         val nodes = mutableListOf<BinaryNode?>()
