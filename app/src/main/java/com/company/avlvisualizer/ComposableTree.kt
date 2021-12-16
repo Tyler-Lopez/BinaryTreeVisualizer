@@ -36,11 +36,6 @@ fun ComposableTree(
     style: ComposableTreeStyle = ComposableTreeStyle(),
     onNodeSelect: (String) -> Unit,
 ) {
-    var center by remember {
-        mutableStateOf(Offset.Zero)
-    }
-    var canvasCenter = Offset.Zero
-
     var selectedIndex: Int by remember {
         mutableStateOf(-1)
     }
@@ -72,27 +67,53 @@ fun ComposableTree(
                 // NODE SELECT
                 detectTapGestures(
                     onTap = {
-                        val corrected = Offset(x = -this.size.width/2f + it.x, y = -this.size.height/2f + it.y)
-                        var found = false
-                        onNodeSelect(
-                            "Clicked ${offset} ${it} ${corrected} ${corrected + offset + it}\n" +
-                                    // "Looking for ${selectionInfo[selectionInfo.lastIndex].first.center}\n" +
-                                    "Looking for ${selectionInfo[selectionInfo.lastIndex].first.center}"
+                        // it = when you click returns an Offset
+                        // (0, 0) is the top left of the screen
+                        // So let's first correct it to be (0, 0) in the center of the screen
+                        val tapAsCenter = Offset(
+                            x = -this.size.width / 2f + it.x,
+                            y = -this.size.height / 2f + it.y
                         )
+                        // Next, let's divide that by the scale so the bigger the scale the smaller the offset
+                        val scaledTap = (tapAsCenter / scale)
+                        // Now that it's been scaled... we need to add the center of the canvas
+                        // This does not yet take into account offset
+                        val canvasCenteredTap = scaledTap + it
+                        // Offsetted...
+                        val offsettedTap = Offset(
+                            canvasCenteredTap.x + (offset.x * 2f),
+                            canvasCenteredTap.y + (offset.y * 2f)
+                        )
+
+                        var found = false
+                        //onNodeSelect(tapAsCenter.toString() + "\nScaled: $scaledTap" + "\nCentered: $canvasCenteredTap" +
+                        //       "\nOffset Calculated: $offsettedTap"+
+                        //      "\nCenter is: $it" +
+                        //      "\nActual offset var is $offset" + "\nLooking for ${selectionInfo[0].first.center}")
+
                         for (i in 0..selectionInfo.lastIndex) {
+                            if (found) continue
                             println("i is $i")
                             val rect = selectionInfo[i].first
-                            if (rect.contains(corrected + offset + it)) {
+                            if (rect.contains(offsettedTap)) {
                                 println("i is $i")
-                                onNodeSelect("NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i")
+                                onNodeSelect("NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i\n" +
+                                        "Found at $offsettedTap")
                                 selectedIndex = i
                                 found = true
                             }
                         }
                         if (!found) {
-                            // onNodeSelect("Not selected node")
+                            onNodeSelect(
+                                        "Looking for ${selectionInfo[0].second.value} at ${selectionInfo[0].first.center}" +
+                                        "\nLooking for ${selectionInfo[1].second.value} at ${selectionInfo[1].first.center}" +
+                                                "\nOffset Calculated: $offsettedTap" +
+                                        "\nCenter is: $it" +
+                                        "\nActual offset var is $offset" + "\nLooking for ${selectionInfo[0].first.center}"
+                            )
                             selectedIndex = -1
                         }
+
                     }
                 )
             }
@@ -107,7 +128,6 @@ fun ComposableTree(
 
 
         ) {
-            canvasCenter = this.center
             selectionInfo.clear()
             // Iterate through data, drawing each node
             val dataList = data.first
@@ -139,13 +159,14 @@ fun ComposableTree(
                     yShift += nodeSize * 50f
                 }
 
-                center = this.center + Offset(xShift, yShift)
+                val centerPos = Offset(center.x + xShift, center.y + yShift)
+                val parentPos = Offset(center.x + parentPosition.x, center.y + parentPosition.y)
 
 
                 selectionInfo.add(
                     Pair(
                         Rect(
-                            center = center,
+                            center = centerPos,
                             radius = nodeSize * 3f
                         ),
                         node
@@ -156,8 +177,8 @@ fun ComposableTree(
 
                 drawLine(
                     color = style.nodeColor,
-                    start = this.center + parentPosition,
-                    end = center,
+                    start = parentPos,
+                    end = centerPos,
                     strokeWidth = style.lineWidth
                 )
             }
@@ -165,12 +186,12 @@ fun ComposableTree(
             for (i in 0..selectionInfo.lastIndex) {
 
                 val node = selectionInfo[i].second
-                center = selectionInfo[i].first.center
+                val centerPos = selectionInfo[i].first.center
 
                 val isSelected = i == selectedIndex
 
                 drawCircle(
-                    center = center,
+                    center = centerPos,
                     color = if (isSelected) style.selectedNodeColor else style.nodeColor,
                     radius = style.nodeSize
                 )
@@ -183,8 +204,8 @@ fun ComposableTree(
                 drawIntoCanvas {
                     it.nativeCanvas.drawText(
                         "${node.value}",
-                        center.x,
-                        center.y + (style.nodeSize / 3),
+                        centerPos.x,
+                        centerPos.y + (style.nodeSize / 3),
                         paint
                     )
                 }

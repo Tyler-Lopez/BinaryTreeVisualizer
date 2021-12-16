@@ -37,9 +37,11 @@ class MainActivity : ComponentActivity() {
         // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
         val tree = BinaryTree()
         tree.insert(50)
-        for (i in 0..1) {
-            tree.insert((Math.random() * 100).toInt())
-        }
+        tree.insert(25)
+        tree.insert(75)
+       // for (i in 0..1) {
+      //      tree.insert((Math.random() * 100).toInt())
+     //   }
         val nodeComposableDataList = tree.returnComposableData()
 
         val nodes = mutableListOf<BinaryNode?>()
@@ -61,7 +63,7 @@ class MainActivity : ComponentActivity() {
                 }
                 Scaffold(
                     topBar = {
-                        TopAppBar(content = {
+                        TopAppBar(modifier = Modifier.height(150.dp), content = {
                             Text(activeNode)
                         })
                     },
