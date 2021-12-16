@@ -37,12 +37,7 @@ class MainActivity : ComponentActivity() {
         // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
         val tree = BinaryTree()
         tree.insert(50)
-        tree.insert(25)
-        tree.insert(75)
-        for (i in 0..10) {
-            tree.insert((Math.random() * 100).toInt())
-        }
-        val nodeComposableDataList = tree.returnComposableData()
+
 
         val nodes = mutableListOf<BinaryNode?>()
         val offsets = mutableListOf<Offset>()
@@ -58,13 +53,40 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AVLVisualizerTheme {
+                var nodeComposableDataList by remember {
+                    mutableStateOf(tree.returnComposableData())
+                }
                 var activeNode by remember {
                     mutableStateOf("None Selected")
                 }
+                var treeStyle by remember {
+                    mutableStateOf(ComposableTreeStyle())
+                }
                 Scaffold(
                     topBar = {
-                        TopAppBar(modifier = Modifier.height(150.dp), content = {
-                            Text(activeNode)
+                        TopAppBar(content = {
+                            Button(
+                                onClick = {
+                                    tree.insert((Math.random() * 100).toInt())
+                                    nodeComposableDataList = tree.returnComposableData()
+                                }
+                            ) {
+                                Text("Insert Random")
+                            }
+                            Button(
+                                onClick = {
+                                    treeStyle = ComposableTreeStyle(ySpacing = treeStyle.ySpacing + 10f)
+                                }
+                            ) {
+                                Text("+")
+                            }
+                            Button(
+                                onClick = {
+                                    treeStyle = ComposableTreeStyle(ySpacing = treeStyle.ySpacing - 10f)
+                                }
+                            ) {
+                                Text("-")
+                            }
                         })
                     },
                     content = {
@@ -78,46 +100,12 @@ class MainActivity : ComponentActivity() {
                             // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 data = nodeComposableDataList,
-                                modifier = Modifier
+                                modifier = Modifier,
+                                style = treeStyle
                             ) {
                                 activeNode = it
                             }
                         }
-
-                        // Commenting this out temporarily to find a better way to represent the tree
-                        /*
-                        ZoomableListener(
-                            // https://developer.android.com/reference/kotlin/androidx/compose/foundation/gestures/package-summary#(androidx.compose.ui.input.pointer.PointerInputScope).detectTransformGestures(kotlin.Boolean,kotlin.Function4)
-                            transformListener = { centroid, pan, zoom ->
-                                val oldScale = scale // Old Scale
-                                scale *= zoom // New Scale
-                                offset =
-                                        // This is necessary to ensure we zoom where fingers are pinching
-                                    (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-                            },
-                            tapListener = {
-                                activeNode = "Offset = $offset OnTap = $it New = ${offset + it}"
-
-                            }
-                        )
-
-                        Tree(
-                            modifier = Modifier.graphicsLayer(
-                                translationX = -offset.x * scale,
-                                translationY = -offset.y * scale,
-                                scaleX = scale,
-                                scaleY = scale,
-                                transformOrigin = TransformOrigin(0f, 0f)
-                            ),
-                            nodes = nodes,
-                            offsets = offsets,
-                            parentOffsets = parentOffsets,
-                            nodeSelect = {
-                                activeNode = it
-                            }
-                        )
-                        */
-
                     })
             }
         }

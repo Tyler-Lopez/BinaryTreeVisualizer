@@ -67,62 +67,60 @@ fun ComposableTree(
                 // NODE SELECT
                 detectTapGestures(
                     onTap = {
-                        // it = when you click returns an Offset
-                        // (0, 0) is the top left of the screen
-                        // So let's first correct it to be (0, 0) in the center of the screen
-                        val tapAsCenter = Offset(
-                            x = -this.size.width / 2f + it.x,
-                            y = -this.size.height / 2f + it.y
-                        )
-                        // Next, let's divide that by the scale so the bigger the scale the smaller the offset
-                        val scaledTap = (tapAsCenter / scale)
-                        // Now that it's been scaled... we need to add the center of the canvas
-                        // This does not yet take into account offset
-                        val canvasCenteredTap = scaledTap + it
-                        // Offsetted...
-                        val offsettedTap = Offset(
-                            canvasCenteredTap.x + (offset.x * 2f),
-                            canvasCenteredTap.y + (offset.y * 2f)
-                        )
-
-                        var found = false
-                        //onNodeSelect(tapAsCenter.toString() + "\nScaled: $scaledTap" + "\nCentered: $canvasCenteredTap" +
-                        //       "\nOffset Calculated: $offsettedTap"+
-                        //      "\nCenter is: $it" +
-                        //      "\nActual offset var is $offset" + "\nLooking for ${selectionInfo[0].first.center}")
-
-                        for (i in 0..selectionInfo.lastIndex) {
-                            if (found) continue
-                            println("i is $i")
-                            val rect = selectionInfo[i].first
-                            val rectOffset = rect.center
-                            val offsetOfRectToCenter = Offset(
-                                x = (-this.size.width / 2f + rectOffset.x) * 2f,
-                                y = (-this.size.height / 2f + rectOffset.y) * 2f
+                        /*
+                            // it = when you click returns an Offset
+                            // (0, 0) is the top left of the screen
+                            // So let's first correct it to be (0, 0) in the center of the screen
+                            val tapAsCenter = Offset(
+                                x = ((-this.size.width / 2f) + it.x
+                                        ),
+                                y = ((-this.size.height / 2f) + it.y)
                             )
-                            val newOffset = Offset(selectionInfo[0].first.center.x + offsetOfRectToCenter.x, selectionInfo[0].first.center.y + offsetOfRectToCenter.y)
-                            val newRect = Rect(center = newOffset, radius = style.nodeSize * 3f)
-                            if (newRect.contains(offsettedTap)) {
+                            // Next, let's divide that by the scale so the bigger the scale the smaller the offset
+                            val scaledTap = Offset(tapAsCenter.x, tapAsCenter.y)
+                            // Now that it's been scaled... we need to add the center of the canvas
+                            // This does not yet take into account offset
+                            val canvasCenteredTap = (scaledTap + it)
+                            // Offsetted...
+                            val offsettedTap = Offset(
+                                canvasCenteredTap.x + (offset.x * 2f),
+                                canvasCenteredTap.y + (offset.y * 2f)
+                            )
+
+                            var found = false
+
+                            for (i in 0..selectionInfo.lastIndex) {
+                                if (found) continue
                                 println("i is $i")
-                                onNodeSelect(
-                                    "NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i\n" +
-                                            "Found at $offsettedTap" + "\nActually $newOffset"
+                                val rect = selectionInfo[i].first
+                                val rectOffset = rect.center
+                                val offsetOfRectToCenter = Offset(
+                                    x = ((-this.size.width / 2f + rectOffset.x) * 2f),
+                                    y = ((-this.size.height / 2f + rectOffset.y) * 2f)
                                 )
-                                selectedIndex = i
-                                found = true
+                                val newOffset = Offset(
+                                    selectionInfo[0].first.center.x + offsetOfRectToCenter.x,
+                                    selectionInfo[0].first.center.y + offsetOfRectToCenter.y
+                                )
+                                val newRect = Rect(center = newOffset, radius = style.nodeSize * 3f)
+                                if (rect.contains(offsettedTap)) {
+                                    println("i is $i")
+                                    onNodeSelect(
+                                        "NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i\n" +
+                                                "Found at $offsettedTap" + "\nActually $newOffset"
+                                    )
+                                    selectedIndex = i
+                                    found = true
+                                }
                             }
-                        }
-                        if (!found) {
-                            onNodeSelect(
-                                "Looking for ${selectionInfo[0].second.value} at ${selectionInfo[0].first.center}" +
-                                        "\nLooking for ${selectionInfo[1].second.value} at ${selectionInfo[1].first.center}" +
-                                        "\nOffset Calculated: $offsettedTap" +
-                                        "\nCenter is: $it" +
-                                        "\nActual offset var is $offset" + "\nLooking for ${selectionInfo[0].first.center}"
-                            )
-                            selectedIndex = -1
+                            if (!found) {
+                                onNodeSelect("")
+                                selectedIndex = -1
+                            }
+
                         }
 
+                   */
                     }
                 )
             }
@@ -157,15 +155,15 @@ fun ComposableTree(
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
-                        BinaryNodeChild.LEFT -> xShift -= nodeSize * 0.07f * 2f.pow(
-                            nodeHeight + 2
+                        BinaryNodeChild.LEFT -> xShift -= nodeSize * 0.05f * 2f.pow(
+                            nodeHeight + 3
                         )
-                        BinaryNodeChild.RIGHT -> xShift += nodeSize * 0.07f * 2f.pow(
-                            nodeHeight + 2
+                        BinaryNodeChild.RIGHT -> xShift += nodeSize * 0.05f * 2f.pow(
+                            nodeHeight + 3
                         )
                     }
                     nodeHeight -= 1
-                    yShift += nodeSize * 50f
+                    yShift += nodeSize * style.ySpacing
                 }
 
                 val centerPos = Offset(center.x + xShift, center.y + yShift)
@@ -176,7 +174,7 @@ fun ComposableTree(
                     Pair(
                         Rect(
                             center = centerPos,
-                            radius = nodeSize * 3f
+                            radius = nodeSize * 5f
                         ),
                         node
                     )
