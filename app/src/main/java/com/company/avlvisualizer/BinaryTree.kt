@@ -35,7 +35,7 @@ class BinaryTree {
     }
 
     // 2nd value is the max height of tree
-    fun returnComposableData(): Pair<List<NodeComposableData>, Int> {
+    fun returnComposableData(): List<NodeComposableData> {
         val toReturn = mutableListOf<NodeComposableData>()
         root?.traverseInOrderWithPath(
             path = listOf(),
@@ -43,7 +43,7 @@ class BinaryTree {
                 toReturn.add(it)
             }
         )
-        return Pair(toReturn, root?.height ?: -1)
+        return toReturn
     }
 
 

@@ -13,21 +13,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.drawscope.DrawContext
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ScaleFactor
-import androidx.compose.ui.layout.times
-import androidx.compose.ui.unit.dp
 import kotlin.math.pow
-import kotlin.random.Random
 
 @Composable
 fun ComposableTree(
@@ -49,7 +41,7 @@ fun ComposableTree(
     }
 
     // List of pairs
-    // .first = the position of the node
+    // .first = the position and size of the node
     // .second = the node information such as height, path, & value
     var selectionInfo: MutableList<Pair<Rect, NodeComposableData>> = mutableListOf()
 
@@ -88,12 +80,12 @@ fun ComposableTree(
 
 
         ) {
-            selectionInfo.clear()
-            // Iterate through data, drawing each node
-            val dataList = data.first
-            val height = data.second
 
-            for (i in 0..dataList.lastIndex) {
+            selectionInfo.clear()
+
+            val height = data[0].height
+
+            for (i in 0..data.lastIndex) {
 
                 var xShift = 0f
                 var yShift = 0f
@@ -102,7 +94,7 @@ fun ComposableTree(
 
                 var nodeHeight = height
 
-                val node = dataList[i]
+                val node = data[i]
                 val nodeSize = style.nodeSize
 
                 for (child in node.path) {

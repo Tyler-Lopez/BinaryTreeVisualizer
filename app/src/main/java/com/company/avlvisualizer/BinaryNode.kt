@@ -40,7 +40,7 @@ data class BinaryNode(
 
 
     fun traverseInOrderWithPath(path: List<BinaryNodeChild>, visit: ComposableNodeVisitor) {
-        visit(NodeComposableData(path, value))
+        visit(NodeComposableData(path, value, height))
         leftChild?.traverseInOrderWithPath(clonePathWithInsert(path, BinaryNodeChild.LEFT), visit)
         rightChild?.traverseInOrderWithPath(clonePathWithInsert(path, BinaryNodeChild.RIGHT), visit)
     }
