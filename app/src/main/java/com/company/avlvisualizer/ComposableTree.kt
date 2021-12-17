@@ -31,22 +31,28 @@ import kotlin.random.Random
 
 @Composable
 fun ComposableTree(
-    data: Pair<List<NodeComposableData>, Int>,
+    data: List<NodeComposableData>,
     modifier: Modifier = Modifier,
-    style: ComposableTreeStyle = ComposableTreeStyle(),
-    onNodeSelect: (String) -> Unit,
+    style: ComposableTreeStyle = ComposableTreeStyle(), // Dependency Injection
+    onNodeSelect: (String) -> Unit, // When a node is selected, return String to caller
 ) {
+    // Which Node is currently tap-selected?
     var selectedIndex: Int by remember {
         mutableStateOf(-1)
     }
+    // Mutable .graphicsLayer-based scaling
     var scale by remember {
         mutableStateOf(1f)
     }
     var offset by remember {
         mutableStateOf(Offset.Zero)
     }
-    // Used to
+
+    // List of pairs
+    // .first = the position of the node
+    // .second = the node information such as height, path, & value
     var selectionInfo: MutableList<Pair<Rect, NodeComposableData>> = mutableListOf()
+
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val boxWithConstraintsScope = this
@@ -67,60 +73,7 @@ fun ComposableTree(
                 // NODE SELECT
                 detectTapGestures(
                     onTap = {
-                        /*
-                            // it = when you click returns an Offset
-                            // (0, 0) is the top left of the screen
-                            // So let's first correct it to be (0, 0) in the center of the screen
-                            val tapAsCenter = Offset(
-                                x = ((-this.size.width / 2f) + it.x
-                                        ),
-                                y = ((-this.size.height / 2f) + it.y)
-                            )
-                            // Next, let's divide that by the scale so the bigger the scale the smaller the offset
-                            val scaledTap = Offset(tapAsCenter.x, tapAsCenter.y)
-                            // Now that it's been scaled... we need to add the center of the canvas
-                            // This does not yet take into account offset
-                            val canvasCenteredTap = (scaledTap + it)
-                            // Offsetted...
-                            val offsettedTap = Offset(
-                                canvasCenteredTap.x + (offset.x * 2f),
-                                canvasCenteredTap.y + (offset.y * 2f)
-                            )
 
-                            var found = false
-
-                            for (i in 0..selectionInfo.lastIndex) {
-                                if (found) continue
-                                println("i is $i")
-                                val rect = selectionInfo[i].first
-                                val rectOffset = rect.center
-                                val offsetOfRectToCenter = Offset(
-                                    x = ((-this.size.width / 2f + rectOffset.x) * 2f),
-                                    y = ((-this.size.height / 2f + rectOffset.y) * 2f)
-                                )
-                                val newOffset = Offset(
-                                    selectionInfo[0].first.center.x + offsetOfRectToCenter.x,
-                                    selectionInfo[0].first.center.y + offsetOfRectToCenter.y
-                                )
-                                val newRect = Rect(center = newOffset, radius = style.nodeSize * 3f)
-                                if (rect.contains(offsettedTap)) {
-                                    println("i is $i")
-                                    onNodeSelect(
-                                        "NODE Value: ${selectionInfo[i].second.value}\nMATCHED AT $i\n" +
-                                                "Found at $offsettedTap" + "\nActually $newOffset"
-                                    )
-                                    selectedIndex = i
-                                    found = true
-                                }
-                            }
-                            if (!found) {
-                                onNodeSelect("")
-                                selectedIndex = -1
-                            }
-
-                        }
-
-                   */
                     }
                 )
             }
