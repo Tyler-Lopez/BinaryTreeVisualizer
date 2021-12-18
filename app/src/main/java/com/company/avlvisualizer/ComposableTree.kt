@@ -12,14 +12,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 @Composable
 fun ComposableTree(
@@ -41,9 +42,9 @@ fun ComposableTree(
     }
 
     // List of pairs
-    // .first = the position and size of the node
+    // .first = the position of the node
     // .second = the node information such as height, path, & value
-    var selectionInfo: MutableList<Pair<Rect, NodeComposableData>> = mutableListOf()
+    val nodePosInfo: MutableList<Pair<Offset, NodeComposableData>> = mutableListOf()
 
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
@@ -63,11 +64,18 @@ fun ComposableTree(
             }
             .pointerInput(Unit) {
                 // NODE SELECT
-                detectTapGestures(
-                    onTap = {
-
+                detectTapGestures {
+                    for (i in 0..nodePosInfo.lastIndex) {
+                        val nodePos = nodePosInfo[i].first
+                        val distance = sqrt(
+                            (it.x - nodePos.x).pow(2) + (it.y - nodePos.y).pow(2)
+                        )
+                        // Click was within a node
+                        if (distance <= style.nodeSize) {
+                            return@detectTapGestures
+                        }
                     }
-                )
+                }
             }
             .graphicsLayer {
                 // APPLY ZOOM
@@ -80,23 +88,25 @@ fun ComposableTree(
 
 
         ) {
+            // Anytime the composable is recomposed, ensure coordinate inform is cleared
+            nodePosInfo.clear()
 
-            selectionInfo.clear()
-
+            // Height of the tree used to determine xShift offset
             val height = data[0].height
 
+            // Iterate through each node
             for (i in 0..data.lastIndex) {
 
                 var xShift = 0f
                 var yShift = 0f
 
                 var parentPosition = Offset(0f, 0f)
-
                 var nodeHeight = height
 
                 val node = data[i]
                 val nodeSize = style.nodeSize
 
+                // Calculate node position from the path
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
@@ -111,43 +121,46 @@ fun ComposableTree(
                     yShift += nodeSize * style.ySpacing
                 }
 
-                val centerPos = Offset(center.x + xShift, center.y + yShift)
+                val nodePos = Offset(center.x + xShift, center.y + yShift)
                 val parentPos = Offset(center.x + parentPosition.x, center.y + parentPosition.y)
 
-
-                selectionInfo.add(
+                // Log the position where this node should be drawn
+                nodePosInfo.add(
                     Pair(
-                        Rect(
-                            center = centerPos,
-                            radius = nodeSize * 5f
-                        ),
+                        nodePos,
                         node
                     )
                 )
-                println("here")
 
-
+                // Draw a line from this node to the parent
+                // Must be done before drawing a circle for correct layering
                 drawLine(
                     color = style.nodeColor,
                     start = parentPos,
-                    end = centerPos,
+                    end = nodePos,
                     strokeWidth = style.lineWidth
                 )
-            }
+            } // End initial iteration
 
-            for (i in 0..selectionInfo.lastIndex) {
 
-                val node = selectionInfo[i].second
-                val centerPos = selectionInfo[i].first.center
+            for (i in 0..nodePosInfo.lastIndex) {
+
+                val centerPos = nodePosInfo[i].first
+                val node = nodePosInfo[i].second
 
                 val isSelected = i == selectedIndex
 
+                // Draw Node
                 drawCircle(
                     center = centerPos,
                     color = if (isSelected) style.selectedNodeColor else style.nodeColor,
-                    radius = style.nodeSize
+                    radius = style.nodeSize,
+                    style = Stroke(
+                        width = if (isSelected) style.nodeSize * .1f else 0f
+                    )
                 )
 
+                // Draw Text
                 val paint = Paint()
                 paint.textAlign = Paint.Align.CENTER
                 paint.textSize = style.nodeSize
@@ -161,6 +174,7 @@ fun ComposableTree(
                         paint
                     )
                 }
+
             }
         }
     }
