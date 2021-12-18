@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -44,37 +45,70 @@ fun ComposableTree(
     // List of pairs
     // .first = the position of the node
     // .second = the node information such as height, path, & value
-    val nodePosInfo: MutableList<Pair<Offset, NodeComposableData>> = mutableListOf()
+    val nodePosInfo by remember {
+        mutableStateOf(mutableStateListOf<Pair<Offset, NodeComposableData>>())
+    }
 
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
-        val boxWithConstraintsScope = this
+        var center by remember {
+            mutableStateOf(
+                Offset(
+                    constraints.maxWidth / 2f,
+                    constraints.maxHeight / 2f
+                )
+            )
+        }
 
         Canvas(modifier = modifier
-            .width(boxWithConstraintsScope.maxWidth)
-            .height(boxWithConstraintsScope.maxHeight)
+            .width(constraints.maxWidth.dp)
+            .height(constraints.maxHeight.dp)
             .background(Color.DarkGray)
+            .pointerInput(Unit) {
+                // NODE SELECT
+                detectTapGestures {
+                    // Define the click with respect to the offset relative to center of the screen
+                    val clickOffset = Offset(
+                        it.x - center.x,
+                        it.y - center.y
+                    )
+                    // Add the actual center back
+                    val adjClick = Offset(
+                        (clickOffset.x / scale) + (center.x) + offset.x * scale,
+                        (clickOffset.y / scale) + (center.y) + offset.y * scale,
+                    )
+                    //      val adjClick = (it / scale) + (offset / scale)
+
+                    for (i in 0..nodePosInfo.lastIndex) {
+                        val nodePos = Offset(
+                            nodePosInfo[i].first.x * scale,
+                            nodePosInfo[i].first.y * scale
+                        )
+                        val node = nodePosInfo[i].second
+                        val distance = sqrt(
+                            (adjClick.x - nodePos.x).pow(2) + (adjClick.y - nodePos.y).pow(2)
+                        )
+                        // Click was within a node
+                        if (distance <= (style.nodeSize * scale)) {
+                            onNodeSelect("Clicked node of ${node.value}")
+                            selectedIndex = i
+                            return@detectTapGestures
+                        }
+                    }
+                    selectedIndex = -1
+                    val fiftyPos = Offset(
+                        nodePosInfo[1].first.x * scale,
+                        nodePosInfo[1].first.y * scale
+                    )
+                    onNodeSelect("Scale is $scale\nClicked at $it\nAs raw: $clickOffset\nAdjusted to $adjClick\n25 is at ${fiftyPos}\nOffset is $offset")
+                }
+            }
             .pointerInput(Unit) {
                 // DRAG AND ZOOM
                 detectTransformGestures { centroid, pan, zoom, _ ->
                     val oldScale = scale // Old Scale
                     scale *= zoom // New Scale
                     offset = (offset + centroid / oldScale) - (centroid / scale + pan / oldScale)
-                }
-            }
-            .pointerInput(Unit) {
-                // NODE SELECT
-                detectTapGestures {
-                    for (i in 0..nodePosInfo.lastIndex) {
-                        val nodePos = nodePosInfo[i].first
-                        val distance = sqrt(
-                            (it.x - nodePos.x).pow(2) + (it.y - nodePos.y).pow(2)
-                        )
-                        // Click was within a node
-                        if (distance <= style.nodeSize) {
-                            return@detectTapGestures
-                        }
-                    }
                 }
             }
             .graphicsLayer {
@@ -94,6 +128,9 @@ fun ComposableTree(
             // Height of the tree used to determine xShift offset
             val height = data[0].height
 
+            val nodeSize = style.nodeSize
+            val lineWidth = style.lineWidth
+
             // Iterate through each node
             for (i in 0..data.lastIndex) {
 
@@ -104,7 +141,7 @@ fun ComposableTree(
                 var nodeHeight = height
 
                 val node = data[i]
-                val nodeSize = style.nodeSize
+
 
                 // Calculate node position from the path
                 for (child in node.path) {
@@ -134,12 +171,14 @@ fun ComposableTree(
 
                 // Draw a line from this node to the parent
                 // Must be done before drawing a circle for correct layering
-                drawLine(
-                    color = style.nodeColor,
-                    start = parentPos,
-                    end = nodePos,
-                    strokeWidth = style.lineWidth
-                )
+                if (i != 0) {
+                    drawLine(
+                        color = style.nodeColor,
+                        start = parentPos,
+                        end = nodePos,
+                        strokeWidth = lineWidth
+                    )
+                }
             } // End initial iteration
 
 
@@ -150,27 +189,32 @@ fun ComposableTree(
 
                 val isSelected = i == selectedIndex
 
-                // Draw Node
+                // Draw Node and border if selected
                 drawCircle(
                     center = centerPos,
                     color = if (isSelected) style.selectedNodeColor else style.nodeColor,
-                    radius = style.nodeSize,
-                    style = Stroke(
-                        width = if (isSelected) style.nodeSize * .1f else 0f
-                    )
+                    radius = nodeSize
                 )
+                if (isSelected) {
+                    drawCircle(
+                        center = centerPos,
+                        color = style.nodeColor,
+                        radius = nodeSize,
+                        style = Stroke(width = nodeSize * .1f)
+                    )
+                }
 
                 // Draw Text
                 val paint = Paint()
                 paint.textAlign = Paint.Align.CENTER
-                paint.textSize = style.nodeSize
+                paint.textSize = nodeSize
                 paint.color = 0xffffffff.toInt()
 
                 drawIntoCanvas {
                     it.nativeCanvas.drawText(
                         "${node.value}",
                         centerPos.x,
-                        centerPos.y + (style.nodeSize / 3),
+                        centerPos.y + (nodeSize / 3),
                         paint
                     )
                 }
