@@ -64,7 +64,6 @@ fun ComposableTree(
         Canvas(modifier = modifier
             .width(constraints.maxWidth.dp)
             .height(constraints.maxHeight.dp)
-            .background(Color.DarkGray)
             .pointerInput(Unit) {
                 // NODE SELECT
                 detectTapGestures {
@@ -148,10 +147,10 @@ fun ComposableTree(
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
                         BinaryNodeChild.LEFT -> xShift -= nodeSize * 0.05f * 2f.pow(
-                            nodeHeight + 3
+                            nodeHeight + 4
                         )
                         BinaryNodeChild.RIGHT -> xShift += nodeSize * 0.05f * 2f.pow(
-                            nodeHeight + 3
+                            nodeHeight + 4
                         )
                     }
                     nodeHeight -= 1
@@ -198,9 +197,9 @@ fun ComposableTree(
                 if (isSelected) {
                     drawCircle(
                         center = centerPos,
-                        color = style.nodeColor,
-                        radius = nodeSize,
-                        style = Stroke(width = nodeSize * .1f)
+                        color = style.selectedNodeBorderColor,
+                        radius = nodeSize * 1.05f,
+                        style = Stroke(width = nodeSize * .2f)
                     )
                 }
 

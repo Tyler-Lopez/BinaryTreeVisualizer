@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -15,17 +16,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.company.avlvisualizer.ui.theme.AVLVisualizerTheme
+import com.company.avlvisualizer.ui.theme.*
 import kotlin.math.atan
 import kotlin.math.sqrt
 
@@ -68,16 +69,25 @@ class MainActivity : ComponentActivity() {
                 }
                 Scaffold(
                     topBar = {
-                        TopAppBar(modifier = Modifier, content = {
-
-                            Button(
-                                onClick = {
-                                    tree.insert((Math.random() * 100).toInt())
-                                    nodeComposableDataList = tree.returnComposableData()
+                        TopAppBar(modifier = Modifier.height(100.dp).border(1.dp, color = LightGrey).shadow(5.dp), backgroundColor = DarkGrey, content = {
+                            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 10.dp)) {
+                                Button(
+                                    onClick = {
+                                        tree.insert((Math.random() * 100).toInt())
+                                        nodeComposableDataList = tree.returnComposableData()
+                                    },
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Grey)
+                                ) {
+                                    Text(
+                                        text = "INSERT RANDOM",
+                                        fontSize = 25.sp,
+                                        fontFamily = roboto,
+                                        fontWeight = FontWeight.Normal,
+                                        color = LightGrey
+                                    )
                                 }
-                            ) {
-                                Text("Insert Random")
                             }
+                            /*
                             Button(
                                 onClick = {
                                     treeStyle = ComposableTreeStyle(ySpacing = treeStyle.ySpacing + 10f)
@@ -92,7 +102,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 Text("-")
                             }
-
+                               */
                           //  Text(activeNode)
                         })
                     },
@@ -102,12 +112,17 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(Color.Green) // Just for debug
                         ) {
                             // The Tree is passed a modifier which changes in accordance with translation and scaling
                             ComposableTree(
                                 data = nodeComposableDataList,
-                                modifier = Modifier,
+                                modifier = Modifier
+                                    .background(Brush.verticalGradient(
+                                        colors = listOf(
+                                            Grey,
+                                            Grey
+                                        )
+                                    )),
                                 style = treeStyle
                             ) {
                                 activeNode = it
