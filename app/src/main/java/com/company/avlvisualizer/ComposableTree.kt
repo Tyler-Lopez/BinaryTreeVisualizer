@@ -45,6 +45,7 @@ fun ComposableTree(
     // List of pairs
     // .first = the position of the node
     // .second = the node information such as height, path, & value
+    // Important to be mutable so it is regenerated upon new node addition
     val nodePosInfo by remember {
         mutableStateOf(mutableStateListOf<Pair<Offset, NodeComposableData>>())
     }
@@ -77,7 +78,6 @@ fun ComposableTree(
                         (clickOffset.x / scale) + (center.x) + offset.x * scale,
                         (clickOffset.y / scale) + (center.y) + offset.y * scale,
                     )
-                    //      val adjClick = (it / scale) + (offset / scale)
 
                     for (i in 0..nodePosInfo.lastIndex) {
                         val nodePos = Offset(
@@ -89,7 +89,7 @@ fun ComposableTree(
                             (adjClick.x - nodePos.x).pow(2) + (adjClick.y - nodePos.y).pow(2)
                         )
                         // Click was within a node
-                        if (distance <= (style.nodeSize * scale)) {
+                        if (distance <= (style.nodeSize * scale * 2)) {
                             onNodeSelect("Clicked node of ${node.value}")
                             selectedIndex = i
                             return@detectTapGestures
