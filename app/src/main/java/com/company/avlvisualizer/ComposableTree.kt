@@ -89,7 +89,7 @@ fun ComposableTree(
                         )
                         // Click was within a node
                         if (distance <= (style.nodeSize * scale * 2)) {
-                            onNodeSelect("Clicked node of ${node.value}")
+                            onNodeSelect("Node Selected: ${node.value}")
                             selectedIndex = i
                             return@detectTapGestures
                         }
@@ -99,7 +99,7 @@ fun ComposableTree(
                         nodePosInfo[1].first.x * scale,
                         nodePosInfo[1].first.y * scale
                     )
-                    onNodeSelect("Scale is $scale\nClicked at $it\nAs raw: $clickOffset\nAdjusted to $adjClick\n25 is at ${fiftyPos}\nOffset is $offset")
+                    onNodeSelect("No Node Selected")
                 }
             }
             .pointerInput(Unit) {
@@ -198,7 +198,7 @@ fun ComposableTree(
                     drawCircle(
                         center = centerPos,
                         color = style.selectedNodeBorderColor,
-                        radius = nodeSize * 1.05f,
+                        radius = nodeSize * 1.1f,
                         style = Stroke(width = nodeSize * .2f)
                     )
                 }

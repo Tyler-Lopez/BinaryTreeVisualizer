@@ -1,5 +1,6 @@
 package com.company.avlvisualizer
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,10 +13,13 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -23,6 +27,9 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Normal
+import androidx.compose.ui.text.font.FontWeight.Companion.Thin
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,49 +69,180 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(tree.returnComposableData())
                 }
                 var activeNode by remember {
-                    mutableStateOf("None Selected")
+                    mutableStateOf("No Node Selected")
                 }
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
                 }
                 Scaffold(
                     topBar = {
-                        TopAppBar(modifier = Modifier.height(100.dp).border(1.dp, color = LightGrey).shadow(5.dp), backgroundColor = DarkGrey, content = {
-                            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 10.dp)) {
-                                Button(
-                                    onClick = {
-                                        tree.insert((Math.random() * 100).toInt())
-                                        nodeComposableDataList = tree.returnComposableData()
-                                    },
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = Grey)
-                                ) {
-                                    Text(
-                                        text = "INSERT RANDOM",
-                                        fontSize = 25.sp,
-                                        fontFamily = roboto,
-                                        fontWeight = FontWeight.Normal,
-                                        color = LightGrey
+                        TopAppBar(
+                            modifier = Modifier
+                                .height(150.dp)
+                                .drawBehind {
+                                    drawLine(
+                                        color = LightGrey,
+                                        strokeWidth = 5f,
+                                        start = Offset(0f, size.height),
+                                        end = Offset(size.width, size.height)
                                     )
                                 }
-                            }
-                            /*
-                            Button(
-                                onClick = {
-                                    treeStyle = ComposableTreeStyle(ySpacing = treeStyle.ySpacing + 10f)
+                                .shadow(5.dp),
+                            backgroundColor = DarkGrey,
+                            content = {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(5.dp)
+                                ) {
+                                    // BEGIN INSERT ROW
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(bottom = 5.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Button(
+                                            onClick = {
+                                                tree.insert((Math.random() * 100).toInt())
+                                                nodeComposableDataList = tree.returnComposableData()
+                                            },
+                                            colors = ButtonDefaults.buttonColors(backgroundColor = Grey)
+                                        ) {
+
+                                            Text(
+                                                text = "ADD RANDOM",
+                                                fontSize = 25.sp,
+                                                fontFamily = roboto,
+                                                fontWeight = Normal,
+                                                color = LightGrey
+                                            )
+                                        }
+                                    } // END INSERT ROW
+                                    // BEGIN SPACING AND BALANCE ROW
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(25.dp)
+                                            .padding(bottom = 5.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        // BEGING SPACING COLUMN
+                                        Row(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                Icons.Filled.Expand, "Expand", tint = LightBlue,
+                                                modifier = Modifier
+                                                    .size(25.dp)
+                                                    .padding(end = 2.dp)
+                                            )
+                                            Text(
+                                                text = "SPACING:\t",
+                                                color = LightGrey,
+                                                fontFamily = roboto,
+                                                fontWeight = Normal,
+                                            )
+                                            Icon(
+                                                imageVector = Icons.Filled.ArrowUpward,
+                                                contentDescription = "Increase Y-Spacing",
+                                                tint = LightGrey,
+                                                modifier = Modifier
+                                                    .size(25.dp)
+                                                    .padding(end = 2.dp)
+                                                    .background(Grey)
+                                                    .clickable {
+                                                        treeStyle =
+                                                            ComposableTreeStyle(ySpacing = treeStyle.ySpacing + 10f)
+                                                    }
+                                            )
+                                            Icon(
+                                                imageVector = Icons.Filled.ArrowDownward,
+                                                contentDescription = "Decrease Y-Spacing",
+                                                tint = LightGrey,
+                                                modifier = Modifier
+                                                    .size(25.dp)
+                                                    .background(Grey)
+                                                    .clickable {
+                                                        treeStyle =
+                                                            ComposableTreeStyle(ySpacing = treeStyle.ySpacing - 10f)
+                                                    }
+                                            )
+                                        } // END SPACING COLUMN
+                                        Row(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                Icons.Filled.Timeline,
+                                                "BALANCING",
+                                                tint = LightBlue,
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .padding(end = 2.dp)
+                                            )
+                                            Text(
+                                                text = "BALANCE:\t",
+                                                color = LightGrey,
+                                                fontFamily = roboto,
+                                                fontWeight = Normal,
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .padding(end = 2.dp)
+                                            )
+                                            Text(
+                                                text = "ON",
+                                                color = LightGrey,
+                                                textAlign = TextAlign.Center,
+                                                fontFamily = roboto,
+                                                fontWeight = Normal,
+
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .width(35.dp)
+                                                    .padding(end = 2.dp)
+                                                    .background(Grey)
+                                                    .clickable {
+                                                        //
+                                                    }
+                                            )
+                                            Text(
+                                                text = "OFF",
+                                                color = LightGrey,
+                                                textAlign = TextAlign.Center,
+                                                fontFamily = roboto,
+                                                fontWeight = Normal,
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .width(35.dp)
+                                                    .padding(end = 2.dp)
+                                                    .background(Grey)
+                                                    .clickable {
+                                                        //
+                                                    }
+                                            )
+                                        }
+
+                                    }
+
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        Text(
+                                            text = activeNode,
+                                            color = LightGrey,
+                                            fontFamily = roboto,
+                                            fontWeight = Thin,
+                                            fontSize = 20.sp
+                                        )
+                                    }
                                 }
-                            ) {
-                                Text("+")
+                                //
                             }
-                            Button(
-                                onClick = {
-                                    treeStyle = ComposableTreeStyle(ySpacing = treeStyle.ySpacing - 10f)
-                                }
-                            ) {
-                                Text("-")
-                            }
-                               */
-                          //  Text(activeNode)
-                        })
+                        )
                     },
                     content = {
                         // A surface container using the 'background' color from the theme
@@ -117,12 +255,14 @@ class MainActivity : ComponentActivity() {
                             ComposableTree(
                                 data = nodeComposableDataList,
                                 modifier = Modifier
-                                    .background(Brush.verticalGradient(
-                                        colors = listOf(
-                                            Grey,
-                                            Grey
+                                    .background(
+                                        Brush.verticalGradient(
+                                            colors = listOf(
+                                                Grey,
+                                                Grey
+                                            )
                                         )
-                                    )),
+                                    ),
                                 style = treeStyle
                             ) {
                                 activeNode = it
