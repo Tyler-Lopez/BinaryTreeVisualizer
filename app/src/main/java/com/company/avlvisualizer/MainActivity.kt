@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             modifier = Modifier
-                                .height(150.dp)
+                                .height(130.dp)
                                 .drawBehind {
                                     drawLine(
                                         color = LightGrey,
