@@ -11,5 +11,6 @@ enum class ComposableTreeTheme(
     val selectedNodeBorderColor: Color,
 ) {
     BLUE(DarkBlue, Red, Grey),
-    RED(Red, DarkBlue, Grey)
+    RED(Red, DarkBlue, Grey);
+
 }

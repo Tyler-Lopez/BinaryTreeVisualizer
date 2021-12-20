@@ -12,6 +12,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -30,6 +32,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.Thin
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,6 +78,10 @@ class MainActivity : ComponentActivity() {
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
                 }
+                var toInsert by remember {
+                    mutableStateOf("")
+                }
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -96,13 +103,20 @@ class MainActivity : ComponentActivity() {
                                         .fillMaxSize()
                                         .padding(5.dp)
                                 ) {
-                                    // BEGIN INSERT ROW
+                                    // BEGIN INSERT RANDOM AND SPECIFIC ROW
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
+                                            .height(55.dp)
                                             .padding(bottom = 5.dp),
-                                        verticalAlignment = Alignment.CenterVertically
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
+                                        // BEGIN INSERT RANDOM COLUMN
+                                        Row(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
                                         Button(
                                             onClick = {
                                                 tree.insert((Math.random() * 100).toInt())
@@ -119,7 +133,31 @@ class MainActivity : ComponentActivity() {
                                                 color = LightGrey
                                             )
                                         }
-                                    } // END INSERT ROW
+                                        } // END INSERT RANDOM COLUMN
+                                        // BEGIN INSERT SPECIFIC COLUMN
+                                        Row(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            TextField(
+                                                value = toInsert,
+                                                modifier = Modifier.fillMaxHeight(),
+                                                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                                                keyboardActions = KeyboardActions(onDone = {
+                                                    tree.insert(toInsert.toInt())
+                                                    toInsert = ""
+                                                    nodeComposableDataList = tree.returnComposableData()
+                                                }),
+                                                onValueChange = {
+                                                   toInsert = it
+                                                },
+                                                singleLine = true,
+                                                placeholder = {
+                                                    Text(text = "(0 - 999)")
+                                                }
+                                            )
+                                        } // END INSERT SPECIFIC COLUMN
+                                    } // END INSERT RANDOM AND INSERT SPECIFIC ROW
                                     // BEGIN SPACING AND BALANCE ROW
                                     Row(
                                         modifier = Modifier
