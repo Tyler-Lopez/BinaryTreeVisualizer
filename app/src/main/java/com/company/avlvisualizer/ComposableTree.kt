@@ -172,7 +172,7 @@ fun ComposableTree(
                 // Must be done before drawing a circle for correct layering
                 if (i != 0) {
                     drawLine(
-                        color = style.nodeColor,
+                        color = style.theme.nodeColor,
                         start = parentPos,
                         end = nodePos,
                         strokeWidth = lineWidth
@@ -191,13 +191,13 @@ fun ComposableTree(
                 // Draw Node and border if selected
                 drawCircle(
                     center = centerPos,
-                    color = if (isSelected) style.selectedNodeColor else style.nodeColor,
+                    color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
                     radius = nodeSize
                 )
                 if (isSelected) {
                     drawCircle(
                         center = centerPos,
-                        color = style.selectedNodeBorderColor,
+                        color = style.theme.selectedNodeBorderColor,
                         radius = nodeSize * 1.1f,
                         style = Stroke(width = nodeSize * .2f)
                     )

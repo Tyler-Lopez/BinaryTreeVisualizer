@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
@@ -78,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             modifier = Modifier
-                                .height(130.dp)
+                                .height(145.dp)
                                 .drawBehind {
                                     drawLine(
                                         color = LightGrey,
@@ -154,8 +155,8 @@ class MainActivity : ComponentActivity() {
                                                     .padding(end = 2.dp)
                                                     .background(Grey)
                                                     .clickable {
-                                                        treeStyle =
-                                                            ComposableTreeStyle(ySpacing = treeStyle.ySpacing + 10f)
+                                                        treeStyle.ySpacing =
+                                                            treeStyle.ySpacing + 10f
                                                     }
                                             )
                                             Icon(
@@ -166,8 +167,8 @@ class MainActivity : ComponentActivity() {
                                                     .size(25.dp)
                                                     .background(Grey)
                                                     .clickable {
-                                                        treeStyle =
-                                                            ComposableTreeStyle(ySpacing = treeStyle.ySpacing - 10f)
+                                                        treeStyle.ySpacing =
+                                                            treeStyle.ySpacing - 10f
                                                     }
                                             )
                                         } // END SPACING COLUMN
@@ -224,9 +225,57 @@ class MainActivity : ComponentActivity() {
                                                     }
                                             )
                                         }
-
-                                    }
-
+                                    } // END SPACING AND BALANCE ROW
+                                    // BEGIN THEME SELECTION ROW
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(25.dp)
+                                            .padding(bottom = 5.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        // BEGING SPACING COLUMN
+                                        Row(
+                                            modifier = Modifier.fillMaxHeight(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                Icons.Filled.Brush, "Theme", tint = LightBlue,
+                                                modifier = Modifier
+                                                    .size(25.dp)
+                                                    .padding(end = 2.dp)
+                                            )
+                                            Text(
+                                                text = "THEME:\t",
+                                                color = LightGrey,
+                                                fontFamily = roboto,
+                                                fontWeight = Normal,
+                                            )
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .width(35.dp)
+                                                    .padding(end = 2.dp)
+                                                    .background(LightBlue)
+                                                    .border(1.dp, LightGrey)
+                                                    .clickable {
+                                                        treeStyle.theme = ComposableTreeTheme.BLUE
+                                                    }
+                                            )
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .width(35.dp)
+                                                    .padding(end = 2.dp)
+                                                    .background(Red)
+                                                    .border(1.dp, LightGrey)
+                                                    .clickable {
+                                                        treeStyle.theme = ComposableTreeTheme.RED
+                                                    }
+                                            )
+                                        } // END THEME SELECTION COLUMN
+                                    } // END THEME SELECTION ROW
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
