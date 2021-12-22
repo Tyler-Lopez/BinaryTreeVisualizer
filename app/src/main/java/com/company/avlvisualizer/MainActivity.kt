@@ -88,6 +88,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 // https://levelup.gitconnected.com/implement-android-snackbar-in-jetpack-compose-d83df5ff5b47
+                // https://www.devbitsandbytes.com/configuring-snackbar-jetpack-compose-using-scaffold-with-bottom-navigation/
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
                 // https://stackoverflow.com/questions/59133100/how-to-close-the-virtual-keyboard-from-a-jetpack-compose-textfield
@@ -354,34 +355,27 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     },
-                    content = {
-                        // A surface container using the 'background' color from the theme
-                        // The Box contains the Composable Tree, and contains the pointerInput for dragging and zooming
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            // The Tree is passed a modifier which changes in accordance with translation and scaling
-                            ComposableTree(
-                                data = nodeComposableDataList,
-                                modifier = Modifier
-                                    .background(
-                                        Brush.verticalGradient(
-                                            colors = listOf(
-                                                Grey,
-                                                Grey
-                                            )
-                                        )
-                                    ),
-                                style = treeStyle
-                            ) {
-                                activeNode = it
-                            }
-                        }
-                    },
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
-                )
+                ) {
+                    ComposableTree(
+                        data = nodeComposableDataList,
+                        modifier = Modifier
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Grey,
+                                        Grey
+                                    )
+                                )
+                            ),
+                        style = treeStyle
+                    ) {
+                        activeNode = it
+                    }
+                    
+                    // Add snack bar and snackbar host here
+                }
             }
         }
     }
