@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -29,6 +30,8 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.Thin
@@ -38,12 +41,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
+import kotlinx.coroutines.launch
 import kotlin.math.atan
 import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
 
 
+    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
@@ -82,6 +87,12 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf("")
                 }
 
+                // https://levelup.gitconnected.com/implement-android-snackbar-in-jetpack-compose-d83df5ff5b47
+                val scaffoldState = rememberScaffoldState()
+                val scope = rememberCoroutineScope()
+                // https://stackoverflow.com/questions/59133100/how-to-close-the-virtual-keyboard-from-a-jetpack-compose-textfield
+                val focusManager = LocalFocusManager.current
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -117,22 +128,23 @@ class MainActivity : ComponentActivity() {
                                             modifier = Modifier.fillMaxHeight(),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                        Button(
-                                            onClick = {
-                                                tree.insert((Math.random() * 100).toInt())
-                                                nodeComposableDataList = tree.returnComposableData()
-                                            },
-                                            colors = ButtonDefaults.buttonColors(backgroundColor = Grey)
-                                        ) {
+                                            Button(
+                                                onClick = {
+                                                    tree.insert((Math.random() * 100).toInt())
+                                                    nodeComposableDataList =
+                                                        tree.returnComposableData()
+                                                },
+                                                colors = ButtonDefaults.buttonColors(backgroundColor = Grey)
+                                            ) {
 
-                                            Text(
-                                                text = "ADD RANDOM",
-                                                fontSize = 25.sp,
-                                                fontFamily = roboto,
-                                                fontWeight = Normal,
-                                                color = LightGrey
-                                            )
-                                        }
+                                                Text(
+                                                    text = "ADD RANDOM",
+                                                    fontSize = 25.sp,
+                                                    fontFamily = roboto,
+                                                    fontWeight = Normal,
+                                                    color = LightGrey
+                                                )
+                                            }
                                         } // END INSERT RANDOM COLUMN
                                         // BEGIN INSERT SPECIFIC COLUMN
                                         Row(
@@ -142,14 +154,25 @@ class MainActivity : ComponentActivity() {
                                             TextField(
                                                 value = toInsert,
                                                 modifier = Modifier.fillMaxHeight(),
-                                                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                                                keyboardOptions = KeyboardOptions.Default.copy(
+                                                    keyboardType = KeyboardType.Number
+                                                ),
                                                 keyboardActions = KeyboardActions(onDone = {
-                                                    tree.insert(toInsert.toInt())
-                                                    toInsert = ""
-                                                    nodeComposableDataList = tree.returnComposableData()
+                                                    focusManager.clearFocus()
+                                                    if (toInsert.toInt() < 0 || toInsert.toInt() > 999) {
+                                                        scope.launch {
+                                                            toInsert = ""
+                                                            scaffoldState.snackbarHostState.showSnackbar("Test")
+                                                        }
+                                                    } else {
+                                                        tree.insert(toInsert.toInt())
+                                                        toInsert = ""
+                                                        nodeComposableDataList =
+                                                            tree.returnComposableData()
+                                                    }
                                                 }),
                                                 onValueChange = {
-                                                   toInsert = it
+                                                    toInsert = it
                                                 },
                                                 singleLine = true,
                                                 placeholder = {
@@ -355,7 +378,10 @@ class MainActivity : ComponentActivity() {
                                 activeNode = it
                             }
                         }
-                    })
+                    },
+                    scaffoldState = scaffoldState,
+                    snackbarHost = { scaffoldState.snackbarHostState }
+                )
             }
         }
     }
