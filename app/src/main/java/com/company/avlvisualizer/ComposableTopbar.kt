@@ -7,11 +7,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
@@ -19,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -27,16 +27,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.company.avlvisualizer.ui.theme.DarkGrey
-import com.company.avlvisualizer.ui.theme.Grey
-import com.company.avlvisualizer.ui.theme.LightGrey
-import com.company.avlvisualizer.ui.theme.roboto
+import com.company.avlvisualizer.ui.theme.*
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun ComposableTopBar(
     message: String,
     onSpacingChange: (Int) -> Unit,
+    onWeightChange: (Int) -> Unit,
     onBalanceChange: () -> Unit,
     onThemeChange: (ComposableTreeTheme) -> Unit,
     onRandomNumber: (Int) -> Unit,
@@ -63,6 +61,7 @@ fun ComposableTopBar(
         }
     ) {
         val maxHeight = this.maxHeight
+        val maxWidth = this.maxWidth
         Column {
             Row(modifier = Modifier.height(75.dp)) {
                 Box(
@@ -76,13 +75,13 @@ fun ComposableTopBar(
                             onRandomNumber((Math.random() * 100).toInt())
                         }),
                     contentAlignment = Center
-                    ) {
+                ) {
                     Text(
-                        text = "Add Random",
-                        fontSize = 35.sp,
+                        text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
+                        fontSize = if (maxWidth > 480.dp) 35.sp else 30.sp,
                         fontFamily = roboto,
                         fontWeight = Bold,
-                        color = White,
+                        color = LightGrey,
                     )
 
                 }
@@ -111,9 +110,13 @@ fun ComposableTopBar(
                             inputStr = it
                         },
                         singleLine = true,
+                        label = {
+                            Text(text = "Insert Number", color = LightGrey)
+                        },
                         placeholder = {
-                            Text(text = "(0 - 999)")
-                        }
+                            Text(text = "(0 - 999)", color = White)
+                        },
+                        colors = TextFieldDefaults.textFieldColors(textColor = White)
                     )
                 }
             }
@@ -121,29 +124,124 @@ fun ComposableTopBar(
                 // Y-SPACING
                 Box(
                     modifier = Modifier
-                        .width(300.dp)
-                        .background(Grey)
+                        .width(180.dp)
                 ) {
-                    Text("box1")
-
+                    ComposableIconTitle(
+                        icon = Icons.Default.Expand,
+                        title = "SPACING"
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowUpward,
+                                contentDescription = "Increase",
+                                modifier = Modifier
+                                    .weight(0.5f)
+                                    .size(it)
+                                    .clickable { onSpacingChange(+10) },
+                                tint = LightBlue
+                            )
+                            Icon(
+                                imageVector = Icons.Default.ArrowDownward,
+                                contentDescription = "Decrease",
+                                modifier = Modifier
+                                    .weight(0.5f)
+                                    .size(it)
+                                    .clickable { onSpacingChange(-10) },
+                                tint = LightBlue
+                            )
+                        }
+                    }
                 }
-                // BALANCE
                 Box(
                     modifier = Modifier
-                        .width(300.dp)
-                        .background(Grey)
+                        .width(180.dp)
                 ) {
-                    Text("box2")
-
+                    ComposableIconTitle(
+                        icon = Icons.Default.LineWeight,
+                        title = "WEIGHT"
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowUpward,
+                                contentDescription = "Increase",
+                                modifier = Modifier
+                                    .weight(0.5f)
+                                    .size(it)
+                                    .clickable { onWeightChange(+100) },
+                                tint = LightBlue
+                            )
+                            Icon(
+                                imageVector = Icons.Default.ArrowDownward,
+                                contentDescription = "Decrease",
+                                modifier = Modifier
+                                    .weight(0.5f)
+                                    .size(it)
+                                    .clickable { onWeightChange(-100) },
+                                tint = LightBlue
+                            )
+                        }
+                    }
                 }
-                // THEME
                 Box(
                     modifier = Modifier
-                        .width(300.dp)
-                        .background(Grey)
+                        .width(360.dp)
                 ) {
-                    Text("box3")
-
+                    ComposableIconTitle(
+                        icon = Icons.Default.Brush,
+                        title = "THEME"
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                        ) {
+                            Button(
+                                modifier = Modifier
+                                    .height(it)
+                                    .weight(0.5f)
+                                    .padding(start = 5.dp)
+                                    .padding(vertical = 5.dp)
+                                    .border(width = 1.dp, color = LightGrey),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Blue),
+                                onClick = { onThemeChange(ComposableTreeTheme.BLUE) }
+                            ) {}
+                            Button(
+                                modifier = Modifier
+                                    .height(it)
+                                    .weight(0.5f)
+                                    .padding(start = 5.dp)
+                                    .padding(vertical = 5.dp)
+                                    .border(width = 1.dp, color = LightGrey),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Red),
+                                onClick = { onThemeChange(ComposableTreeTheme.RED) }
+                            ) {}
+                            Button(
+                                modifier = Modifier
+                                    .height(it)
+                                    .weight(0.5f)
+                                    .padding(start = 5.dp)
+                                    .padding(vertical = 5.dp)
+                                    .border(width = 1.dp, color = LightGrey),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                                onClick = { onThemeChange(ComposableTreeTheme.GREEN) }
+                            ) {}
+                            Button(
+                                modifier = Modifier
+                                    .height(it)
+                                    .weight(0.5f)
+                                    .padding(start = 5.dp)
+                                    .padding(vertical = 5.dp)
+                                    .border(width = 1.dp, color = LightGrey),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Purple),
+                                onClick = { onThemeChange(ComposableTreeTheme.PURPLE) }
+                            ) {}
+                        }
+                    }
                 }
             }
             Row {

@@ -82,13 +82,31 @@ class MainActivity : ComponentActivity() {
                         ComposableTopBar(
                             message = "",
                             onSpacingChange = {
-
+                                if (treeStyle.ySpacing <= 10 && it < 0) {
+                                    scope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "Cannot decrease spacing further."
+                                        )
+                                    }
+                                } else treeStyle.ySpacing += it
+                            },
+                            onWeightChange = {
+                                if (treeStyle.nodeSize <= 80 && it < 0) {
+                                    scope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "Cannot decrease width further."
+                                        )
+                                    }
+                                } else {
+                                    treeStyle.nodeSize += it
+                                    treeStyle.lineWidth += it
+                                }
                             },
                             onBalanceChange = {
 
                             },
                             onThemeChange = {
-
+                                treeStyle.theme = it
                             },
                             onRandomNumber = {
                                 tree.insert(it)
@@ -109,274 +127,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         )
-                        /*
-                        TopAppBar(
-                            modifier = Modifier
-                                .height(145.dp)
-                                .drawBehind {
-                                    drawLine(
-                                        color = LightGrey,
-                                        strokeWidth = 5f,
-                                        start = Offset(0f, size.height),
-                                        end = Offset(size.width, size.height)
-                                    )
-                                }
-                                .shadow(5.dp),
-                            backgroundColor = DarkGrey,
-                            content = {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(5.dp)
-                                ) {
-                                    // BEGIN INSERT RANDOM AND SPECIFIC ROW
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(55.dp)
-                                            .padding(bottom = 5.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        // BEGIN INSERT RANDOM COLUMN
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Button(
-                                                onClick = {
-                                                    val randomNumber = (Math.random() * 100).toInt()
-                                                    tree.insert(randomNumber)
-                                                    nodeComposableDataList =
-                                                        tree.returnComposableData()
-                                                },
-                                                colors = ButtonDefaults.buttonColors(backgroundColor = Grey)
-                                            ) {
-
-                                                Text(
-                                                    text = "ADD RANDOM",
-                                                    fontSize = 25.sp,
-                                                    fontFamily = roboto,
-                                                    fontWeight = Normal,
-                                                    color = LightGrey
-                                                )
-                                            }
-                                        } // END INSERT RANDOM COLUMN
-                                        // BEGIN INSERT SPECIFIC COLUMN
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            TextField(
-                                                value = inputStr,
-                                                modifier = Modifier.fillMaxHeight(),
-                                                keyboardOptions = KeyboardOptions.Default.copy(
-                                                    keyboardType = KeyboardType.Number
-                                                ),
-                                                keyboardActions = KeyboardActions(onDone = {
-                                                    // Close keyboard
-                                                    focusManager.clearFocus()
-                                                    // Handle user-input and edge cases
-                                                    try {
-                                                        val inputVal = inputStr.toInt()
-                                                        if (inputVal < 0 || inputVal > 999) throw Exception()
-                                                        tree.insert(inputVal)
-                                                        nodeComposableDataList =
-                                                            tree.returnComposableData()
-                                                    } catch (e: Exception) {
-                                                        scope.launch {
-                                                            scaffoldState.snackbarHostState.showSnackbar(
-                                                                message = "Input must be an integer in the range of 0 to 999."
-                                                            )
-                                                        }
-                                                    }
-                                                    // Reset user-input string
-                                                    inputStr = ""
-                                                }),
-                                                onValueChange = {
-                                                    inputStr = it
-                                                },
-                                                singleLine = true,
-                                                placeholder = {
-                                                    Text(text = "(0 - 999)")
-                                                }
-                                            )
-                                        } // END INSERT SPECIFIC COLUMN
-                                    } // END INSERT RANDOM AND INSERT SPECIFIC ROW
-                                    // BEGIN SPACING AND BALANCE ROW
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(25.dp)
-                                            .padding(bottom = 5.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        // BEGING SPACING COLUMN
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Expand, "Expand", tint = LightBlue,
-                                                modifier = Modifier
-                                                    .size(25.dp)
-                                                    .padding(end = 2.dp)
-                                            )
-                                            Text(
-                                                text = "SPACING:\t",
-                                                color = LightGrey,
-                                                fontFamily = roboto,
-                                                fontWeight = Normal,
-                                            )
-                                            Icon(
-                                                imageVector = Icons.Filled.ArrowUpward,
-                                                contentDescription = "Increase Y-Spacing",
-                                                tint = LightGrey,
-                                                modifier = Modifier
-                                                    .size(25.dp)
-                                                    .padding(end = 2.dp)
-                                                    .background(Grey)
-                                                    .clickable {
-                                                        treeStyle.ySpacing =
-                                                            treeStyle.ySpacing + 10f
-                                                    }
-                                            )
-                                            Icon(
-                                                imageVector = Icons.Filled.ArrowDownward,
-                                                contentDescription = "Decrease Y-Spacing",
-                                                tint = LightGrey,
-                                                modifier = Modifier
-                                                    .size(25.dp)
-                                                    .background(Grey)
-                                                    .clickable {
-                                                        treeStyle.ySpacing =
-                                                            treeStyle.ySpacing - 10f
-                                                    }
-                                            )
-                                        } // END SPACING COLUMN
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Timeline,
-                                                "BALANCING",
-                                                tint = LightBlue,
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .padding(end = 2.dp)
-                                            )
-                                            Text(
-                                                text = "BALANCE:\t",
-                                                color = LightGrey,
-                                                fontFamily = roboto,
-                                                fontWeight = Normal,
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .padding(end = 2.dp)
-                                            )
-                                            Text(
-                                                text = "ON",
-                                                color = LightGrey,
-                                                textAlign = TextAlign.Center,
-                                                fontFamily = roboto,
-                                                fontWeight = Normal,
-
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .width(35.dp)
-                                                    .padding(end = 2.dp)
-                                                    .background(Grey)
-                                                    .clickable {
-                                                        //
-                                                    }
-                                            )
-                                            Text(
-                                                text = "OFF",
-                                                color = LightGrey,
-                                                textAlign = TextAlign.Center,
-                                                fontFamily = roboto,
-                                                fontWeight = Normal,
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .width(35.dp)
-                                                    .padding(end = 2.dp)
-                                                    .background(Grey)
-                                                    .clickable {
-                                                        //
-                                                    }
-                                            )
-                                        }
-                                    } // END SPACING AND BALANCE ROW
-                                    // BEGIN THEME SELECTION ROW
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(25.dp)
-                                            .padding(bottom = 5.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        // BEGING SPACING COLUMN
-                                        Row(
-                                            modifier = Modifier.fillMaxHeight(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Brush, "Theme", tint = LightBlue,
-                                                modifier = Modifier
-                                                    .size(25.dp)
-                                                    .padding(end = 2.dp)
-                                            )
-                                            Text(
-                                                text = "THEME:\t",
-                                                color = LightGrey,
-                                                fontFamily = roboto,
-                                                fontWeight = Normal,
-                                            )
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .width(35.dp)
-                                                    .padding(end = 2.dp)
-                                                    .background(LightBlue)
-                                                    .border(1.dp, LightGrey)
-                                                    .clickable {
-                                                        treeStyle.theme = ComposableTreeTheme.BLUE
-                                                    }
-                                            )
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxHeight()
-                                                    .width(35.dp)
-                                                    .padding(end = 2.dp)
-                                                    .background(Red)
-                                                    .border(1.dp, LightGrey)
-                                                    .clickable {
-                                                        treeStyle.theme = ComposableTreeTheme.RED
-                                                    }
-                                            )
-                                        } // END THEME SELECTION COLUMN
-                                    } // END THEME SELECTION ROW
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = activeNode,
-                                            color = LightGrey,
-                                            fontFamily = roboto,
-                                            fontWeight = Thin,
-                                            fontSize = 20.sp
-                                        )
-                                    }
-                                }
-                                //
-                            }
-                        )
-
-                         */
                     },
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }

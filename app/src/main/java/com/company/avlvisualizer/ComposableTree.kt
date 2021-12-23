@@ -149,15 +149,15 @@ fun ComposableTree(
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
-                        BinaryNodeChild.LEFT -> xShift -= nodeSize * 0.05f * 2f.pow(
+                        BinaryNodeChild.LEFT -> xShift -= 50f * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
-                        BinaryNodeChild.RIGHT -> xShift += nodeSize * 0.05f * 2f.pow(
+                        BinaryNodeChild.RIGHT -> xShift += 50f * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
                     }
                     nodeHeight -= 1
-                    yShift += nodeSize * style.ySpacing
+                    yShift += 100f * style.ySpacing
                 }
 
                 val nodePos = Offset(center.x + xShift, center.y + yShift)

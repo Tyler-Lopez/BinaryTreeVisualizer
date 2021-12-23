@@ -1,9 +1,7 @@
 package com.company.avlvisualizer
 
 import androidx.compose.ui.graphics.Color
-import com.company.avlvisualizer.ui.theme.DarkBlue
-import com.company.avlvisualizer.ui.theme.Grey
-import com.company.avlvisualizer.ui.theme.Red
+import com.company.avlvisualizer.ui.theme.*
 
 enum class ComposableTreeTheme(
     val nodeColor: Color,
@@ -11,6 +9,7 @@ enum class ComposableTreeTheme(
     val selectedNodeColor: Color,
 ) {
     BLUE(DarkBlue, Red, Grey),
-    RED(Red, DarkBlue, Grey);
-
+    RED(Red, DarkBlue, Grey),
+    GREEN(Green, Purple, Grey),
+    PURPLE(Purple, Color.Magenta, Grey)
 }
