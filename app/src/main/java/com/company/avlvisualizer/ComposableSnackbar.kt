@@ -22,6 +22,9 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Thin
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.company.avlvisualizer.ui.theme.DarkGrey
+import com.company.avlvisualizer.ui.theme.LightGrey
+import com.company.avlvisualizer.ui.theme.Red
 import com.company.avlvisualizer.ui.theme.roboto
 
 @Composable
@@ -38,7 +41,7 @@ fun ComposableSnackbar(
                     Column(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
                         Text(
                             text = "Error",
-                            color = Color.Red,
+                            color = Red,
                             textAlign = TextAlign.Left,
                             fontFamily = roboto,
                             fontWeight = SemiBold,
@@ -46,7 +49,7 @@ fun ComposableSnackbar(
                         )
                         Text(
                             text = data.message,
-                            color = Color.LightGray,
+                            color = LightGrey,
                             textAlign = TextAlign.Left,
                             fontFamily = roboto,
                             fontWeight = Light,
@@ -59,8 +62,8 @@ fun ComposableSnackbar(
         modifier = modifier
             .padding(5.dp)
             .fillMaxWidth()
-            .background(Color.DarkGray)
-            .border(width = 1.dp, Color.LightGray)
+            .background(DarkGrey)
+            .border(width = 1.dp, LightGrey)
             .shadow(5.dp)
             .wrapContentHeight(Alignment.Bottom)
     )
