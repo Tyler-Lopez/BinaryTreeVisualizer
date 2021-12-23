@@ -83,6 +83,23 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     topBar = {
+                        ComposableTopBar(
+                            message = "",
+                            onSpacingChange = {
+
+                            },
+                            onBalanceChange = {
+
+                            },
+                            onThemeChange = {
+
+                            },
+                            onRandomNumber = {
+                                tree.insert(it)
+                                nodeComposableDataList = tree.returnComposableData()
+                            }
+                        )
+                        /*
                         TopAppBar(
                             modifier = Modifier
                                 .height(145.dp)
@@ -348,6 +365,8 @@ class MainActivity : ComponentActivity() {
                                 //
                             }
                         )
+
+                         */
                     },
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
