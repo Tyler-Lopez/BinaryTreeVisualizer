@@ -7,8 +7,8 @@ import com.company.avlvisualizer.ui.theme.Red
 
 enum class ComposableTreeTheme(
     val nodeColor: Color,
+    val lineColor: Color,
     val selectedNodeColor: Color,
-    val selectedNodeBorderColor: Color,
 ) {
     BLUE(DarkBlue, Red, Grey),
     RED(Red, DarkBlue, Grey);

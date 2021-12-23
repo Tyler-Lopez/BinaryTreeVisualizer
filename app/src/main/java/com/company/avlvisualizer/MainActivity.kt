@@ -163,7 +163,9 @@ class MainActivity : ComponentActivity() {
                                                     if (toInsert.toInt() < 0 || toInsert.toInt() > 999) {
                                                         scope.launch {
                                                             toInsert = ""
-                                                            scaffoldState.snackbarHostState.showSnackbar("Test")
+                                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                                "Input must be an integer in the range of 0 - 999"
+                                                            )
                                                         }
                                                     } else {
                                                         tree.insert(toInsert.toInt())
@@ -358,23 +360,28 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
                 ) {
-                    ComposableTree(
-                        data = nodeComposableDataList,
-                        modifier = Modifier
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        Grey,
-                                        Grey
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        ComposableTree(
+                            data = nodeComposableDataList,
+                            modifier = Modifier
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            Grey,
+                                            Grey
+                                        )
                                     )
-                                )
-                            ),
-                        style = treeStyle
-                    ) {
-                        activeNode = it
+                                ),
+                            style = treeStyle
+                        ) {
+                            activeNode = it
+                        }
+
+                        ComposableSnackbar(
+                            snackbarHostState = scaffoldState.snackbarHostState,
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        )
                     }
-                    
-                    // Add snack bar and snackbar host here
                 }
             }
         }
