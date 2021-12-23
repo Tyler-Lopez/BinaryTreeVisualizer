@@ -10,4 +10,5 @@ An Android application which allows the user to construct, insert into, remove f
 
 ## UI Examples
 
-// TO-DO
+![image](https://user-images.githubusercontent.com/77797048/147272913-0b4800ba-fc31-42f8-9419-99b47f76a4e5.png)
+
