@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
             nodes.add(bstNode)
         }
 
+
         // End tree data structure
 
         super.onCreate(savedInstanceState)
@@ -117,7 +118,8 @@ class MainActivity : ComponentActivity() {
                                         ) {
                                             Button(
                                                 onClick = {
-                                                    tree.insert((Math.random() * 100).toInt())
+                                                    val randomNumber = (Math.random() * 100).toInt()
+                                                    tree.insert(randomNumber)
                                                     nodeComposableDataList =
                                                         tree.returnComposableData()
                                                 },
@@ -369,7 +371,7 @@ class MainActivity : ComponentActivity() {
 
                         ComposableSnackbar(
                             snackbarHostState = scaffoldState.snackbarHostState,
-                            modifier = Modifier.align(Alignment.BottomCenter)
+                            modifier = Modifier.align(Alignment.BottomCenter),
                         )
                     }
                 }

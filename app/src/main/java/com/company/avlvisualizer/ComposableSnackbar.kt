@@ -1,5 +1,6 @@
 package com.company.avlvisualizer
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +27,7 @@ import com.company.avlvisualizer.ui.theme.roboto
 @Composable
 fun ComposableSnackbar(
     snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     SnackbarHost(
         hostState = snackbarHostState,
@@ -58,6 +59,7 @@ fun ComposableSnackbar(
         modifier = modifier
             .padding(5.dp)
             .fillMaxWidth()
+            .background(Color.DarkGray)
             .border(width = 1.dp, Color.LightGray)
             .shadow(5.dp)
             .wrapContentHeight(Alignment.Bottom)
