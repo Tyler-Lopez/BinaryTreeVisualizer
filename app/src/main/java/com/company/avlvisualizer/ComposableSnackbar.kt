@@ -1,9 +1,7 @@
 package com.company.avlvisualizer
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
@@ -15,7 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.font.FontWeight.Companion.Light
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
+import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.font.FontWeight.Companion.Thin
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,13 +34,24 @@ fun ComposableSnackbar(
             Snackbar(
                 modifier = Modifier.fillMaxWidth(),
                 content = {
-                    Text(
-                        text = data.message,
-                        textAlign = TextAlign.Center,
-                        fontFamily = roboto,
-                        fontWeight = Normal,
-                        fontSize = 35.sp
-                    )
+                    Column(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
+                        Text(
+                            text = "Error",
+                            color = Color.Red,
+                            textAlign = TextAlign.Left,
+                            fontFamily = roboto,
+                            fontWeight = SemiBold,
+                            fontSize = 35.sp
+                        )
+                        Text(
+                            text = data.message,
+                            color = Color.LightGray,
+                            textAlign = TextAlign.Left,
+                            fontFamily = roboto,
+                            fontWeight = Light,
+                            fontSize = 30.sp
+                        )
+                    }
                 },
             )
         },

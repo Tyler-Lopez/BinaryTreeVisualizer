@@ -1,17 +1,12 @@
 package com.company.avlvisualizer
 
-import android.graphics.Paint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -21,18 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.Color.Companion.Blue
-import androidx.compose.ui.graphics.Color.Companion.LightGray
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.Thin
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,8 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
-import kotlin.math.atan
-import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
 
@@ -83,7 +69,7 @@ class MainActivity : ComponentActivity() {
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
                 }
-                var toInsert by remember {
+                var inputStr by remember {
                     mutableStateOf("")
                 }
 
@@ -153,29 +139,33 @@ class MainActivity : ComponentActivity() {
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             TextField(
-                                                value = toInsert,
+                                                value = inputStr,
                                                 modifier = Modifier.fillMaxHeight(),
                                                 keyboardOptions = KeyboardOptions.Default.copy(
                                                     keyboardType = KeyboardType.Number
                                                 ),
                                                 keyboardActions = KeyboardActions(onDone = {
+                                                    // Close keyboard
                                                     focusManager.clearFocus()
-                                                    if (toInsert.toInt() < 0 || toInsert.toInt() > 999) {
-                                                        scope.launch {
-                                                            toInsert = ""
-                                                            scaffoldState.snackbarHostState.showSnackbar(
-                                                                "Input must be an integer in the range of 0 - 999"
-                                                            )
-                                                        }
-                                                    } else {
-                                                        tree.insert(toInsert.toInt())
-                                                        toInsert = ""
+                                                    // Handle user-input and edge cases
+                                                    try {
+                                                        val inputVal = inputStr.toInt()
+                                                        if (inputVal < 0 || inputVal > 999) throw Exception()
+                                                        tree.insert(inputVal)
                                                         nodeComposableDataList =
                                                             tree.returnComposableData()
+                                                    } catch (e: Exception) {
+                                                        scope.launch {
+                                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                                message = "Input must be an integer in the range of 0 to 999."
+                                                            )
+                                                        }
                                                     }
+                                                    // Reset user-input string
+                                                    inputStr = ""
                                                 }),
                                                 onValueChange = {
-                                                    toInsert = it
+                                                    inputStr = it
                                                 },
                                                 singleLine = true,
                                                 placeholder = {
