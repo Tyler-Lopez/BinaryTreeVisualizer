@@ -70,16 +70,12 @@ class MainActivity : ComponentActivity() {
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
                 }
-                var inputStr by remember {
-                    mutableStateOf("")
-                }
 
                 // https://levelup.gitconnected.com/implement-android-snackbar-in-jetpack-compose-d83df5ff5b47
                 // https://www.devbitsandbytes.com/configuring-snackbar-jetpack-compose-using-scaffold-with-bottom-navigation/
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
-                // https://stackoverflow.com/questions/59133100/how-to-close-the-virtual-keyboard-from-a-jetpack-compose-textfield
-                val focusManager = LocalFocusManager.current
+
 
                 Scaffold(
                     topBar = {
@@ -97,6 +93,20 @@ class MainActivity : ComponentActivity() {
                             onRandomNumber = {
                                 tree.insert(it)
                                 nodeComposableDataList = tree.returnComposableData()
+                            },
+                            onInsert = {
+                                try {
+                                    val inputVal = it.toInt()
+                                    if (inputVal < 0 || inputVal > 999) throw Exception()
+                                    tree.insert(inputVal)
+                                    nodeComposableDataList = tree.returnComposableData()
+                                } catch (e: Exception) {
+                                    scope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "Input must be an integer in the range of 0 to 999."
+                                        )
+                                    }
+                                }
                             }
                         )
                         /*
