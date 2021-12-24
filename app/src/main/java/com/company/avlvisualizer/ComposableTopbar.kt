@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
 import com.google.accompanist.flowlayout.FlowRow
@@ -44,6 +45,14 @@ fun ComposableTopBar(
     val focusManager = LocalFocusManager.current
     var inputStr by remember {
         mutableStateOf("")
+    }
+    // https://foso.github.io/Jetpack-Compose-Playground/material/dropdownmenu/
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    val items = listOf("Not Balanced", "AVL Balanced")
+    var selectedIndex by remember {
+        mutableStateOf(0)
     }
 
 
@@ -78,9 +87,9 @@ fun ComposableTopBar(
                 ) {
                     Text(
                         text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
-                        fontSize = if (maxWidth > 480.dp) 35.sp else 30.sp,
+                        fontSize = if (maxWidth > 480.dp) 30.sp else 25.sp,
                         fontFamily = roboto,
-                        fontWeight = Bold,
+                        fontWeight = Normal,
                         color = LightGrey,
                     )
 
@@ -185,6 +194,58 @@ fun ComposableTopBar(
                                     .clickable { onWeightChange(-100) },
                                 tint = LightBlue
                             )
+                        }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .width(240.dp)
+                ) {
+                    ComposableIconTitle(
+                        icon = Icons.Default.Insights,
+                        title = "BALANCE"
+                    ) {
+                        BoxWithConstraints(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            val boxWithConstraintsScope = this
+                            Text(
+                                text = items[selectedIndex],
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Grey)
+                                    .border(0.5.dp, LightGrey)
+                                    .padding(2.dp)
+                                    .clickable(onClick = { expanded = true }),
+                                color = LightBlue
+                            )
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                modifier = Modifier
+                                    .width(this.maxWidth)
+                                    .background(Grey)
+                                    .border((0.5).dp, LightGrey),
+                            ) {
+
+                                items.forEachIndexed { index, s ->
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            selectedIndex = index
+                                            expanded = false
+                                        },
+                                        contentPadding = PaddingValues(horizontal = 1.dp),
+                                        modifier = Modifier
+                                            .width(boxWithConstraintsScope.maxWidth)
+                                            .height(boxWithConstraintsScope.maxHeight)
+                                            .padding(1.dp)
+                                            .background(Color.Magenta)
+                                    ) {
+                                        // https://foso.github.io/Jetpack-Compose-Playground/material/dropdownmenu/
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }

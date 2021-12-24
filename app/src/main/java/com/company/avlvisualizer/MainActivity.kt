@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                                             message = "Cannot decrease spacing further."
                                         )
                                     }
-                                } else treeStyle.ySpacing += it
+                                } else treeStyle.ySpacing += (it + ((if (it < 0) -1 else 1)*(treeStyle.ySpacing * 0.1f)))
                             },
                             onWeightChange = {
                                 if (treeStyle.nodeSize <= 80 && it < 0) {
@@ -98,8 +98,8 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 } else {
-                                    treeStyle.nodeSize += it
-                                    treeStyle.lineWidth += it
+                                    treeStyle.nodeSize += ((if (it < 0) -1 else 1)*(treeStyle.nodeSize * 0.2f))
+                                    treeStyle.lineWidth += ((if (it < 0) -1 else 1)*(treeStyle.lineWidth * 0.2f))
                                 }
                             },
                             onBalanceChange = {
