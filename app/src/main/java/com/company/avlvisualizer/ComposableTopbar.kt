@@ -137,6 +137,8 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(180.dp)
+                        .height(50.dp),
+                    contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.Expand,
@@ -170,6 +172,8 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(180.dp)
+                        .height(50.dp),
+                    contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.LineWeight,
@@ -203,30 +207,23 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(240.dp)
+                        .height(50.dp),
+                    contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.Insights,
                         title = "BALANCE"
                     ) {
-                        BoxWithConstraints(
-                            modifier = Modifier.fillMaxSize()
+                        //DROPDOWN TO COME
+                        ComposableDropdown(
+                            text = "No Balance",
+                            modifier = Modifier.height(it)
                         ) {
                             Text(
-                                text = items[selectedIndex],
+                                text = "hola",
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Grey)
-                                    .padding(2.dp)
-                                    .clickable(onClick = { expanded = true }),
-                                color = LightBlue
-                            )
-                            ComposableDropdown(
-                                items = items,
-                                expanded = expanded,
-                                selectedIndex = selectedIndex,
-                                updateMenuExpandStatus = { expanded = true },
-                                onDismissMenuView = { expanded = false },
-                                onMenuItemClick = { selectedIndex = it }
+                                    .fillMaxWidth()
+                                    .background(Color.Green)
                             )
                         }
                     }
@@ -234,6 +231,8 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(360.dp)
+                        .height(50.dp),
+                    contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.Brush,
