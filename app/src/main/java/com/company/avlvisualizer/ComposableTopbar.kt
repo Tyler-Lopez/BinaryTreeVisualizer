@@ -1,10 +1,12 @@
 package com.company.avlvisualizer
 
+import ComposableDropdown
 import android.graphics.Paint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -14,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
@@ -208,44 +211,23 @@ fun ComposableTopBar(
                         BoxWithConstraints(
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            val boxWithConstraintsScope = this
                             Text(
                                 text = items[selectedIndex],
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .background(Grey)
-                                    .border(0.5.dp, LightGrey)
                                     .padding(2.dp)
                                     .clickable(onClick = { expanded = true }),
                                 color = LightBlue
                             )
-                            DropdownMenu(
+                            ComposableDropdown(
+                                items = items,
                                 expanded = expanded,
-                                onDismissRequest = { expanded = false },
-                                modifier = Modifier
-                                    .width(this.maxWidth)
-                                    .background(Grey)
-                                    .border((0.5).dp, LightGrey),
-                            ) {
-
-                                items.forEachIndexed { index, s ->
-                                    DropdownMenuItem(
-                                        onClick = {
-                                            selectedIndex = index
-                                            expanded = false
-                                        },
-                                        contentPadding = PaddingValues(horizontal = 1.dp),
-                                        modifier = Modifier
-                                            .width(boxWithConstraintsScope.maxWidth)
-                                            .height(boxWithConstraintsScope.maxHeight)
-                                            .padding(1.dp)
-                                            .background(Color.Magenta)
-                                    ) {
-                                        // https://foso.github.io/Jetpack-Compose-Playground/material/dropdownmenu/
-                                    }
-                                }
-
-                            }
+                                selectedIndex = selectedIndex,
+                                updateMenuExpandStatus = { expanded = true },
+                                onDismissMenuView = { expanded = false },
+                                onMenuItemClick = { selectedIndex = it }
+                            )
                         }
                     }
                 }
