@@ -214,19 +214,44 @@ fun ComposableTopBar(
                         icon = Icons.Default.Insights,
                         title = "BALANCE"
                     ) {
+                        BoxWithConstraints(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(it),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            ComposeMenu(
+                                width = this.maxWidth,
+                                menuItems = listOf("Unbalanced", "Balanced", "AVL Tree"),
+                                menuExpandedState = expanded,
+                                seletedIndex = selectedIndex,
+                                updateMenuExpandStatus = {
+                                    expanded = true
+                                },
+                                onDismissMenuView = {
+                                    expanded = false
+                                },
+                                onMenuItemclick = { index->
+                                    selectedIndex = index
+                                    expanded = false
+                                }
+                            )
+                        }
+                        /*
                             //DROPDOWN TO COME
                             ComposableDropdown(
-                                text = "Unbalanced",
-                                height = it
-                            ) {
-                                Text(
-                                    text = "hola",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(it)
-                                        .background(Color.Green)
-                                )
-                            }
+                                options = listOf(
+                                    "Unbalanced",
+                                    "AVL Tree",
+                                    "Test"
+                                ),
+                                height = it,
+                                onSelection = {
+
+                                }
+                            )
+                            */
+
                     }
                 }
                 Box(
