@@ -214,18 +214,19 @@ fun ComposableTopBar(
                         icon = Icons.Default.Insights,
                         title = "BALANCE"
                     ) {
-                        //DROPDOWN TO COME
-                        ComposableDropdown(
-                            text = "No Balance",
-                            modifier = Modifier.height(it)
-                        ) {
-                            Text(
-                                text = "hola",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color.Green)
-                            )
-                        }
+                            //DROPDOWN TO COME
+                            ComposableDropdown(
+                                text = "Unbalanced",
+                                height = it
+                            ) {
+                                Text(
+                                    text = "hola",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(it)
+                                        .background(Color.Green)
+                                )
+                            }
                     }
                 }
                 Box(
