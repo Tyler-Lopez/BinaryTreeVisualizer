@@ -11,9 +11,15 @@ typealias OffsetVisitor = (Offset, BinaryNode?, Offset?) -> Unit
 data class BinaryNode(
     val value: Int
 ) {
-    var height: Int = 0
-
     // CONSIDERING PUTTING THIS IN A DIFFERENT CLASS...
+    var leftChild: BinaryNode? = null
+    var rightChild: BinaryNode? = null
+
+    val min: BinaryNode?
+        get() = leftChild?.min ?: this
+
+    var height = 0
+
     val leftHeight: Int
         get() = leftChild?.height ?: -1
 
@@ -22,9 +28,6 @@ data class BinaryNode(
 
     val balanceFactor: Int
         get() = leftHeight - rightHeight
-
-    var leftChild: BinaryNode? = null
-    var rightChild: BinaryNode? = null
 
 
     override fun toString() = diagram(this)
@@ -67,58 +70,5 @@ data class BinaryNode(
         }
         toReturn.add(newMove)
         return toReturn
-    }
-
-    // AVL BALANCING FUNCTIONS
-    companion object {
-        private fun leftRotate(node: BinaryNode): BinaryNode {
-            val pivot = node.rightChild!!
-            node.rightChild = pivot.leftChild
-            pivot.leftChild = node
-            node.height = maxOf(node.leftHeight, node.rightHeight) + 1
-            pivot.height = maxOf(pivot.leftHeight, node.rightHeight) + 1
-            return pivot
-        }
-
-        private fun rightRotate(node: BinaryNode): BinaryNode {
-            val pivot = node.leftChild!!
-            node.leftChild = pivot.rightChild
-            pivot.rightChild = node
-            node.height = maxOf(node.leftHeight, node.rightHeight) + 1
-            pivot.height = maxOf(pivot.leftHeight, node.rightHeight) + 1
-            return pivot
-        }
-
-        private fun rightLeftRotate(node: BinaryNode): BinaryNode {
-            val rightChild = node.rightChild ?: return node
-            node.rightChild = rightRotate(rightChild)
-            return leftRotate(node)
-        }
-
-        private fun leftRightRotate(node: BinaryNode): BinaryNode {
-            val leftChild = node.leftChild ?: return node
-            node.leftChild = leftRotate(leftChild)
-            return rightRotate(node)
-        }
-
-        fun balanced(node: BinaryNode): BinaryNode {
-            return when (node.balanceFactor) {
-                2 -> {
-                    if (node.leftChild?.balanceFactor == -1) {
-                        leftRightRotate(node)
-                    } else {
-                        rightRotate(node)
-                    }
-                }
-                3 -> {
-                    if (node.rightChild?.balanceFactor == 1) {
-                        rightLeftRotate(node)
-                    } else {
-                        leftRotate(node)
-                    }
-                }
-                else -> node
-            }
-        }
     }
 }

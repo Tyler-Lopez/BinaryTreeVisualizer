@@ -1,11 +1,9 @@
 package com.company.avlvisualizer
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
-import org.w3c.dom.Node
 import java.util.*
 import kotlin.math.pow
+import kotlin.math.max
 
 class BinaryTree {
 
@@ -13,28 +11,25 @@ class BinaryTree {
     override fun toString() = root?.toString() ?: "Empty"
 
     fun insert(value: Int, avlInsert: Boolean = false) {
-        root = insert(root, value, avlInsert)
+        root = if (avlInsert) {
+            insertAVL(root, value)
+        } else {
+            insertUnbalanced(root, value)
+        }
     }
 
-    private fun insert(
+    private fun insertUnbalanced(
         node: BinaryNode?,
-        value: Int,
-        avlInsert: Boolean
+        value: Int
     ): BinaryNode {
         node ?: return BinaryNode(value)
         if (value < node.value) {
-            node.leftChild = insert(node.leftChild, value, avlInsert)
+            node.leftChild = insertUnbalanced(node.leftChild, value)
         } else {
-            node.rightChild = insert(node.rightChild, value, avlInsert)
+            node.rightChild = insertUnbalanced(node.rightChild, value)
         }
-        if (avlInsert) {
-            val balancedNode = BinaryNode.balanced(node)
-            balancedNode?.height = maxOf(balancedNode?.leftHeight ?: 0, balancedNode?.rightHeight ?: 0) + 1
-            return balancedNode
-        } else {
-            node.height = 1 + maxOf(node.leftChild?.height ?: 0, node.rightChild?.height ?: 0)
-            return node
-        }
+        node.height = 1 + maxOf(node.leftChild?.height ?: 0, node.rightChild?.height ?: 0)
+        return node
     }
 
     fun traversePreOrder(offsetVisit: OffsetVisitor) {
@@ -107,5 +102,84 @@ class BinaryTree {
             queue.addLast(node.rightChild)
         }
         // Move on to either next child or next level w/e first
+    }
+
+    // AVL FUNCTIONS
+    private fun balanced(node: BinaryNode): BinaryNode {
+        return when (node.balanceFactor) {
+            2 -> {
+                if (node.leftChild?.balanceFactor == -1) {
+                    leftRightRotate(node)
+                } else {
+                    rightRotate(node)
+                }
+            }
+            -2 -> {
+                if (node.rightChild?.balanceFactor == 1) {
+                    rightLeftRotate(node)
+                } else {
+                    leftRotate(node)
+                }
+            }
+            else -> node
+        }
+    }
+
+    private fun leftRotate(node: BinaryNode): BinaryNode {
+        // 1
+        val pivot = node.rightChild!!
+        // 2
+        node.rightChild = pivot.leftChild
+        // 3
+        pivot.leftChild = node
+        // 4
+        node.height = max(node.leftHeight, node.rightHeight) + 1
+        pivot.height = max(pivot.leftHeight, pivot.rightHeight) + 1
+        // 5
+        return pivot
+    }
+
+    private fun rightRotate(node: BinaryNode): BinaryNode {
+        val pivot = node.leftChild!!
+        node.leftChild = pivot.rightChild
+        pivot.rightChild = node
+        node.height = max(node.leftHeight, node.rightHeight) + 1
+        pivot.height = max(pivot.leftHeight, pivot.rightHeight) + 1
+        return pivot
+    }
+
+    private fun rightLeftRotate(node: BinaryNode): BinaryNode {
+        val rightChild = node.rightChild ?: return node
+        node.rightChild = rightRotate(rightChild)
+        return leftRotate(node)
+    }
+
+    private fun leftRightRotate(node: BinaryNode): BinaryNode {
+        val leftChild = node.leftChild ?: return node
+        node.leftChild = leftRotate(leftChild)
+        return rightRotate(node)
+    }
+
+    private fun insertAVL(node: BinaryNode?, value: Int): BinaryNode {
+        node ?: return BinaryNode(value)
+        if (value < node.value) {
+            node.leftChild = insertAVL(node.leftChild, value)
+        } else {
+            node.rightChild = insertAVL(node.rightChild, value)
+        }
+        val balancedNode = balanced(node)
+        balancedNode.height = max(
+            balancedNode.leftHeight,
+            balancedNode.rightHeight
+        ) + 1
+        return balancedNode
+    }
+
+    fun balanceTree(): BinaryTree {
+        val toReturn = BinaryTree()
+        forEachLevelOrder {
+            if (it != null) toReturn.insert(it.value, true)
+        }
+        return toReturn
     }
 }

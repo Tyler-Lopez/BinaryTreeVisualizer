@@ -37,38 +37,19 @@ class MainActivity : ComponentActivity() {
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
-        val tree = BinaryTree()
-        tree.insert(50)
-        tree.insert(25)
-        tree.insert(75)
-        tree.insert(10)
-        tree.insert(100)
-
-
-        val nodes = mutableListOf<BinaryNode?>()
-        val offsets = mutableListOf<Offset>()
-        val parentOffsets = mutableListOf<Offset>()
-        tree.traversePreOrder { offset, bstNode, parentOffset ->
-            parentOffsets.add(parentOffset ?: Offset(0f, 0f))
-            offsets.add(offset)
-            nodes.add(bstNode)
-        }
-
-
-        // End tree data structure
 
         super.onCreate(savedInstanceState)
         setContent {
+            // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
+            var tree by remember { mutableStateOf(BinaryTree()) }
+            // End tree data structure
+
             AVLVisualizerTheme {
                 var balanceType by remember {
                     mutableStateOf(BinaryTreeBalanceType.UNBALANCED)
                 }
                 var nodeComposableDataList by remember {
                     mutableStateOf(tree.returnComposableData())
-                }
-                var activeNode by remember {
-                    mutableStateOf("No Node Selected")
                 }
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
@@ -107,6 +88,10 @@ class MainActivity : ComponentActivity() {
                             },
                             onBalanceChange = {
                                 balanceType = it
+                                if (balanceType == BinaryTreeBalanceType.AVL_TREE) {
+                                    tree = tree.balanceTree()
+                                    nodeComposableDataList = tree.returnComposableData()
+                                }
                             },
                             onThemeChange = {
                                 treeStyle.theme = it
@@ -119,7 +104,10 @@ class MainActivity : ComponentActivity() {
                                 try {
                                     val inputVal = it.toInt()
                                     if (inputVal < 0 || inputVal > 999) throw Exception()
-                                    tree.insert(inputVal)
+                                    tree.insert(
+                                        inputVal,
+                                        balanceType == BinaryTreeBalanceType.AVL_TREE
+                                    )
                                     nodeComposableDataList = tree.returnComposableData()
                                 } catch (e: Exception) {
                                     scope.launch {
@@ -135,21 +123,26 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { scaffoldState.snackbarHostState }
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        ComposableTree(
-                            data = nodeComposableDataList,
-                            modifier = Modifier
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(
-                                            Grey,
-                                            Grey
+                        if (nodeComposableDataList.isNotEmpty()) {
+                            ComposableTree(
+                                data = nodeComposableDataList,
+                                modifier = Modifier
+                                    .background(
+                                        Brush.verticalGradient(
+                                            colors = listOf(
+                                                Grey,
+                                                Grey
+                                            )
                                         )
-                                    )
-                                ),
-                            style = treeStyle
-                        ) {
-                            activeNode = it
+                                    ),
+                                style = treeStyle
+                            ) {
+                              //  activeNode = it
+                            }
+                        } else {
+                            Text("THE TREE IS EMPTY\nINSERT A VALUE TO BEGIN")
                         }
+
 
                         ComposableSnackbar(
                             snackbarHostState = scaffoldState.snackbarHostState,
