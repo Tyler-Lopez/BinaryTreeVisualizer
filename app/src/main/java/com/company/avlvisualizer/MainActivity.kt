@@ -61,6 +61,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AVLVisualizerTheme {
+                var balanceType by remember {
+                    mutableStateOf(BinaryTreeBalanceType.UNBALANCED)
+                }
                 var nodeComposableDataList by remember {
                     mutableStateOf(tree.returnComposableData())
                 }
@@ -88,7 +91,7 @@ class MainActivity : ComponentActivity() {
                                             message = "Cannot decrease spacing further."
                                         )
                                     }
-                                } else treeStyle.ySpacing += (it + ((if (it < 0) -1 else 1)*(treeStyle.ySpacing * 0.1f)))
+                                } else treeStyle.ySpacing += (it + ((if (it < 0) -1 else 1) * (treeStyle.ySpacing * 0.1f)))
                             },
                             onWeightChange = {
                                 if (treeStyle.nodeSize <= 80 && it < 0) {
@@ -98,18 +101,18 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 } else {
-                                    treeStyle.nodeSize += ((if (it < 0) -1 else 1)*(treeStyle.nodeSize * 0.2f))
-                                    treeStyle.lineWidth += ((if (it < 0) -1 else 1)*(treeStyle.lineWidth * 0.2f))
+                                    treeStyle.nodeSize += ((if (it < 0) -1 else 1) * (treeStyle.nodeSize * 0.2f))
+                                    treeStyle.lineWidth += ((if (it < 0) -1 else 1) * (treeStyle.lineWidth * 0.2f))
                                 }
                             },
                             onBalanceChange = {
-
+                                balanceType = it
                             },
                             onThemeChange = {
                                 treeStyle.theme = it
                             },
                             onRandomNumber = {
-                                tree.insert(it)
+                                tree.insert(it, balanceType == BinaryTreeBalanceType.AVL_TREE)
                                 nodeComposableDataList = tree.returnComposableData()
                             },
                             onInsert = {

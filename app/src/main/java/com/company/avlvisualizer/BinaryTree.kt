@@ -12,22 +12,29 @@ class BinaryTree {
     var root: BinaryNode? = null
     override fun toString() = root?.toString() ?: "Empty"
 
-    fun insert(value: Int) {
-        root = insert(root, value)
+    fun insert(value: Int, avlInsert: Boolean = false) {
+        root = insert(root, value, avlInsert)
     }
 
     private fun insert(
         node: BinaryNode?,
-        value: Int
+        value: Int,
+        avlInsert: Boolean
     ): BinaryNode {
         node ?: return BinaryNode(value)
         if (value < node.value) {
-            node.leftChild = insert(node.leftChild, value)
+            node.leftChild = insert(node.leftChild, value, avlInsert)
         } else {
-            node.rightChild = insert(node.rightChild, value)
+            node.rightChild = insert(node.rightChild, value, avlInsert)
         }
-        node.height = 1 + maxOf(node.leftChild?.height ?: 0, node.rightChild?.height ?: 0)
-        return node
+        if (avlInsert) {
+            val balancedNode = BinaryNode.balanced(node)
+            balancedNode?.height = maxOf(balancedNode?.leftHeight ?: 0, balancedNode?.rightHeight ?: 0) + 1
+            return balancedNode
+        } else {
+            node.height = 1 + maxOf(node.leftChild?.height ?: 0, node.rightChild?.height ?: 0)
+            return node
+        }
     }
 
     fun traversePreOrder(offsetVisit: OffsetVisitor) {
@@ -47,14 +54,36 @@ class BinaryTree {
     }
 
 
-
-
-
-    private fun traversePreOrder(offsetVisit: OffsetVisitor, offset: Offset, node: BinaryNode?, depth: Int, parentOffset: Offset? = null) {
+    private fun traversePreOrder(
+        offsetVisit: OffsetVisitor,
+        offset: Offset,
+        node: BinaryNode?,
+        depth: Int,
+        parentOffset: Offset? = null
+    ) {
         offsetVisit(offset, node, parentOffset)
-        if (node?.leftChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x - 1000f - ((node.height * node.height).toDouble().pow(3).toFloat()), y = offset.y + 80000f), node?.leftChild, depth + 1, offset)
-        if (node?.rightChild != null) traversePreOrder(offsetVisit, Offset(x = offset.x + 1000f + ((node.height * node.height).toDouble().pow(3).toFloat()), y = offset.y + 80000f), node?.rightChild, depth + 1, offset)
+        if (node?.leftChild != null) traversePreOrder(
+            offsetVisit,
+            Offset(
+                x = offset.x - 1000f - ((node.height * node.height).toDouble().pow(3).toFloat()),
+                y = offset.y + 80000f
+            ),
+            node?.leftChild,
+            depth + 1,
+            offset
+        )
+        if (node?.rightChild != null) traversePreOrder(
+            offsetVisit,
+            Offset(
+                x = offset.x + 1000f + ((node.height * node.height).toDouble().pow(3).toFloat()),
+                y = offset.y + 80000f
+            ),
+            node?.rightChild,
+            depth + 1,
+            offset
+        )
     }
+
     // Breadth-first traversal
     fun forEachLevelOrder(visit: Visitor) {
         // First, iterate back the root we are on

@@ -39,7 +39,7 @@ fun ComposableTopBar(
     message: String,
     onSpacingChange: (Int) -> Unit,
     onWeightChange: (Int) -> Unit,
-    onBalanceChange: () -> Unit,
+    onBalanceChange: (BinaryTreeBalanceType) -> Unit,
     onThemeChange: (ComposableTreeTheme) -> Unit,
     onRandomNumber: (Int) -> Unit,
     onInsert: (String) -> Unit
@@ -220,9 +220,10 @@ fun ComposableTopBar(
                                 .height(it),
                             contentAlignment = Alignment.CenterStart
                         ) {
+                            val options = listOf("Unbalanced", "AVL Tree")
                             ComposeMenu(
                                 width = this.maxWidth,
-                                menuItems = listOf("Unbalanced", "Balanced", "AVL Tree"),
+                                menuItems = options,
                                 menuExpandedState = expanded,
                                 seletedIndex = selectedIndex,
                                 updateMenuExpandStatus = {
@@ -233,6 +234,10 @@ fun ComposableTopBar(
                                 },
                                 onMenuItemclick = { index->
                                     selectedIndex = index
+                                    onBalanceChange(when (options[index]) {
+                                        "Unbalanced" -> BinaryTreeBalanceType.UNBALANCED
+                                        else -> BinaryTreeBalanceType.AVL_TREE
+                                    })
                                     expanded = false
                                 }
                             )
