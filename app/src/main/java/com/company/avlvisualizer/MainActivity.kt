@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
                                     it.nativeCanvas.drawText(
                                         "Insert a number to begin.",
                                         center.x,
-                                        center.y + 80f,
+                                        center.y + 100f,
                                         paintSub
                                     )
                                 }

@@ -20,7 +20,7 @@ enum class ComposableTreeTheme(
     val lineColor: Color,
     val selectedNodeColor: Color,
 ) {
-    BLUE(DarkerBlue, DarkBlue, Grey) {
+    BLUE(Color(16, 90, 201), Color(38, 125, 255), Grey) {
         @Composable
         override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
             Button(
@@ -48,7 +48,7 @@ enum class ComposableTreeTheme(
             ) { }
         }
     },
-    GREEN(DarkerGreen, Green, Grey) {
+    GREEN(Color(17, 135, 8), Color(36, 173, 26), Grey) {
         @Composable
         override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
             Button(
@@ -62,7 +62,7 @@ enum class ComposableTreeTheme(
             ) { }
         }
     },
-    YELLOW(Color(179, 138, 18), Color(232, 179, 21), Grey) {
+    YELLOW(Color(237, 157, 7), Color(232, 179, 21), Grey) {
         @Composable
         override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
             Button(

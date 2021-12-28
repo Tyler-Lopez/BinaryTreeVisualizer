@@ -279,7 +279,7 @@ fun ComposableTopBar(
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.Brush,
-                        title = "THEME"
+                        title = "COLOR"
                     ) {
                         // Display a thumbnail of each theme with an onClick to update theme
                         LazyRow(
