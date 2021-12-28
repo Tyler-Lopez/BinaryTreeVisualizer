@@ -15,12 +15,7 @@ An Android application which allows the user to construct, insert into, remove f
 * Extremely large trees may be visualized
 
 ## UI Examples
-![image](https://user-images.githubusercontent.com/77797048/147599741-ba555399-1264-4a3e-a019-5e506032aedc.png)
-  ![image](https://user-images.githubusercontent.com/77797048/147599653-f1515597-f13f-4a40-9ac2-4eeb30532243.png)
-
-  ![image](https://user-images.githubusercontent.com/77797048/147599640-5ab902d1-427a-45f7-a5e7-05a5d7e91f70.png)
-
-  ![image](https://user-images.githubusercontent.com/77797048/147599635-53fc8c35-e730-48ae-aae9-3cbd9218bf83.png)
+![image](https://user-images.githubusercontent.com/77797048/147599741-ba555399-1264-4a3e-a019-5e506032aedc.png) ![image](https://user-images.githubusercontent.com/77797048/147599653-f1515597-f13f-4a40-9ac2-4eeb30532243.png) ![image](https://user-images.githubusercontent.com/77797048/147599640-5ab902d1-427a-45f7-a5e7-05a5d7e91f70.png) ![image](https://user-images.githubusercontent.com/77797048/147599635-53fc8c35-e730-48ae-aae9-3cbd9218bf83.png)
 
   ![image](https://user-images.githubusercontent.com/77797048/147599631-9e8fe508-7a57-4d6e-a5ec-d8b509f7de8e.png)
   ![image](https://user-images.githubusercontent.com/77797048/147599677-4f20d39c-8f23-4216-852b-8773c523f78b.png)
