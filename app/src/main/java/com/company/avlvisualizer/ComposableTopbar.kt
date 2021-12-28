@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -261,50 +263,15 @@ fun ComposableTopBar(
                         icon = Icons.Default.Brush,
                         title = "THEME"
                     ) {
-                        Row(
+                        LazyRow(
                             modifier = Modifier
                                 .fillMaxHeight()
                         ) {
-                            Button(
-                                modifier = Modifier
-                                    .height(it)
-                                    .weight(0.5f)
-                                    .padding(start = 5.dp)
-                                    .padding(vertical = 5.dp)
-                                    .border(width = 1.dp, color = LightGrey),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Blue),
-                                onClick = { onThemeChange(ComposableTreeTheme.BLUE) }
-                            ) {}
-                            Button(
-                                modifier = Modifier
-                                    .height(it)
-                                    .weight(0.5f)
-                                    .padding(start = 5.dp)
-                                    .padding(vertical = 5.dp)
-                                    .border(width = 1.dp, color = LightGrey),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Red),
-                                onClick = { onThemeChange(ComposableTreeTheme.RED) }
-                            ) {}
-                            Button(
-                                modifier = Modifier
-                                    .height(it)
-                                    .weight(0.5f)
-                                    .padding(start = 5.dp)
-                                    .padding(vertical = 5.dp)
-                                    .border(width = 1.dp, color = LightGrey),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
-                                onClick = { onThemeChange(ComposableTreeTheme.GREEN) }
-                            ) {}
-                            Button(
-                                modifier = Modifier
-                                    .height(it)
-                                    .weight(0.5f)
-                                    .padding(start = 5.dp)
-                                    .padding(vertical = 5.dp)
-                                    .border(width = 1.dp, color = LightGrey),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Purple),
-                                onClick = { onThemeChange(ComposableTreeTheme.PURPLE) }
-                            ) {}
+                            items(items = ComposableTreeTheme.getThemes(), itemContent = { theme ->
+                                theme.thumbnail(height = it, onClick = { newTheme ->
+                                    onThemeChange(newTheme)
+                                })
+                            })
                         }
                     }
                 }

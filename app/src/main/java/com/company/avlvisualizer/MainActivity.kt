@@ -17,13 +17,15 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-
 
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
+            val context = LocalContext.current
             // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
             var tree by remember { mutableStateOf(BinaryTree()) }
             // End tree data structure
@@ -113,11 +116,12 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
                 ) {
-                    Box(
+                    BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Grey)
                     ) {
+                        val boxWithConstraintsScope = this
                         if (nodeComposableDataList.isNotEmpty()) {
                             ComposableTree(
                                 data = nodeComposableDataList,
@@ -126,27 +130,24 @@ class MainActivity : ComponentActivity() {
                                 //  activeNode = it
                             }
                         } else {
-                            val circleRadius = 150f
+                            val circleRadius = (LocalDensity.current.run { boxWithConstraintsScope.maxWidth.toPx() } / 2f) * 0.9f
                             Canvas(modifier = Modifier.fillMaxSize()){
                                 drawOval(
                                     color = DarkGrey,
-                                    topLeft = Offset(center.x - (circleRadius * 2), center.y - (circleRadius)),
-                                    size = Size(circleRadius * 4, circleRadius * 2),
-                                )
-                                drawOval(
-                                    color = LightGrey,
-                                    topLeft = Offset(center.x - (circleRadius * 2), center.y - (circleRadius)),
-                                    size = Size(circleRadius * 4, circleRadius * 2),
-                                    style = Stroke(width = 1f)
+                                    topLeft = Offset(center.x - circleRadius, center.y - (circleRadius / 2f)),
+                                    size = Size(circleRadius * 2, circleRadius),
                                 )
                                 // Draw Text
                                 val paint = Paint()
+                                val roboto = ResourcesCompat.getFont(context, R.font.roboto_medium)
                                 paint.textAlign = Paint.Align.CENTER
-                                paint.textSize = 50f
+                                paint.textSize = circleRadius / 5f
                                 paint.color = 0xb5b7c7ff.toInt()
+                                paint.typeface = roboto
+
                                 val paintSub = Paint()
                                 paintSub.textAlign = Paint.Align.CENTER
-                                paintSub.textSize = 25f
+                                paintSub.textSize = circleRadius / 10f
                                 paintSub.color = 0xdcdde3ff.toInt()
 
                                 drawIntoCanvas {
@@ -159,7 +160,7 @@ class MainActivity : ComponentActivity() {
                                     it.nativeCanvas.drawText(
                                         "Insert a number to begin.",
                                         center.x,
-                                        center.y + 40f,
+                                        center.y + 80f,
                                         paintSub
                                     )
                                 }
