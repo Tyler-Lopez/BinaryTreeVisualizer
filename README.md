@@ -16,7 +16,7 @@ An Android application which allows the user to construct, insert into, remove f
 
 ## UI Examples
 <center>
-<img align="center" src="https://user-images.githubusercontent.com/77797048/147599468-91748488-5ecc-4ad8-82bf-41cd6b888478.png" width="300px">
+<img align="center" src="https://user-images.githubusercontent.com/77797048/147599468-91748488-5ecc-4ad8-82bf-41cd6b888478.png">
 <img src="https://user-images.githubusercontent.com/77797048/147599477-394a28c0-31be-4062-a5c3-470a130f65cd.png" width="300px">
 <img src="https://user-images.githubusercontent.com/77797048/147599484-89f78a9a-b93a-4144-ba60-6122a9775c63.png" width="300px">
 <img src="https://user-images.githubusercontent.com/77797048/147599498-62df95e8-a0e5-494a-9ba0-de3c0cc71fa7.png" width="300px">
