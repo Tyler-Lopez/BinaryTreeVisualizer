@@ -44,7 +44,7 @@ fun ComposableIconTitle(
                 fontFamily = roboto,
                 fontSize = 18.sp
             )
-            Spacer(modifier = Modifier.width(2.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             content(boxWithConstraintsScope.maxHeight)
         }
     }

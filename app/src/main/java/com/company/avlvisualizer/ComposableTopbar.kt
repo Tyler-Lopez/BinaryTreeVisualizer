@@ -226,31 +226,18 @@ fun ComposableTopBar(
                                 onDismissMenuView = {
                                     expanded = false
                                 },
-                                onMenuItemclick = { index->
+                                onMenuItemclick = { index ->
                                     selectedIndex = index
-                                    onBalanceChange(when (options[index]) {
-                                        "Unbalanced" -> BinaryTreeBalanceType.UNBALANCED
-                                        else -> BinaryTreeBalanceType.AVL_TREE
-                                    })
+                                    onBalanceChange(
+                                        when (options[index]) {
+                                            "Unbalanced" -> BinaryTreeBalanceType.UNBALANCED
+                                            else -> BinaryTreeBalanceType.AVL_TREE
+                                        }
+                                    )
                                     expanded = false
                                 }
                             )
                         }
-                        /*
-                            //DROPDOWN TO COME
-                            ComposableDropdown(
-                                options = listOf(
-                                    "Unbalanced",
-                                    "AVL Tree",
-                                    "Test"
-                                ),
-                                height = it,
-                                onSelection = {
-
-                                }
-                            )
-                            */
-
                     }
                 }
                 Box(
@@ -263,12 +250,14 @@ fun ComposableTopBar(
                         icon = Icons.Default.Brush,
                         title = "THEME"
                     ) {
+                        // Display a thumbnail of each theme with an onClick to update theme
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxHeight()
                         ) {
                             items(items = ComposableTreeTheme.getThemes(), itemContent = { theme ->
-                                theme.thumbnail(height = it, onClick = { newTheme ->
+                                // .thumbnail is a composable function defined in Theme enum
+                                theme.thumbnail(height = it * 0.7f, onClick = { newTheme ->
                                     onThemeChange(newTheme)
                                 })
                             })
@@ -276,11 +265,6 @@ fun ComposableTopBar(
                     }
                 }
             }
-            Row {
-
-            }
-
         }
-
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
@@ -29,6 +30,8 @@ class MainActivity : ComponentActivity() {
 
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
+        // https://stackoverflow.com/questions/68980068/jetpack-compose-status-bar-color-not-updated-in-dark-theme
+        this.window.statusBarColor = ContextCompat.getColor(this,R.color.black)
 
 
         super.onCreate(savedInstanceState)

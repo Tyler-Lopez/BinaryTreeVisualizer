@@ -8,9 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
+    primary = Purple500,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = Teal200,
+
+    background = Color.White,
+    surface = Grey, // IMPORTANT FOR DROPDOWN!
 )
 
 private val LightColorPalette = lightColors(
@@ -18,25 +21,26 @@ private val LightColorPalette = lightColors(
     primaryVariant = Purple700,
     secondary = Teal200,
 
-            background = Color.White,
-    surface = Grey, // IMPORTANT FOR DROPDOWN!
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
+    background = Color.White,
+    surface = DarkGrey, // IMPORTANT FOR DROPDOWN!
+    onPrimary = DarkGrey,
+    onSecondary = DarkGrey,
+    onBackground = DarkGrey,
+    onSurface = DarkGrey,
 
-)
+    )
 
 @Composable
 fun AVLVisualizerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
+    val colors =
+    //   val colors = if (darkTheme) {
+    //      DarkColorPalette
+        //   } else {
         LightColorPalette
-    }
+//    }
 
     MaterialTheme(
         colors = colors,
