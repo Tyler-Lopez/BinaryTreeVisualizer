@@ -1,33 +1,24 @@
 package com.company.avlvisualizer
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight.Companion.Normal
-import androidx.compose.ui.text.font.FontWeight.Companion.Thin
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -122,25 +113,57 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
                 ) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Grey)
+                    ) {
                         if (nodeComposableDataList.isNotEmpty()) {
                             ComposableTree(
                                 data = nodeComposableDataList,
-                                modifier = Modifier
-                                    .background(
-                                        Brush.verticalGradient(
-                                            colors = listOf(
-                                                Grey,
-                                                Grey
-                                            )
-                                        )
-                                    ),
                                 style = treeStyle
                             ) {
-                              //  activeNode = it
+                                //  activeNode = it
                             }
                         } else {
-                            Text("THE TREE IS EMPTY\nINSERT A VALUE TO BEGIN")
+                            val circleRadius = 150f
+                            Canvas(modifier = Modifier.fillMaxSize()){
+                                drawOval(
+                                    color = DarkGrey,
+                                    topLeft = Offset(center.x - (circleRadius * 2), center.y - (circleRadius)),
+                                    size = Size(circleRadius * 4, circleRadius * 2),
+                                )
+                                drawOval(
+                                    color = LightGrey,
+                                    topLeft = Offset(center.x - (circleRadius * 2), center.y - (circleRadius)),
+                                    size = Size(circleRadius * 4, circleRadius * 2),
+                                    style = Stroke(width = 1f)
+                                )
+                                // Draw Text
+                                val paint = Paint()
+                                paint.textAlign = Paint.Align.CENTER
+                                paint.textSize = 50f
+                                paint.color = 0xb5b7c7ff.toInt()
+                                val paintSub = Paint()
+                                paintSub.textAlign = Paint.Align.CENTER
+                                paintSub.textSize = 25f
+                                paintSub.color = 0xdcdde3ff.toInt()
+
+                                drawIntoCanvas {
+                                    it.nativeCanvas.drawText(
+                                        "TREE IS EMPTY",
+                                        center.x,
+                                        center.y,
+                                        paint
+                                    )
+                                    it.nativeCanvas.drawText(
+                                        "Insert a number to begin.",
+                                        center.x,
+                                        center.y + 40f,
+                                        paintSub
+                                    )
+                                }
+                            }
                         }
 
 
