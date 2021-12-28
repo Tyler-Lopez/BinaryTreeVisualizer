@@ -16,10 +16,18 @@ An Android application which allows the user to construct, insert into, remove f
 
 ## UI Examples
 <center>
-<img align="center" src="https://user-images.githubusercontent.com/77797048/147599468-91748488-5ecc-4ad8-82bf-41cd6b888478.png">
-<img src="https://user-images.githubusercontent.com/77797048/147599477-394a28c0-31be-4062-a5c3-470a130f65cd.png" width="300px">
-<img src="https://user-images.githubusercontent.com/77797048/147599484-89f78a9a-b93a-4144-ba60-6122a9775c63.png" width="300px">
-<img src="https://user-images.githubusercontent.com/77797048/147599498-62df95e8-a0e5-494a-9ba0-de3c0cc71fa7.png" width="300px">
-<img src="https://user-images.githubusercontent.com/77797048/147599504-49334574-6b2a-4098-bfe4-88163185bcba.png" width="300px">
+  ![image](https://user-images.githubusercontent.com/77797048/147599665-4d30ce0a-03d9-4b70-85a7-3ea566c05f7f.png)
+
+  ![image](https://user-images.githubusercontent.com/77797048/147599653-f1515597-f13f-4a40-9ac2-4eeb30532243.png)
+
+  ![image](https://user-images.githubusercontent.com/77797048/147599640-5ab902d1-427a-45f7-a5e7-05a5d7e91f70.png)
+
+  ![image](https://user-images.githubusercontent.com/77797048/147599635-53fc8c35-e730-48ae-aae9-3cbd9218bf83.png)
+
+  ![image](https://user-images.githubusercontent.com/77797048/147599631-9e8fe508-7a57-4d6e-a5ec-d8b509f7de8e.png)
+  ![image](https://user-images.githubusercontent.com/77797048/147599677-4f20d39c-8f23-4216-852b-8773c523f78b.png)
+![image](https://user-images.githubusercontent.com/77797048/147599684-d6789421-8eb6-4ed2-9f6f-9b37a5b7c900.png)
+![image](https://user-images.githubusercontent.com/77797048/147599695-2d9c3708-62f9-472c-b442-b3e4837f2eed.png)
+
 <img src="https://user-images.githubusercontent.com/77797048/147491405-cf384d01-b311-466f-9505-42fdc6f16928.png" width="300px">
 </center>
