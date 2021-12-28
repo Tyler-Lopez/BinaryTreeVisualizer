@@ -15,9 +15,7 @@ An Android application which allows the user to construct, insert into, remove f
 * Extremely large trees may be visualized
 
 ## UI Examples
-<center>
-  ![image](https://user-images.githubusercontent.com/77797048/147599665-4d30ce0a-03d9-4b70-85a7-3ea566c05f7f.png)
-
+![image](https://user-images.githubusercontent.com/77797048/147599741-ba555399-1264-4a3e-a019-5e506032aedc.png)
   ![image](https://user-images.githubusercontent.com/77797048/147599653-f1515597-f13f-4a40-9ac2-4eeb30532243.png)
 
   ![image](https://user-images.githubusercontent.com/77797048/147599640-5ab902d1-427a-45f7-a5e7-05a5d7e91f70.png)
@@ -30,4 +28,4 @@ An Android application which allows the user to construct, insert into, remove f
 ![image](https://user-images.githubusercontent.com/77797048/147599695-2d9c3708-62f9-472c-b442-b3e4837f2eed.png)
 
 <img src="https://user-images.githubusercontent.com/77797048/147491405-cf384d01-b311-466f-9505-42fdc6f16928.png" width="300px">
-</center>
+
