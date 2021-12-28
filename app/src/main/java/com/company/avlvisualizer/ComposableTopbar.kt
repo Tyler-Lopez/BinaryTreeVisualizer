@@ -21,8 +21,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
@@ -82,14 +84,43 @@ fun ComposableTopBar(
                         }),
                     contentAlignment = Center
                 ) {
-                    Text(
-                        text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
-                        fontSize = if (maxWidth > 480.dp) 30.sp else 25.sp,
-                        fontFamily = roboto,
-                        fontWeight = Normal,
-                        color = LightGrey,
-                    )
-
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
+                            textAlign = TextAlign.Center,
+                            fontSize = if (maxWidth > 480.dp) 30.sp else 25.sp,
+                            fontFamily = roboto,
+                            fontWeight = Normal,
+                            color = LightGrey,
+                            modifier = Modifier.weight(0.7f)
+                        )
+                        Box(modifier = Modifier.weight(0.3f), contentAlignment = Center) {
+                            Button(
+                                modifier = Modifier
+                                    .width(40.dp)
+                                    .height(30.dp),
+                                onClick = {
+                                    for (i in 1..10) {
+                                        onRandomNumber((Math.random() * 100).toInt())
+                                    }
+                                },
+                                contentPadding = PaddingValues(2.dp),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
+                            ) {
+                                Text(
+                                    "+ 10",
+                                    fontSize = 13.sp,
+                                    color = LightGrey,
+                                    fontFamily = roboto,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                        }
+                    }
                 }
                 Box(
                     modifier = Modifier

@@ -149,10 +149,10 @@ fun ComposableTree(
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
-                        BinaryNodeChild.LEFT -> xShift -= ((nodeSize * 0.2f ) + 60) * 0.05f * 2f.pow(
+                        BinaryNodeChild.LEFT -> xShift -= ((nodeSize * 0.2f ) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
-                        BinaryNodeChild.RIGHT -> xShift += ((nodeSize * 0.2f ) + 60) * 0.05f * 2f.pow(
+                        BinaryNodeChild.RIGHT -> xShift += ((nodeSize * 0.2f ) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
                     }
