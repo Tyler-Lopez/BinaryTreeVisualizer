@@ -1,7 +1,6 @@
-<img src="https://github.com/Tyler-Lopez/BinaryTreeVisualizerApp/blob/main/BinaryTreeVisualizerApp_Logo.svg" width="100%" height="144">
-
 <center>
-  # TREE VISUALIZER | Binary Tree Visualizer App
+  <img src="https://github.com/Tyler-Lopez/BinaryTreeVisualizerApp/blob/main/BinaryTreeVisualizerApp_Logo.svg" width="100%" height="144">
+  <h1>TREE VISUALIZER | Binary Tree Visualizer App</h1>
 </center>
 
 ## About
