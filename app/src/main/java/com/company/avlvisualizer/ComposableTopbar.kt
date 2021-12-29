@@ -46,25 +46,26 @@ fun ComposableTopBar(
         mutableStateOf("")
     }
     // https://foso.github.io/Jetpack-Compose-Playground/material/dropdownmenu/
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-    val items = listOf("Not Balanced", "AVL Balanced")
-    var selectedIndex by remember {
-        mutableStateOf(0)
-    }
+    var expandedBalance by remember { mutableStateOf(false) }
+    var expandedColor by remember { mutableStateOf(false) }
+    val itemsBalance = BinaryTreeBalanceType.getBalanceTypes()
+    val itemsColors = ComposableTreeTheme.getThemes()
+    var selectedIndexBalance by remember { mutableStateOf(0) }
+    var selectedIndexColor by remember { mutableStateOf(0) }
+
 
 
     BoxWithConstraints(modifier = Modifier
         .fillMaxWidth()
-        .shadow(5.dp)
         .background(DarkGrey)
+        .padding(bottom = 5.dp)
+      //  .shadow(3.dp)
         .drawBehind {
             drawLine(
                 color = LightGrey,
-                strokeWidth = 5f,
-                start = Offset(0f, size.height),
-                end = Offset(size.width, size.height)
+                strokeWidth = 3f,
+                start = Offset(0f, size.height.plus(10)),
+                end = Offset(size.width, size.height.plus(10))
             )
         }
     ) {
@@ -162,7 +163,7 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(180.dp)
-                        .height(50.dp),
+                        .height(40.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
@@ -197,7 +198,7 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(180.dp)
-                        .height(50.dp),
+                        .height(40.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
@@ -232,7 +233,7 @@ fun ComposableTopBar(
                 Box(
                     modifier = Modifier
                         .width(240.dp)
-                        .height(50.dp),
+                        .height(40.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
@@ -245,27 +246,22 @@ fun ComposableTopBar(
                                 .height(it),
                             contentAlignment = Alignment.CenterStart
                         ) {
-                            val options = listOf("Unbalanced", "AVL Tree")
                             ComposeMenu(
                                 width = this.maxWidth,
-                                menuItems = options,
-                                menuExpandedState = expanded,
-                                seletedIndex = selectedIndex,
+                                menuItems = itemsBalance,
+                                menuExpandedState = expandedBalance,
+                                selectedIndex = selectedIndexBalance,
                                 updateMenuExpandStatus = {
-                                    expanded = true
+                                    expandedBalance = true
+                                    expandedColor = false
                                 },
                                 onDismissMenuView = {
-                                    expanded = false
+                                    expandedBalance = false
                                 },
                                 onMenuItemclick = { index ->
-                                    selectedIndex = index
-                                    onBalanceChange(
-                                        when (options[index]) {
-                                            "Unbalanced" -> BinaryTreeBalanceType.UNBALANCED
-                                            else -> BinaryTreeBalanceType.AVL_TREE
-                                        }
-                                    )
-                                    expanded = false
+                                    selectedIndexBalance = index
+                                    onBalanceChange(itemsBalance[selectedIndexBalance])
+                                    expandedBalance = false
                                 }
                             )
                         }
@@ -273,18 +269,47 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(360.dp)
-                        .height(50.dp),
+                        .width(180.dp)
+                        .height(40.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.Brush,
                         title = "COLOR"
                     ) {
+                        BoxWithConstraints(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(it),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            ComposeMenu(
+                                width = this.maxWidth,
+                                menuItems = itemsColors,
+                                menuExpandedState = expandedColor,
+                                selectedIndex = selectedIndexColor,
+                                updateMenuExpandStatus = {
+                                    expandedColor = true
+                                    expandedBalance = false
+                                },
+                                onDismissMenuView = {
+                                    expandedColor = false
+                                },
+                                onMenuItemclick = { index ->
+                                    selectedIndexColor = index
+                                    onThemeChange(
+                                        itemsColors[selectedIndexColor]
+                                    )
+                                    expandedColor = false
+                                }
+                            )
+                        }
                         // Display a thumbnail of each theme with an onClick to update theme
+                        /*
                         LazyRow(
                             modifier = Modifier
-                                .fillMaxHeight()
+                                .fillMaxHeight(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             items(items = ComposableTreeTheme.getThemes(), itemContent = { theme ->
                                 // .thumbnail is a composable function defined in Theme enum
@@ -293,6 +318,8 @@ fun ComposableTopBar(
                                 })
                             })
                         }
+
+                         */
                     }
                 }
             }

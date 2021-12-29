@@ -9,12 +9,17 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.company.avlvisualizer.ui.theme.DarkGrey
 import com.company.avlvisualizer.ui.theme.Red
 
 @Composable
-fun ComposableResetButton(modifier: Modifier, onReset: () -> Unit) {
+fun ComposableResetButton(
+    modifier: Modifier,
+    color: Color = Red,
+    onReset: () -> Unit
+) {
     Button(
         modifier = modifier,
         onClick = {
@@ -27,7 +32,7 @@ fun ComposableResetButton(modifier: Modifier, onReset: () -> Unit) {
             imageVector = Icons.Default.Refresh,
             contentDescription = "Reset Tree and Setitngs",
             modifier = Modifier.fillMaxSize(),
-            tint = Red
+            tint = color
         )
     }
 }

@@ -144,8 +144,8 @@ class MainActivity : ComponentActivity() {
                                 .size(45.dp)
                                 .offset(y = maxHeight - 45.dp)
                                 .padding(5.dp)
-                                .border(width = 0.1.dp, color = LightGrey)
-                                .shadow(5.dp)
+                                .shadow(5.dp),
+                                color = LightBlue
                                 ) {
                                 tree = BinaryTree()
                                 treeStyle = ComposableTreeStyle()

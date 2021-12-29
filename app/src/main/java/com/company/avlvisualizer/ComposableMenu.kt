@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -28,9 +29,9 @@ import kotlinx.coroutines.NonDisposableHandle.parent
 @Composable
 fun ComposeMenu(
     width: Dp,
-    menuItems: List<String>,
+    menuItems: List<Dropdownable>,
     menuExpandedState: Boolean,
-    seletedIndex: Int,
+    selectedIndex: Int,
     updateMenuExpandStatus: () -> Unit,
     onDismissMenuView: () -> Unit,
     onMenuItemclick: (Int) -> Unit,
@@ -44,26 +45,18 @@ fun ComposeMenu(
                 onClick = {
                     updateMenuExpandStatus()
                 },
-            ),
-
+            )
+            .shadow(5.dp),
         ) {
-
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxSize()
-                .border(
-                    width = 0.5.dp,
-                    color = LightGrey
-                )
+                .background(Grey)
                 .padding(5.dp)
         ) {
-            Text(
-                text = menuItems[seletedIndex],
-                color = Color.White,
-                fontSize = 14.sp
-            )
+            menuItems[selectedIndex].thumbnail()
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "Open or close the dropdown",
@@ -77,9 +70,7 @@ fun ComposeMenu(
             expanded = menuExpandedState,
             onDismissRequest = { onDismissMenuView() },
             modifier = Modifier
-                .width(width * 1.1f)
-                    // COLOR ACTUALLY PULLED FROM SURFACE THEME!!!!
-            //    .border(width = 0.5.dp, color = LightGrey)
+                .width(width * 0.95f)
                 .clip(CutCornerShape(10.dp))
 
         ) {
@@ -89,14 +80,10 @@ fun ComposeMenu(
                         onMenuItemclick(index)
                     },
                     modifier = Modifier
-                        .background(Grey)
+                       // .background(Grey)
                         .clip(RectangleShape)
                 ) {
-                    Text(
-                        text = title,
-                        fontSize = 14.sp,
-                        color = LightGrey
-                    )
+                    title.thumbnail()
                 }
             }
         }

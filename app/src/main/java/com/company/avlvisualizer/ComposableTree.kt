@@ -194,7 +194,8 @@ fun ComposableTree(
                 // Draw Node and border if selected
                 drawCircle(
                     center = centerPos,
-                    color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
+                //    color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
+                    color = style.theme.nodeColor,
                     radius = nodeSize
                 )
 

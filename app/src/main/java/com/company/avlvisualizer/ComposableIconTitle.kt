@@ -35,7 +35,7 @@ fun ComposableIconTitle(
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                modifier = Modifier.size(boxWithConstraintsScope.maxHeight.times(0.8f)).padding(end = 2.dp),
+                modifier = Modifier.size(boxWithConstraintsScope.maxHeight.times(0.6f)).padding(end = 4.dp),
                 tint = LightGrey
             )
             Text(

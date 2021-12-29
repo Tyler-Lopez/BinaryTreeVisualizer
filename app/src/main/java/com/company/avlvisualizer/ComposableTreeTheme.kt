@@ -1,102 +1,71 @@
 package com.company.avlvisualizer
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
 
-enum class ComposableTreeTheme(
+data class ComposableTreeTheme(
     val nodeColor: Color,
     val lineColor: Color,
-    val selectedNodeColor: Color,
-) {
-    BLUE(Color(16, 90, 201), Color(38, 125, 255), Grey) {
-        @Composable
-        override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
-            Button(
-                modifier = androidx.compose.ui.Modifier
-                    .size(height)
-                    .padding(start = 5.dp)
-                    .padding(vertical = 5.dp)
-                    .border(width = 1.dp, color = LightGrey),
-                colors = ButtonDefaults.buttonColors(backgroundColor = this.lineColor),
-                onClick = { onClick(this) }
-            ) { }
-        }
-    },
-    RED(DarkerRed, Red, Grey) {
-        @Composable
-        override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
-            Button(
-                modifier = androidx.compose.ui.Modifier
-                    .size(height)
-                    .padding(start = 5.dp)
-                    .padding(vertical = 5.dp)
-                    .border(width = 1.dp, color = LightGrey),
-                colors = ButtonDefaults.buttonColors(backgroundColor = this.lineColor),
-                onClick = { onClick(this) }
-            ) { }
-        }
-    },
-    GREEN(Color(17, 135, 8), Color(36, 173, 26), Grey) {
-        @Composable
-        override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
-            Button(
-                modifier = androidx.compose.ui.Modifier
-                    .size(height)
-                    .padding(start = 5.dp)
-                    .padding(vertical = 5.dp)
-                    .border(width = 1.dp, color = LightGrey),
-                colors = ButtonDefaults.buttonColors(backgroundColor = this.lineColor),
-                onClick = { onClick(this) }
-            ) { }
-        }
-    },
-    YELLOW(Color(237, 157, 7), Color(232, 179, 21), Grey) {
-        @Composable
-        override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
-            Button(
-                modifier = androidx.compose.ui.Modifier
-                    .size(height)
-                    .padding(start = 5.dp)
-                    .padding(vertical = 5.dp)
-                    .border(width = 1.dp, color = LightGrey),
-                colors = ButtonDefaults.buttonColors(backgroundColor = this.lineColor),
-                onClick = { onClick(this) }
-            ) { }
-        }
-    },
-    PURPLE(Purple, Color.Magenta, Grey) {
-        @Composable
-        override fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit) {
-            Button(
-                modifier = androidx.compose.ui.Modifier
-                    .size(height)
-                    .padding(start = 5.dp)
-                    .padding(vertical = 5.dp)
-                    .border(width = 1.dp, color = LightGrey),
-                colors = ButtonDefaults.buttonColors(backgroundColor = this.lineColor),
-                onClick = { onClick(this) }
-            ) { }
-        }
-    };
+) : Dropdownable {
 
     @Composable
-    abstract fun thumbnail(height: Dp, onClick: (ComposableTreeTheme) -> Unit)
+    override fun thumbnail() {
+        val theme = this
+        Box(modifier = Modifier.shadow(3.dp)) {
+            Text(
+                text = "COLOR",
+                color = theme.lineColor,
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(30.dp)
+                    .padding(3.dp)
+                    .background(theme.lineColor)
+            )
+        }
+    }
 
     companion object {
         fun getThemes(): List<ComposableTreeTheme> {
-            return listOf(BLUE, GREEN, YELLOW, PURPLE, RED)
+            return listOf(
+                // BLUE
+                ComposableTreeTheme(
+                    Color(16, 90, 201),
+                    LightBlue
+                ),
+                // GREEN
+                ComposableTreeTheme(
+                    Color(17, 135, 8),
+                    Color(36, 173, 26)
+                ),
+                // RED
+                ComposableTreeTheme(DarkerRed, Red),
+                // YELLOW
+                ComposableTreeTheme(
+                    Color(237, 157, 7),
+                    Color(232, 179, 21)
+                ),
+                // PINK
+                ComposableTreeTheme(
+                    Color(221, 36, 144),
+                    Color(251, 62, 173)
+                ),
+            )
         }
     }
 }

@@ -22,7 +22,7 @@ private val LightColorPalette = lightColors(
     secondary = Teal200,
 
     background = Color.White,
-    surface = DarkGrey, // IMPORTANT FOR DROPDOWN!
+    surface = Grey, // IMPORTANT FOR DROPDOWN!
     onPrimary = DarkGrey,
     onSecondary = DarkGrey,
     onBackground = DarkGrey,
