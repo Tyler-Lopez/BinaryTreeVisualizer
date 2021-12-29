@@ -21,7 +21,7 @@ import com.company.avlvisualizer.ui.theme.roboto
 @Composable
 fun ComposableIconTitle(
     icon: ImageVector,
-    title: String,
+    title: String?,
     content: @Composable RowScope.(Dp) -> Unit
 ) {
     BoxWithConstraints {
@@ -35,15 +35,18 @@ fun ComposableIconTitle(
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                modifier = Modifier.size(boxWithConstraintsScope.maxHeight.times(0.6f)).padding(end = 4.dp),
+                modifier = Modifier
+                    .size(boxWithConstraintsScope.maxHeight.times(0.7f))
+                    .padding(end = 4.dp),
                 tint = LightGrey
             )
-            Text(
-                text = "$title:",
-                color = LightGrey,
-                fontFamily = roboto,
-                fontSize = 18.sp
-            )
+            if (title != null)
+                Text(
+                    text = "$title:",
+                    color = LightGrey,
+                    fontFamily = roboto,
+                    fontSize = 18.sp
+                )
             Spacer(modifier = Modifier.width(4.dp))
             content(boxWithConstraintsScope.maxHeight)
         }

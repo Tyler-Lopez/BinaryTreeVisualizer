@@ -59,7 +59,7 @@ fun ComposableTopBar(
         .fillMaxWidth()
         .background(DarkGrey)
         .padding(bottom = 5.dp)
-      //  .shadow(3.dp)
+        //  .shadow(3.dp)
         .drawBehind {
             drawLine(
                 color = LightGrey,
@@ -72,7 +72,7 @@ fun ComposableTopBar(
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
         Column {
-            Row(modifier = Modifier.height(75.dp)) {
+            Row(modifier = Modifier.height(65.dp)) {
                 Box(
                     modifier = Modifier
                         .weight(0.6f)
@@ -85,11 +85,13 @@ fun ComposableTopBar(
                         }),
                     contentAlignment = Center
                 ) {
+
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+
                         Text(
                             text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
                             textAlign = TextAlign.Center,
@@ -122,7 +124,11 @@ fun ComposableTopBar(
                             }
                         }
                     }
+
+
                 }
+
+
                 Box(
                     modifier = Modifier
                         .weight(0.4f)
@@ -162,13 +168,13 @@ fun ComposableTopBar(
                 // Y-SPACING
                 Box(
                     modifier = Modifier
-                        .width(180.dp)
-                        .height(40.dp),
+                        .width(120.dp)
+                        .height(50.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.Expand,
-                        title = "SPACING"
+                        title = null
                     ) {
                         Row(
                             modifier = Modifier
@@ -179,7 +185,7 @@ fun ComposableTopBar(
                                 contentDescription = "Increase",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it)
+                                    .size(it.times(0.8f))
                                     .clickable { onSpacingChange(+10) },
                                 tint = LightBlue
                             )
@@ -188,7 +194,7 @@ fun ComposableTopBar(
                                 contentDescription = "Decrease",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it)
+                                    .size(it.times(0.8f))
                                     .clickable { onSpacingChange(-10) },
                                 tint = LightBlue
                             )
@@ -197,13 +203,13 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(180.dp)
-                        .height(40.dp),
+                        .width(120.dp)
+                        .height(50.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
                         icon = Icons.Default.LineWeight,
-                        title = "WEIGHT"
+                        title = null
                     ) {
                         Row(
                             modifier = Modifier
@@ -214,7 +220,7 @@ fun ComposableTopBar(
                                 contentDescription = "Increase",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it)
+                                    .size(it.times(0.8f))
                                     .clickable { onWeightChange(+100) },
                                 tint = LightBlue
                             )
@@ -223,7 +229,7 @@ fun ComposableTopBar(
                                 contentDescription = "Decrease",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it)
+                                    .size(it.times(0.8f))
                                     .clickable { onWeightChange(-100) },
                                 tint = LightBlue
                             )
@@ -232,8 +238,47 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(240.dp)
-                        .height(40.dp),
+                        .width(120.dp)
+                        .height(50.dp),
+                    contentAlignment = Center
+                ) {
+                    ComposableIconTitle(
+                        icon = Icons.Default.Brush,
+                        title = null
+                    ) {
+                        BoxWithConstraints(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(it),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            ComposeMenu(
+                                width = this.maxWidth,
+                                menuItems = itemsColors,
+                                menuExpandedState = expandedColor,
+                                selectedIndex = selectedIndexColor,
+                                updateMenuExpandStatus = {
+                                    expandedColor = true
+                                    expandedBalance = false
+                                },
+                                onDismissMenuView = {
+                                    expandedColor = false
+                                },
+                                onMenuItemclick = { index ->
+                                    selectedIndexColor = index
+                                    onThemeChange(
+                                        itemsColors[selectedIndexColor]
+                                    )
+                                    expandedColor = false
+                                }
+                            )
+                        }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .width(360.dp)
+                        .height(50.dp),
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
@@ -265,61 +310,6 @@ fun ComposableTopBar(
                                 }
                             )
                         }
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .width(180.dp)
-                        .height(40.dp),
-                    contentAlignment = Center
-                ) {
-                    ComposableIconTitle(
-                        icon = Icons.Default.Brush,
-                        title = "COLOR"
-                    ) {
-                        BoxWithConstraints(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(it),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            ComposeMenu(
-                                width = this.maxWidth,
-                                menuItems = itemsColors,
-                                menuExpandedState = expandedColor,
-                                selectedIndex = selectedIndexColor,
-                                updateMenuExpandStatus = {
-                                    expandedColor = true
-                                    expandedBalance = false
-                                },
-                                onDismissMenuView = {
-                                    expandedColor = false
-                                },
-                                onMenuItemclick = { index ->
-                                    selectedIndexColor = index
-                                    onThemeChange(
-                                        itemsColors[selectedIndexColor]
-                                    )
-                                    expandedColor = false
-                                }
-                            )
-                        }
-                        // Display a thumbnail of each theme with an onClick to update theme
-                        /*
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxHeight(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            items(items = ComposableTreeTheme.getThemes(), itemContent = { theme ->
-                                // .thumbnail is a composable function defined in Theme enum
-                                theme.thumbnail(height = it * 0.7f, onClick = { newTheme ->
-                                    onThemeChange(newTheme)
-                                })
-                            })
-                        }
-
-                         */
                     }
                 }
             }

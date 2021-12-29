@@ -29,12 +29,12 @@ data class ComposableTreeTheme(
         val theme = this
         Box(modifier = Modifier.shadow(3.dp)) {
             Text(
-                text = "COLOR",
+                text = "C",
+                fontSize = 0.sp,
                 color = theme.lineColor,
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(30.dp)
-                    .padding(3.dp)
+                    .width(30.dp)
+                    .height(15.dp)
                     .background(theme.lineColor)
             )
         }

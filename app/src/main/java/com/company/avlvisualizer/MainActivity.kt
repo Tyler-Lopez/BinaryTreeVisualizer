@@ -140,15 +140,19 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 //  activeNode = it
                             }
-                            ComposableResetButton(modifier = Modifier
-                                .size(45.dp)
-                                .offset(y = maxHeight - 45.dp)
-                                .padding(5.dp)
-                                .shadow(5.dp),
-                                color = LightBlue
-                                ) {
+                            ComposableResetButton(
+                                modifier = Modifier
+                                    .size(45.dp)
+                                    .offset(y = maxHeight - 45.dp)
+                                    .padding(5.dp)
+                                    .shadow(5.dp),
+                                color = Red
+                            ) {
+                                // Reset tree nodes, y-spacing and thickness
                                 tree = BinaryTree()
+                                val tmpTheme = treeStyle.theme
                                 treeStyle = ComposableTreeStyle()
+                                treeStyle.theme = tmpTheme
                                 nodeComposableDataList = tree.returnComposableData()
                             }
                         } else {

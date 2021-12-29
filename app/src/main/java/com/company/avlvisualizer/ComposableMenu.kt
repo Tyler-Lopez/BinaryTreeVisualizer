@@ -54,7 +54,7 @@ fun ComposeMenu(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Grey)
-                .padding(5.dp)
+                .padding(10.dp)
         ) {
             menuItems[selectedIndex].thumbnail()
             Icon(
