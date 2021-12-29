@@ -12,7 +12,7 @@ interface Dropdownable {
     fun thumbnail() {
         Text(
             text = "$this",
-            color = White,
+            color = Color.White,
             fontSize = 14.sp
         )
     }
