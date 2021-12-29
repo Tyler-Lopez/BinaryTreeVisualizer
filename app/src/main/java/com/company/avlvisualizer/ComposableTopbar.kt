@@ -114,7 +114,7 @@ fun ComposableTopBar(
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 20.sp,
-                                    color = LightBlue,
+                                    color = LightGrey,
                                     fontFamily = roboto, modifier = Modifier
                                 )
                             }
@@ -133,7 +133,7 @@ fun ComposableTopBar(
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 20.sp,
-                                    color = LightBlue,
+                                    color = LightGrey,
                                     fontFamily = roboto, modifier = Modifier,
                                     letterSpacing = TextUnit(0f, TextUnitType.Sp)
                                 )
@@ -141,11 +141,11 @@ fun ComposableTopBar(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.width(5.dp))
+                Spacer(modifier = Modifier.width(6.dp))
 
                 Box(
                     modifier = Modifier
-                        .weight(0.4f)
+                        .weight(0.45f)
                         .shadow(5.dp)
                 ) {
                     TextField(
