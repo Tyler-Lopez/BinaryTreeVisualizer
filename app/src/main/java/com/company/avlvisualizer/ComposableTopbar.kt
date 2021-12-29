@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
@@ -24,12 +25,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import com.company.avlvisualizer.ui.theme.*
 import com.google.accompanist.flowlayout.FlowRow
+import kotlin.random.Random
 
+@ExperimentalUnitApi
 @Composable
 fun ComposableTopBar(
     message: String,
@@ -72,73 +75,84 @@ fun ComposableTopBar(
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
         Column {
-            Row(modifier = Modifier.height(65.dp)) {
+            Row(modifier = Modifier.height(60.dp), verticalAlignment = Alignment.CenterVertically) {
+
+
                 Box(
                     modifier = Modifier
                         .weight(0.6f)
                         .fillMaxHeight()
-                        .padding(5.dp)
+                        .shadow(5.dp)
                         .background(Grey)
-                        .border(width = (0.5f).dp, color = LightGrey)
-                        .clickable(onClick = {
-                            onRandomNumber((Math.random() * 100).toInt())
-                        }),
-                    contentAlignment = Center
+                        .padding(10.dp),
                 ) {
-
                     Row(
                         modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
                         Text(
-                            text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
-                            textAlign = TextAlign.Center,
-                            fontSize = if (maxWidth > 480.dp) 30.sp else 25.sp,
-                            fontFamily = roboto,
-                            fontWeight = Normal,
+                            text = "Add Random",
                             color = LightGrey,
-                            modifier = Modifier.weight(0.7f)
+                            modifier = Modifier.padding(end = 10.dp)
                         )
-                        Box(modifier = Modifier.weight(0.3f), contentAlignment = Center) {
-                            Button(
-                                modifier = Modifier
-                                    .width(40.dp)
-                                    .height(30.dp),
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            Button(modifier = Modifier
+                                .width(40.dp)
+                                .height(40.dp)
+                                .padding(end = 5.dp)
+                                .border(1.dp, LightBlue),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Grey),
                                 onClick = {
-                                    for (i in 1..10) {
-                                        onRandomNumber((Math.random() * 100).toInt())
-                                    }
-                                },
-                                contentPadding = PaddingValues(2.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
+                                    onRandomNumber(Random.nextInt(0, 999))
+                                }, contentPadding = PaddingValues(1.dp)
                             ) {
                                 Text(
-                                    "+ 10",
-                                    fontSize = 13.sp,
-                                    color = LightGrey,
-                                    fontFamily = roboto,
-                                    fontWeight = FontWeight.Bold,
+                                    text = "1",
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 20.sp,
+                                    color = White,
+                                    fontFamily = roboto, modifier = Modifier
+                                )
+                            }
+                            Button(modifier = Modifier
+                                .width(50.dp)
+                                .height(40.dp)
+                                .padding(start = 5.dp)
+                                .border(1.dp, LightBlue),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Grey),
+                                onClick = {
+                                    for (i in 1..10) onRandomNumber(Random.nextInt(0, 999))
+                                }, contentPadding = PaddingValues(1.dp)
+                            ) {
+                                Text(
+                                    text = "10",
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 20.sp,
+                                    color = White,
+                                    fontFamily = roboto, modifier = Modifier,
+                                    letterSpacing = TextUnit(0f, TextUnitType.Sp)
                                 )
                             }
                         }
                     }
-
-
                 }
-
+                Spacer(modifier = Modifier.width(5.dp))
 
                 Box(
                     modifier = Modifier
                         .weight(0.4f)
-                        .padding(top = 5.dp, bottom = 5.dp, end = 5.dp)
-                        .background(Grey)
-                        .border(width = (0.5f).dp, color = LightGrey)
+                        .shadow(5.dp)
                 ) {
                     TextField(
                         value = inputStr,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Grey),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Number
                         ),
@@ -163,12 +177,69 @@ fun ComposableTopBar(
                         colors = TextFieldDefaults.textFieldColors(textColor = White)
                     )
                 }
+
+                /*
+
+            Box(
+                modifier = Modifier
+                    .weight(0.6f)
+                    .fillMaxHeight()
+                    .background(Grey)
+                    .clickable(onClick = {
+                        onRandomNumber((Math.random() * 100).toInt())
+                    }),
+                contentAlignment = Center
+            ) {
             }
-            FlowRow {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
+                        textAlign = TextAlign.Center,
+                        fontSize = if (maxWidth > 480.dp) 30.sp else 25.sp,
+                        fontFamily = roboto,
+                        fontWeight = Normal,
+                        color = LightGrey,
+                        modifier = Modifier.weight(0.7f)
+                    )
+                    Box(modifier = Modifier.weight(0.3f), contentAlignment = Center) {
+                        Button(
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(30.dp),
+                            onClick = {
+                                for (i in 1..10) {
+                                    onRandomNumber((Math.random() * 100).toInt())
+                                }
+                            },
+                            contentPadding = PaddingValues(2.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
+                        ) {
+                            Text(
+                                "+ 10",
+                                fontSize = 13.sp,
+                                color = LightGrey,
+                                fontFamily = roboto,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+                }
+
+
+            }*/
+
+
+            }
+            FlowRow(modifier = Modifier.padding(5.dp)) {
                 // Y-SPACING
                 Box(
                     modifier = Modifier
-                        .width(120.dp)
+                        .width(115.dp)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {
@@ -185,7 +256,7 @@ fun ComposableTopBar(
                                 contentDescription = "Increase",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it.times(0.8f))
+                                    .size(it.times(0.7f))
                                     .clickable { onSpacingChange(+10) },
                                 tint = LightBlue
                             )
@@ -194,7 +265,7 @@ fun ComposableTopBar(
                                 contentDescription = "Decrease",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it.times(0.8f))
+                                    .size(it.times(0.7f))
                                     .clickable { onSpacingChange(-10) },
                                 tint = LightBlue
                             )
@@ -203,7 +274,7 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(120.dp)
+                        .width(115.dp)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {
@@ -220,7 +291,7 @@ fun ComposableTopBar(
                                 contentDescription = "Increase",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it.times(0.8f))
+                                    .size(it.times(0.7f))
                                     .clickable { onWeightChange(+100) },
                                 tint = LightBlue
                             )
@@ -229,7 +300,7 @@ fun ComposableTopBar(
                                 contentDescription = "Decrease",
                                 modifier = Modifier
                                     .weight(0.5f)
-                                    .size(it.times(0.8f))
+                                    .size(it.times(0.7f))
                                     .clickable { onWeightChange(-100) },
                                 tint = LightBlue
                             )
@@ -277,7 +348,7 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(360.dp)
+                        .width(275.dp)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {

@@ -20,7 +20,7 @@ import com.company.avlvisualizer.ui.theme.roboto
 
 @Composable
 fun ComposableIconTitle(
-    icon: ImageVector,
+    icon: ImageVector?,
     title: String?,
     content: @Composable RowScope.(Dp) -> Unit
 ) {
@@ -30,8 +30,10 @@ fun ComposableIconTitle(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
+            if (icon != null)
             Icon(
                 imageVector = icon,
                 contentDescription = title,

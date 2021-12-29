@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -36,6 +37,7 @@ import java.lang.Float.max
 
 class MainActivity : ComponentActivity() {
 
+    @ExperimentalUnitApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         // https://stackoverflow.com/questions/68980068/jetpack-compose-status-bar-color-not-updated-in-dark-theme
@@ -159,36 +161,28 @@ class MainActivity : ComponentActivity() {
                             val circleRadius = (LocalDensity.current.run {
                                 minOf(
                                     boxWithConstraintsScope.maxWidth.toPx(),
-                                    boxWithConstraintsScope.maxWidth.toPx()
+                                    boxWithConstraintsScope.maxHeight.toPx()
                                 )
                             } / 2f) * 0.9f
                             Canvas(modifier = Modifier.fillMaxSize()) {
-                                drawOval(
-                                    color = DarkGrey,
-                                    topLeft = Offset(
-                                        center.x - circleRadius,
-                                        center.y - (circleRadius / 2f)
-                                    ),
-                                    size = Size(circleRadius * 2, circleRadius),
-                                )
                                 // Draw Text
                                 val paint = Paint()
                                 val roboto = ResourcesCompat.getFont(context, R.font.roboto_medium)
                                 paint.textAlign = Paint.Align.CENTER
-                                paint.textSize = circleRadius / 5f
+                                paint.textSize = circleRadius / 4f
                                 paint.color = 0xff6592b8.toInt()
                                 paint.typeface = roboto
 
                                 val paintSub = Paint()
                                 paintSub.textAlign = Paint.Align.CENTER
-                                paintSub.textSize = circleRadius / 10f
+                                paintSub.textSize = circleRadius / 7f
                                 paintSub.color = 0xffc4c4c4.toInt()
                                 paintSub.typeface = roboto
 
 
                                 drawIntoCanvas {
                                     it.nativeCanvas.drawText(
-                                        "TREE IS EMPTY",
+                                        "EMPTY TREE",
                                         center.x,
                                         center.y,
                                         paint
@@ -196,7 +190,7 @@ class MainActivity : ComponentActivity() {
                                     it.nativeCanvas.drawText(
                                         "Insert a number to begin",
                                         center.x,
-                                        center.y + (circleRadius) / 6f,
+                                        center.y + (circleRadius) / 4f,
                                         paintSub
                                     )
                                 }
