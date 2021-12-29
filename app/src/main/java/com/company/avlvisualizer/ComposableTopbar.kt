@@ -114,7 +114,7 @@ fun ComposableTopBar(
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 20.sp,
-                                    color = White,
+                                    color = LightGrey,
                                     fontFamily = roboto, modifier = Modifier
                                 )
                             }
@@ -133,7 +133,7 @@ fun ComposableTopBar(
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 20.sp,
-                                    color = White,
+                                    color = LightGrey,
                                     fontFamily = roboto, modifier = Modifier,
                                     letterSpacing = TextUnit(0f, TextUnitType.Sp)
                                 )
