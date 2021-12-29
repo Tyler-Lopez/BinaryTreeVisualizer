@@ -6,12 +6,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Redo
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.ResetTv
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -25,13 +32,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
+import java.lang.Float.max
 
 class MainActivity : ComponentActivity() {
 
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         // https://stackoverflow.com/questions/68980068/jetpack-compose-status-bar-color-not-updated-in-dark-theme
-        this.window.statusBarColor = ContextCompat.getColor(this,R.color.black)
+        this.window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
 
         super.onCreate(savedInstanceState)
@@ -132,12 +140,31 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 //  activeNode = it
                             }
+                            ComposableResetButton(modifier = Modifier
+                                .size(45.dp)
+                                .offset(y = maxHeight - 45.dp)
+                                .padding(5.dp)
+                                .border(width = 0.1.dp, color = LightGrey)
+                                .shadow(5.dp)
+                                ) {
+                                tree = BinaryTree()
+                                treeStyle = ComposableTreeStyle()
+                                nodeComposableDataList = tree.returnComposableData()
+                            }
                         } else {
-                            val circleRadius = (LocalDensity.current.run { boxWithConstraintsScope.maxWidth.toPx() } / 2f) * 0.9f
-                            Canvas(modifier = Modifier.fillMaxSize()){
+                            val circleRadius = (LocalDensity.current.run {
+                                minOf(
+                                    boxWithConstraintsScope.maxWidth.toPx(),
+                                    boxWithConstraintsScope.maxWidth.toPx()
+                                )
+                            } / 2f) * 0.9f
+                            Canvas(modifier = Modifier.fillMaxSize()) {
                                 drawOval(
                                     color = DarkGrey,
-                                    topLeft = Offset(center.x - circleRadius, center.y - (circleRadius / 2f)),
+                                    topLeft = Offset(
+                                        center.x - circleRadius,
+                                        center.y - (circleRadius / 2f)
+                                    ),
                                     size = Size(circleRadius * 2, circleRadius),
                                 )
                                 // Draw Text
@@ -145,13 +172,15 @@ class MainActivity : ComponentActivity() {
                                 val roboto = ResourcesCompat.getFont(context, R.font.roboto_medium)
                                 paint.textAlign = Paint.Align.CENTER
                                 paint.textSize = circleRadius / 5f
-                                paint.color = 0xb5b7c7ff.toInt()
+                                paint.color = 0xff6592b8.toInt()
                                 paint.typeface = roboto
 
                                 val paintSub = Paint()
                                 paintSub.textAlign = Paint.Align.CENTER
                                 paintSub.textSize = circleRadius / 10f
-                                paintSub.color = 0xdcdde3ff.toInt()
+                                paintSub.color = 0xffc4c4c4.toInt()
+                                paintSub.typeface = roboto
+
 
                                 drawIntoCanvas {
                                     it.nativeCanvas.drawText(
@@ -161,15 +190,14 @@ class MainActivity : ComponentActivity() {
                                         paint
                                     )
                                     it.nativeCanvas.drawText(
-                                        "Insert a number to begin.",
+                                        "Insert a number to begin",
                                         center.x,
-                                        center.y + 100f,
+                                        center.y + (circleRadius) / 6f,
                                         paintSub
                                     )
                                 }
                             }
                         }
-
 
                         ComposableSnackbar(
                             snackbarHostState = scaffoldState.snackbarHostState,
