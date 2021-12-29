@@ -60,13 +60,13 @@ fun ComposableTopBar(
 
     BoxWithConstraints(modifier = Modifier
         .fillMaxWidth()
+        .shadow(3.dp)
         .background(DarkGrey)
         .padding(bottom = 5.dp)
-        //  .shadow(3.dp)
         .drawBehind {
             drawLine(
                 color = LightGrey,
-                strokeWidth = 3f,
+                strokeWidth = 5f,
                 start = Offset(0f, size.height.plus(10)),
                 end = Offset(size.width, size.height.plus(10))
             )
@@ -102,9 +102,9 @@ fun ComposableTopBar(
                             Button(modifier = Modifier
                                 .width(40.dp)
                                 .height(40.dp)
-                                .padding(end = 5.dp)
-                                .border(1.dp, LightBlue),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Grey),
+                                .padding(end = 5.dp),
+                               // .border(1.dp, LightBlue),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                 onClick = {
                                     onRandomNumber(Random.nextInt(0, 999))
                                 }, contentPadding = PaddingValues(1.dp)
@@ -112,18 +112,18 @@ fun ComposableTopBar(
                                 Text(
                                     text = "1",
                                     textAlign = TextAlign.Center,
-                                    fontWeight = FontWeight.Normal,
+                                    fontWeight = FontWeight.Bold,
                                     fontSize = 20.sp,
-                                    color = White,
+                                    color = LightBlue,
                                     fontFamily = roboto, modifier = Modifier
                                 )
                             }
                             Button(modifier = Modifier
                                 .width(50.dp)
                                 .height(40.dp)
-                                .padding(start = 5.dp)
-                                .border(1.dp, LightBlue),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Grey),
+                                .padding(start = 5.dp),
+                              //  .border(1.dp, LightBlue),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                 onClick = {
                                     for (i in 1..10) onRandomNumber(Random.nextInt(0, 999))
                                 }, contentPadding = PaddingValues(1.dp)
@@ -131,9 +131,9 @@ fun ComposableTopBar(
                                 Text(
                                     text = "10",
                                     textAlign = TextAlign.Center,
-                                    fontWeight = FontWeight.Normal,
+                                    fontWeight = FontWeight.Bold,
                                     fontSize = 20.sp,
-                                    color = White,
+                                    color = LightBlue,
                                     fontFamily = roboto, modifier = Modifier,
                                     letterSpacing = TextUnit(0f, TextUnitType.Sp)
                                 )
@@ -348,7 +348,7 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(275.dp)
+                        .width(360.dp)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {
