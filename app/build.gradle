@@ -51,6 +51,10 @@ dependencies {
     // ICONS
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    // SVG COIL
+    implementation "io.coil-kt:coil-compose:1.4.0"
+    implementation("io.coil-kt:coil-svg:1.4.0")
+
     // FLOW
     // https://google.github.io/accompanist/flowlayout/
     implementation "com.google.accompanist:accompanist-flowlayout:0.20.3"

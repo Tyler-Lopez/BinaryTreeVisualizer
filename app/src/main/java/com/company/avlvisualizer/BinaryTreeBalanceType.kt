@@ -2,7 +2,7 @@ package com.company.avlvisualizer
 
 enum class BinaryTreeBalanceType : Dropdownable {
     UNBALANCED {
-        override fun toString(): String = "Unbalanced"
+        override fun toString(): String = "None"
     },
     AVL_TREE {
         override fun toString(): String = "AVL Tree"

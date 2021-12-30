@@ -33,7 +33,7 @@ data class ComposableTreeTheme(
                 fontSize = 0.sp,
                 color = theme.lineColor,
                 modifier = Modifier
-                    .width(30.dp)
+                    .width(25.dp)
                     .height(15.dp)
                     .background(theme.lineColor)
             )

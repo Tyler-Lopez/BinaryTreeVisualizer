@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
@@ -75,19 +77,20 @@ fun ComposableTopBar(
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
         Column {
-            Row(modifier = Modifier.height(60.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.height(60.dp).padding(bottom=5.dp), verticalAlignment = Alignment.CenterVertically) {
 
 
                 Box(
                     modifier = Modifier
-                        .weight(0.6f)
+                        //.weight(0.6f)
                         .fillMaxHeight()
                         .shadow(5.dp)
                         .background(Grey)
                         .padding(10.dp),
+                    contentAlignment = CenterStart
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxHeight(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -96,7 +99,7 @@ fun ComposableTopBar(
                             modifier = Modifier.padding(end = 10.dp)
                         )
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxHeight(),
                             horizontalArrangement = Arrangement.Start
                         ) {
                             Button(modifier = Modifier
@@ -145,7 +148,7 @@ fun ComposableTopBar(
 
                 Box(
                     modifier = Modifier
-                        .weight(0.45f)
+                 //       .weight(0.45f)
                         .shadow(5.dp)
                 ) {
                     TextField(
@@ -178,68 +181,14 @@ fun ComposableTopBar(
                     )
                 }
 
-                /*
-
-            Box(
-                modifier = Modifier
-                    .weight(0.6f)
-                    .fillMaxHeight()
-                    .background(Grey)
-                    .clickable(onClick = {
-                        onRandomNumber((Math.random() * 100).toInt())
-                    }),
-                contentAlignment = Center
-            ) {
-            }
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Text(
-                        text = if (maxWidth > 480.dp) "Insert Random" else "+ Random",
-                        textAlign = TextAlign.Center,
-                        fontSize = if (maxWidth > 480.dp) 30.sp else 25.sp,
-                        fontFamily = roboto,
-                        fontWeight = Normal,
-                        color = LightGrey,
-                        modifier = Modifier.weight(0.7f)
-                    )
-                    Box(modifier = Modifier.weight(0.3f), contentAlignment = Center) {
-                        Button(
-                            modifier = Modifier
-                                .width(40.dp)
-                                .height(30.dp),
-                            onClick = {
-                                for (i in 1..10) {
-                                    onRandomNumber((Math.random() * 100).toInt())
-                                }
-                            },
-                            contentPadding = PaddingValues(2.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
-                        ) {
-                            Text(
-                                "+ 10",
-                                fontSize = 13.sp,
-                                color = LightGrey,
-                                fontFamily = roboto,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-                    }
-                }
-
-
-            }*/
 
 
             }
-            FlowRow(modifier = Modifier.padding(5.dp)) {
+            FlowRow(modifier = Modifier) {
                 // Y-SPACING
                 Box(
                     modifier = Modifier
-                        .width(115.dp)
+                        .width(120.dp)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {
@@ -274,7 +223,7 @@ fun ComposableTopBar(
                 }
                 Box(
                     modifier = Modifier
-                        .width(115.dp)
+                        .width(120.dp)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {
@@ -319,12 +268,12 @@ fun ComposableTopBar(
                     ) {
                         BoxWithConstraints(
                             modifier = Modifier
-                                .fillMaxWidth()
+                      //          .fillMaxWidth()
                                 .height(it),
                             contentAlignment = Alignment.CenterStart
                         ) {
                             ComposeMenu(
-                                width = this.maxWidth,
+                          //      width = this.maxWidth,
                                 menuItems = itemsColors,
                                 menuExpandedState = expandedColor,
                                 selectedIndex = selectedIndexColor,
@@ -346,9 +295,10 @@ fun ComposableTopBar(
                         }
                     }
                 }
+                val sizeAvailableOnRow =  maxWidth.minus(360.dp).minus(1.dp)
                 Box(
                     modifier = Modifier
-                        .width(360.dp)
+                        .width(if (sizeAvailableOnRow >= 230.dp) sizeAvailableOnRow else maxWidth)
                         .height(50.dp),
                     contentAlignment = Center
                 ) {
@@ -359,11 +309,12 @@ fun ComposableTopBar(
                         BoxWithConstraints(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(it),
+                                .height(it)
+                                .background(Color.Magenta),
                             contentAlignment = Alignment.CenterStart
                         ) {
                             ComposeMenu(
-                                width = this.maxWidth,
+                         //       width = this.maxWidth,
                                 menuItems = itemsBalance,
                                 menuExpandedState = expandedBalance,
                                 selectedIndex = selectedIndexBalance,

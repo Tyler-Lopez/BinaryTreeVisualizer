@@ -158,6 +158,12 @@ class MainActivity : ComponentActivity() {
                                 nodeComposableDataList = tree.returnComposableData()
                             }
                         } else {
+                            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    text = "${this.maxWidth}"
+                                )
+                            }
+                            /*
                             val circleRadius = (LocalDensity.current.run {
                                 minOf(
                                     boxWithConstraintsScope.maxWidth.toPx(),
@@ -195,6 +201,8 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }
+
+                             */
                         }
 
                         ComposableSnackbar(

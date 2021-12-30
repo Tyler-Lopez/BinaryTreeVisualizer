@@ -28,7 +28,7 @@ import kotlinx.coroutines.NonDisposableHandle.parent
 
 @Composable
 fun ComposeMenu(
-    width: Dp,
+ //   width: Dp,
     menuItems: List<Dropdownable>,
     menuExpandedState: Boolean,
     selectedIndex: Int,
@@ -38,8 +38,8 @@ fun ComposeMenu(
 ) {
     Box(
         modifier = Modifier
-            .width(width)
-            .fillMaxHeight()
+        //    .width(width)
+            .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
             .clickable(
                 onClick = {
@@ -54,7 +54,7 @@ fun ComposeMenu(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Grey)
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
         ) {
             menuItems[selectedIndex].thumbnail()
             Icon(
@@ -62,6 +62,7 @@ fun ComposeMenu(
                 contentDescription = "Open or close the dropdown",
                 tint = LightBlue,
                 modifier = Modifier
+                    .size(30.dp)
                     .scale(1f, if (menuExpandedState) -1f else 1f) // Mirror dropdown
             )
         }
@@ -70,7 +71,7 @@ fun ComposeMenu(
             expanded = menuExpandedState,
             onDismissRequest = { onDismissMenuView() },
             modifier = Modifier
-                .width(width * 0.95f)
+           //     .width(width * 0.95f)
                 .clip(CutCornerShape(10.dp))
 
         ) {
