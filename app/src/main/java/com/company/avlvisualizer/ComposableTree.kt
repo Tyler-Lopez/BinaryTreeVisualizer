@@ -37,6 +37,9 @@ fun ComposableTree(
     var offset by remember {
         mutableStateOf(Offset.Zero)
     }
+    var selectedValue by remember {
+        mutableStateOf(-1)
+    }
 
     // List of pairs
     // .first = the position of the node
@@ -88,10 +91,12 @@ fun ComposableTree(
                         // Click was within a node
                         if (distance <= (style.nodeSize * scale * 2)) {
                             onNodeSelect(i)
+                            selectedValue = node.value
                             return@detectTapGestures
                         }
                     }
                     onNodeSelect(null)
+                   // selectedValue = -1
 
                 }
             }
@@ -180,7 +185,7 @@ fun ComposableTree(
                 val node = nodePosInfo[i].second
 
                 // TEMPORARY ADD SELECTED LOGIC HERE
-                val isSelected = false
+                val isSelected = node.value == selectedValue
 
                 // Draw Node and border if selected
                 drawCircle(

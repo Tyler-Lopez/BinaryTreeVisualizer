@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
 import android.media.AudioManager
+import android.media.MediaPlayer
+import android.media.PlaybackParams
+import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -48,7 +51,7 @@ import java.lang.Float.max
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
-
+    @SuppressLint("WrongConstant")
     @ExperimentalUnitApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +61,10 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
+   //         val mp: MediaPlayer = MediaPlayer.create(this, R.raw.audio)
+
+            val mp: MediaPlayer = MediaPlayer.create(this, R.raw.node_select)
+            val clickMp: MediaPlayer = MediaPlayer.create(this, R.raw.click_sound)
 
             val context = LocalContext.current
             val vibrator: Vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -142,6 +149,9 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 }
+                            },
+                            onHapticFeedback = {
+                                vibrate(vibrator, clickMp)
                             }
                         )
                     },
@@ -162,7 +172,11 @@ class MainActivity : ComponentActivity() {
                                 data = nodeComposableDataList,
                                 style = treeStyle,
                                 onNodeSelect = {
-                                    if (it != null) vibrate(vibrator, audioManager)
+                                    println("here")
+                                    if (it != null) vibrate(vibrator, mp)
+                                    //  audioManager.playSoundEffect(SoundEffectConstants.CLICK,1.0f)
+                                    //
+                                    //        vibrate(vibrator, audioManager)
                                 }
                             )
                             Box(
@@ -178,7 +192,7 @@ class MainActivity : ComponentActivity() {
                                     // .border(1.dp, LightBlue),
                                     colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                     onClick = {
-                                        vibrate(vibrator, audioManager)
+                                        vibrate(vibrator, mp)
                                         tree = BinaryTree()
                                         val tmpTheme = treeStyle.theme
                                         treeStyle = ComposableTreeStyle()
@@ -241,9 +255,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @SuppressLint("WrongConstant")
-fun vibrate(vibrator: Vibrator, audioManager: AudioManager) {
+fun vibrate(vibrator: Vibrator, mp: MediaPlayer) {
+    mp.start()
     if (vibrator.hasVibrator()) { // Vibrator availability checking
-        audioManager.playSoundEffect(SoundEffectConstants.CLICK, 1.0f)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(
                 VibrationEffect.createOneShot(

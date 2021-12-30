@@ -43,7 +43,8 @@ fun ComposableTopBar(
     onBalanceChange: (BinaryTreeBalanceType) -> Unit,
     onThemeChange: (ComposableTreeTheme) -> Unit,
     onRandomNumber: () -> Unit,
-    onInsert: (String) -> Unit
+    onInsert: (String) -> Unit,
+    onHapticFeedback: () -> Unit
 ) {
     // https://stackoverflow.com/questions/59133100/how-to-close-the-virtual-keyboard-from-a-jetpack-compose-textfield
     val focusManager = LocalFocusManager.current
@@ -77,7 +78,12 @@ fun ComposableTopBar(
         val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
         Column {
-            Row(modifier = Modifier.height(60.dp).padding(bottom=5.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(bottom = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
 
                 Box(
@@ -102,13 +108,15 @@ fun ComposableTopBar(
                             modifier = Modifier.fillMaxHeight(),
                             horizontalArrangement = Arrangement.Start
                         ) {
-                            Button(modifier = Modifier
-                                .width(40.dp)
-                                .height(40.dp)
-                                .padding(end = 5.dp),
-                               // .border(1.dp, LightBlue),
+                            Button(
+                                modifier = Modifier
+                                    .width(40.dp)
+                                    .height(40.dp)
+                                    .padding(end = 5.dp),
+                                // .border(1.dp, LightBlue),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                 onClick = {
+                                    onHapticFeedback()
                                     onRandomNumber()
                                 }, contentPadding = PaddingValues(1.dp)
                             ) {
@@ -121,13 +129,15 @@ fun ComposableTopBar(
                                     fontFamily = roboto, modifier = Modifier
                                 )
                             }
-                            Button(modifier = Modifier
-                                .width(50.dp)
-                                .height(40.dp)
-                                .padding(start = 5.dp),
-                              //  .border(1.dp, LightBlue),
+                            Button(
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(40.dp)
+                                    .padding(start = 5.dp),
+                                //  .border(1.dp, LightBlue),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                 onClick = {
+                                    onHapticFeedback()
                                     for (i in 1..10) onRandomNumber()
                                 }, contentPadding = PaddingValues(1.dp)
                             ) {
@@ -148,14 +158,17 @@ fun ComposableTopBar(
 
                 Box(
                     modifier = Modifier
-                 //       .weight(0.45f)
+                        //       .weight(0.45f)
                         .shadow(5.dp)
                 ) {
                     TextField(
                         value = inputStr,
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Grey),
+                            .background(Grey)
+                            .clickable {
+                                onHapticFeedback()
+                            },
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Number
                         ),
@@ -166,6 +179,8 @@ fun ComposableTopBar(
                             onInsert(inputStr)
                             // Reset user-input string
                             inputStr = ""
+                            // Send audio
+                            onHapticFeedback()
                         }),
                         onValueChange = {
                             inputStr = it
@@ -180,7 +195,6 @@ fun ComposableTopBar(
                         colors = TextFieldDefaults.textFieldColors(textColor = White)
                     )
                 }
-
 
 
             }
@@ -206,7 +220,10 @@ fun ComposableTopBar(
                                 modifier = Modifier
                                     .weight(0.5f)
                                     .size(it.times(0.7f))
-                                    .clickable { onSpacingChange(+10) },
+                                    .clickable {
+                                        onSpacingChange(+10)
+                                        onHapticFeedback()
+                                    },
                                 tint = LightBlue
                             )
                             Icon(
@@ -215,7 +232,10 @@ fun ComposableTopBar(
                                 modifier = Modifier
                                     .weight(0.5f)
                                     .size(it.times(0.7f))
-                                    .clickable { onSpacingChange(-10) },
+                                    .clickable {
+                                        onSpacingChange(-10)
+                                        onHapticFeedback()
+                                    },
                                 tint = LightBlue
                             )
                         }
@@ -241,7 +261,10 @@ fun ComposableTopBar(
                                 modifier = Modifier
                                     .weight(0.5f)
                                     .size(it.times(0.7f))
-                                    .clickable { onWeightChange(+100) },
+                                    .clickable {
+                                        onWeightChange(+100)
+                                        onHapticFeedback()
+                                    },
                                 tint = LightBlue
                             )
                             Icon(
@@ -250,7 +273,12 @@ fun ComposableTopBar(
                                 modifier = Modifier
                                     .weight(0.5f)
                                     .size(it.times(0.7f))
-                                    .clickable { onWeightChange(-100) },
+                                    .clickable {
+                                        onWeightChange(-100)
+                                        onHapticFeedback()
+
+
+                                    },
                                 tint = LightBlue
                             )
                         }
@@ -268,16 +296,17 @@ fun ComposableTopBar(
                     ) {
                         BoxWithConstraints(
                             modifier = Modifier
-                      //          .fillMaxWidth()
+                                //          .fillMaxWidth()
                                 .height(it),
                             contentAlignment = Alignment.CenterStart
                         ) {
                             ComposeMenu(
-                          //      width = this.maxWidth,
+                                //      width = this.maxWidth,
                                 menuItems = itemsColors,
                                 menuExpandedState = expandedColor,
                                 selectedIndex = selectedIndexColor,
                                 updateMenuExpandStatus = {
+                                    onHapticFeedback()
                                     expandedColor = true
                                     expandedBalance = false
                                 },
@@ -285,6 +314,7 @@ fun ComposableTopBar(
                                     expandedColor = false
                                 },
                                 onMenuItemclick = { index ->
+                                    onHapticFeedback()
                                     selectedIndexColor = index
                                     onThemeChange(
                                         itemsColors[selectedIndexColor]
@@ -295,7 +325,7 @@ fun ComposableTopBar(
                         }
                     }
                 }
-                val sizeAvailableOnRow =  maxWidth.minus(360.dp).minus(1.dp)
+                val sizeAvailableOnRow = maxWidth.minus(360.dp).minus(1.dp)
                 Box(
                     modifier = Modifier
                         .width(if (sizeAvailableOnRow >= 230.dp) sizeAvailableOnRow else maxWidth)
@@ -314,11 +344,12 @@ fun ComposableTopBar(
                             contentAlignment = Alignment.CenterStart
                         ) {
                             ComposeMenu(
-                         //       width = this.maxWidth,
+                                //       width = this.maxWidth,
                                 menuItems = itemsBalance,
                                 menuExpandedState = expandedBalance,
                                 selectedIndex = selectedIndexBalance,
                                 updateMenuExpandStatus = {
+                                    onHapticFeedback()
                                     expandedBalance = true
                                     expandedColor = false
                                 },
@@ -326,6 +357,7 @@ fun ComposableTopBar(
                                     expandedBalance = false
                                 },
                                 onMenuItemclick = { index ->
+                                    onHapticFeedback()
                                     selectedIndexBalance = index
                                     onBalanceChange(itemsBalance[selectedIndexBalance])
                                     expandedBalance = false
