@@ -68,7 +68,7 @@ fun ComposableTree(
                 // NODE SELECT
                 detectTapGestures {
                     // Temporarily commented out until full function exists
-                    /*
+                    
                     // Define the click with respect to the offset relative to center of the screen
                     val clickOffset = Offset(
                         it.x - center.x,
@@ -102,7 +102,7 @@ fun ComposableTree(
                         nodePosInfo[1].first.y * scale
                     )
                     onNodeSelect("No Node Selected")
-                     */
+
                 }
             }
             .pointerInput(Unit) {
@@ -194,8 +194,7 @@ fun ComposableTree(
                 // Draw Node and border if selected
                 drawCircle(
                     center = centerPos,
-                //    color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
-                    color = style.theme.nodeColor,
+                    color = if (isSelected) Color.Black else style.theme.nodeColor,
                     radius = nodeSize
                 )
 

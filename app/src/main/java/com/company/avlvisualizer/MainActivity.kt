@@ -5,15 +5,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Redo
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.ResetTv
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -21,19 +19,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 import java.lang.Float.max
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
 
@@ -142,67 +146,64 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 //  activeNode = it
                             }
-                            ComposableResetButton(
+                            Box(
                                 modifier = Modifier
-                                    .size(45.dp)
-                                    .offset(y = maxHeight - 45.dp)
-                                    .padding(5.dp)
-                                    .shadow(5.dp),
-                                color = Red
+                                    .fillMaxWidth()
+                                    .height(55.dp)
+                                    .offset(y = maxHeight - 55.dp)
+                             //       .shadow(5.dp)
+                                    .padding(5.dp),
                             ) {
-                                // Reset tree nodes, y-spacing and thickness
-                                tree = BinaryTree()
-                                val tmpTheme = treeStyle.theme
-                                treeStyle = ComposableTreeStyle()
-                                treeStyle.theme = tmpTheme
-                                nodeComposableDataList = tree.returnComposableData()
-                            }
-                        } else {
-                            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    text = "${this.maxWidth}"
-                                )
-                            }
-                            /*
-                            val circleRadius = (LocalDensity.current.run {
-                                minOf(
-                                    boxWithConstraintsScope.maxWidth.toPx(),
-                                    boxWithConstraintsScope.maxHeight.toPx()
-                                )
-                            } / 2f) * 0.9f
-                            Canvas(modifier = Modifier.fillMaxSize()) {
-                                // Draw Text
-                                val paint = Paint()
-                                val roboto = ResourcesCompat.getFont(context, R.font.roboto_medium)
-                                paint.textAlign = Paint.Align.CENTER
-                                paint.textSize = circleRadius / 4f
-                                paint.color = 0xff6592b8.toInt()
-                                paint.typeface = roboto
-
-                                val paintSub = Paint()
-                                paintSub.textAlign = Paint.Align.CENTER
-                                paintSub.textSize = circleRadius / 7f
-                                paintSub.color = 0xffc4c4c4.toInt()
-                                paintSub.typeface = roboto
-
-
-                                drawIntoCanvas {
-                                    it.nativeCanvas.drawText(
-                                        "EMPTY TREE",
-                                        center.x,
-                                        center.y,
-                                        paint
-                                    )
-                                    it.nativeCanvas.drawText(
-                                        "Insert a number to begin",
-                                        center.x,
-                                        center.y + (circleRadius) / 4f,
-                                        paintSub
+                                Button(modifier = Modifier
+                                    .fillMaxHeight(),
+                                    // .border(1.dp, LightBlue),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
+                                    onClick = {
+                                        tree = BinaryTree()
+                                        val tmpTheme = treeStyle.theme
+                                        treeStyle = ComposableTreeStyle()
+                                        treeStyle.theme = tmpTheme
+                                        nodeComposableDataList = tree.returnComposableData()
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Replay,
+                                        contentDescription = "Reset tree nodes, y-spacing and thickness",
+                                        tint = Color.White
                                     )
                                 }
                             }
+                        } else {
 
-                             */
+                            BoxWithConstraints(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                val circleRadius = (LocalDensity.current.run {
+                                    minOf(
+                                        boxWithConstraintsScope.maxWidth.toPx(),
+                                        boxWithConstraintsScope.maxHeight.toPx()
+                                    )
+                                } / 2f) * 0.4f
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Image(
+                                        painter = painterResource(R.drawable.binarytreevisualizerapp_logo),
+                                        contentDescription = "App Logo",
+                                        modifier = Modifier.size(circleRadius.dp)
+                                    )
+                                    Text(
+                                        text = "TREE IS EMPTY",
+                                        fontSize = 25.sp,
+                                        fontFamily = roboto,
+                                        textAlign = TextAlign.Center,
+                                        color = Color(232, 179, 21)
+                                    )
+                                    Text(
+                                        text = "Insert a number to begin",
+                                        fontSize = 20.sp,
+                                        fontFamily = roboto,
+                                        textAlign = TextAlign.Center,
+                                        color = LightGrey
+                                    )
+                                }
+                            }
                         }
 
                         ComposableSnackbar(
