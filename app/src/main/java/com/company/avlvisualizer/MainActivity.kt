@@ -1,13 +1,18 @@
 package com.company.avlvisualizer
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Paint
+import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,8 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +58,11 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
+
             val context = LocalContext.current
+            val vibrator: Vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
             // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
             var tree by remember { mutableStateOf(BinaryTree()) }
             // End tree data structure
@@ -108,7 +120,10 @@ class MainActivity : ComponentActivity() {
                                 treeStyle.theme = it
                             },
                             onRandomNumber = {
-                                tree.insert(it, balanceType == BinaryTreeBalanceType.AVL_TREE)
+                                tree.insert(
+                                    value = Random.nextInt(0, 999),
+                                    avlInsert = balanceType == BinaryTreeBalanceType.AVL_TREE
+                                )
                                 nodeComposableDataList = tree.returnComposableData()
                             },
                             onInsert = {
@@ -133,6 +148,8 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
                 ) {
+
+
                     BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxSize()
@@ -140,18 +157,20 @@ class MainActivity : ComponentActivity() {
                     ) {
                         val boxWithConstraintsScope = this
                         if (nodeComposableDataList.isNotEmpty()) {
+
                             ComposableTree(
                                 data = nodeComposableDataList,
-                                style = treeStyle
-                            ) {
-                                //  activeNode = it
-                            }
+                                style = treeStyle,
+                                onNodeSelect = {
+                                    if (it != null) vibrate(vibrator, audioManager)
+                                }
+                            )
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(55.dp)
                                     .offset(y = maxHeight - 55.dp)
-                             //       .shadow(5.dp)
+                                    //       .shadow(5.dp)
                                     .padding(5.dp),
                             ) {
                                 Button(modifier = Modifier
@@ -159,6 +178,7 @@ class MainActivity : ComponentActivity() {
                                     // .border(1.dp, LightBlue),
                                     colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                     onClick = {
+                                        vibrate(vibrator, audioManager)
                                         tree = BinaryTree()
                                         val tmpTheme = treeStyle.theme
                                         treeStyle = ComposableTreeStyle()
@@ -175,7 +195,10 @@ class MainActivity : ComponentActivity() {
                             }
                         } else {
 
-                            BoxWithConstraints(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            BoxWithConstraints(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
                                 val circleRadius = (LocalDensity.current.run {
                                     minOf(
                                         boxWithConstraintsScope.maxWidth.toPx(),
@@ -186,7 +209,7 @@ class MainActivity : ComponentActivity() {
                                     Image(
                                         painter = painterResource(R.drawable.binarytreevisualizerapp_logo),
                                         contentDescription = "App Logo",
-                                        modifier = Modifier.size(circleRadius.dp)
+                                        modifier = Modifier.size(circleRadius.dp.times(0.8f))
                                     )
                                     Text(
                                         text = "TREE IS EMPTY",
@@ -213,6 +236,23 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+}
+
+@SuppressLint("WrongConstant")
+fun vibrate(vibrator: Vibrator, audioManager: AudioManager) {
+    if (vibrator.hasVibrator()) { // Vibrator availability checking
+        audioManager.playSoundEffect(SoundEffectConstants.CLICK, 1.0f)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    30,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            ) // New vibrate method for API Level 26 or higher
+        } else {
+            vibrator.vibrate(30) // Vibrate method for below API Level 26
         }
     }
 }

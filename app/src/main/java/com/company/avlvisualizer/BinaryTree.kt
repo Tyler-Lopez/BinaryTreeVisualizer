@@ -104,6 +104,15 @@ class BinaryTree {
         // Move on to either next child or next level w/e first
     }
 
+    fun contains(value: Int): Boolean {
+        forEachLevelOrder {
+            if (value == it?.value) {
+                return@forEachLevelOrder
+            }
+        }
+        return false
+    }
+
     // AVL FUNCTIONS
     private fun balanced(node: BinaryNode): BinaryNode {
         return when (node.balanceFactor) {

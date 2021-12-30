@@ -42,7 +42,7 @@ fun ComposableTopBar(
     onWeightChange: (Int) -> Unit,
     onBalanceChange: (BinaryTreeBalanceType) -> Unit,
     onThemeChange: (ComposableTreeTheme) -> Unit,
-    onRandomNumber: (Int) -> Unit,
+    onRandomNumber: () -> Unit,
     onInsert: (String) -> Unit
 ) {
     // https://stackoverflow.com/questions/59133100/how-to-close-the-virtual-keyboard-from-a-jetpack-compose-textfield
@@ -109,7 +109,7 @@ fun ComposableTopBar(
                                // .border(1.dp, LightBlue),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                 onClick = {
-                                    onRandomNumber(Random.nextInt(0, 999))
+                                    onRandomNumber()
                                 }, contentPadding = PaddingValues(1.dp)
                             ) {
                                 Text(
@@ -128,7 +128,7 @@ fun ComposableTopBar(
                               //  .border(1.dp, LightBlue),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
                                 onClick = {
-                                    for (i in 1..10) onRandomNumber(Random.nextInt(0, 999))
+                                    for (i in 1..10) onRandomNumber()
                                 }, contentPadding = PaddingValues(1.dp)
                             ) {
                                 Text(

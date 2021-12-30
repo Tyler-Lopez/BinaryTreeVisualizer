@@ -22,6 +22,7 @@ import com.company.avlvisualizer.ui.theme.*
 data class ComposableTreeTheme(
     val nodeColor: Color,
     val lineColor: Color,
+    val selectedNodeColor: Color
 ) : Dropdownable {
 
     @Composable
@@ -46,24 +47,32 @@ data class ComposableTreeTheme(
                 // BLUE
                 ComposableTreeTheme(
                     Color(16, 90, 201),
-                    LightBlue
+                    LightBlue,
+                    Color(180, 104, 5)
                 ),
                 // GREEN
                 ComposableTreeTheme(
                     Color(17, 135, 8),
-                    Color(36, 173, 26)
+                    Color(36, 173, 26),
+                    Color(137, 0, 180)
                 ),
                 // RED
-                ComposableTreeTheme(DarkerRed, Red),
+                ComposableTreeTheme(
+                    DarkerRed,
+                    Red,
+                    Color(30, 122, 11)
+                ),
                 // YELLOW
                 ComposableTreeTheme(
                     Color(237, 157, 7),
-                    Color(232, 179, 21)
+                    Color(232, 179, 21),
+                    Color(126, 4, 128)
                 ),
                 // PINK
                 ComposableTreeTheme(
                     Color(221, 36, 144),
-                    Color(251, 62, 173)
+                    Color(251, 62, 173),
+                    Color(11, 143, 154)
                 ),
             )
         }

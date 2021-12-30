@@ -28,12 +28,8 @@ fun ComposableTree(
     data: List<NodeComposableData>,
     modifier: Modifier = Modifier,
     style: ComposableTreeStyle = ComposableTreeStyle(), // Dependency Injection
-    onNodeSelect: (String) -> Unit, // When a node is selected, return String to caller
+    onNodeSelect: (Int?) -> Unit, // When a node is selected, return String to caller
 ) {
-    // Which Node is currently tap-selected?
-    var selectedIndex: Int by remember {
-        mutableStateOf(-1)
-    }
     // Mutable .graphicsLayer-based scaling
     var scale by remember {
         mutableStateOf(1f)
@@ -91,17 +87,11 @@ fun ComposableTree(
                         )
                         // Click was within a node
                         if (distance <= (style.nodeSize * scale * 2)) {
-                            onNodeSelect("Node Selected: ${node.value}")
-                            selectedIndex = i
+                            onNodeSelect(i)
                             return@detectTapGestures
                         }
                     }
-                    selectedIndex = -1
-                    val fiftyPos = Offset(
-                        nodePosInfo[1].first.x * scale,
-                        nodePosInfo[1].first.y * scale
-                    )
-                    onNodeSelect("No Node Selected")
+                    onNodeSelect(null)
 
                 }
             }
@@ -149,10 +139,10 @@ fun ComposableTree(
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
-                        BinaryNodeChild.LEFT -> xShift -= ((nodeSize * 0.2f ) + 80) * 0.05f * 2f.pow(
+                        BinaryNodeChild.LEFT -> xShift -= ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
-                        BinaryNodeChild.RIGHT -> xShift += ((nodeSize * 0.2f ) + 80) * 0.05f * 2f.pow(
+                        BinaryNodeChild.RIGHT -> xShift += ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
                     }
@@ -189,26 +179,27 @@ fun ComposableTree(
                 val centerPos = nodePosInfo[i].first
                 val node = nodePosInfo[i].second
 
-                val isSelected = i == selectedIndex
+                // TEMPORARY ADD SELECTED LOGIC HERE
+                val isSelected = false
 
                 // Draw Node and border if selected
                 drawCircle(
                     center = centerPos,
-                    color = if (isSelected) Color.Black else style.theme.nodeColor,
-                    radius = nodeSize
+                    color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
+                    radius = if (isSelected) nodeSize * 1.3f else nodeSize
                 )
 
                 // Draw Text
                 val paint = Paint()
                 paint.textAlign = Paint.Align.CENTER
-                paint.textSize = nodeSize
+                paint.textSize = if (isSelected) nodeSize * 1.2f else nodeSize
                 paint.color = 0xffffffff.toInt()
 
                 drawIntoCanvas {
                     it.nativeCanvas.drawText(
                         "${node.value}",
                         centerPos.x,
-                        centerPos.y + (nodeSize / 3),
+                        centerPos.y + (nodeSize / 2.5f),
                         paint
                     )
                 }
