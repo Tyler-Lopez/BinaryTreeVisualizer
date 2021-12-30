@@ -68,7 +68,7 @@ fun ComposableTree(
                 // NODE SELECT
                 detectTapGestures {
                     // Temporarily commented out until full function exists
-                    
+
                     // Define the click with respect to the offset relative to center of the screen
                     val clickOffset = Offset(
                         it.x - center.x,
