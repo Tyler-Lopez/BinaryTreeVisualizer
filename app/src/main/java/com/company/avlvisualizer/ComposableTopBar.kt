@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
@@ -123,11 +125,13 @@ fun ComposableTopBar(
                                 fontFamily = roboto,
                                 modifier = Modifier
                                     .width(50.dp)
+
+                                    .padding(horizontal = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
                                     .clickable {
                                         onHapticFeedback()
                                         onRandomNumber(1)
                                     }
-                                    .padding(horizontal = 5.dp)
                                     .shadow(3.dp)
                                     .background(DarkGrey)
                                     .padding(horizontal = 5.dp)
@@ -141,11 +145,13 @@ fun ComposableTopBar(
                                 fontFamily = roboto,
                                 modifier = Modifier
                                     .width(50.dp)
+
+                                    .padding(horizontal = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
                                     .clickable {
                                         onHapticFeedback()
                                         onRandomNumber(10)
                                     }
-                                    .padding(horizontal = 5.dp)
                                     .shadow(3.dp)
                                     .background(DarkGrey)
                                     .padding(horizontal = 5.dp)
@@ -190,8 +196,7 @@ fun ComposableTopBar(
                         label = {
                             Text(
                                 text = "Insert Number",
-                                color = LightGrey,
-                                fontSize = 23.sp
+                                color = LightGrey
                             )
                         },
                         placeholder = {

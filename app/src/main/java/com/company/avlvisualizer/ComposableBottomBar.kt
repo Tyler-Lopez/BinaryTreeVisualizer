@@ -43,6 +43,7 @@ fun ComposableBottomBar(
             .background(DarkGrey)
             .padding(10.dp)
     ) {
+        val maxWidth = this.maxWidth
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,30 +72,37 @@ fun ComposableBottomBar(
 
 
                 Text(
-                    text = if (selected != -1) "$selected Selected" else "Tap to Select a Node",
+                    text = when {
+                        maxWidth > 480.dp -> if (selected != -1) "$selected Selected" else "Tap to Select Node"
+                        else -> if (selected != -1) "$selected" else "Tap to Select"
+                    },
                     fontFamily = roboto,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Normal,
                     fontSize = 25.sp,
                     letterSpacing = 0.sp,
                     color = LightGrey,
-                    modifier = Modifier.fillMaxHeight().padding(end = 10.dp)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(end = 10.dp)
                 )
                 if (selected != -1) {
-                        Text(
-                            text = "Remove",
-                            fontFamily = roboto,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 25.sp,
-                            letterSpacing = 0.sp,
-                            color = LightBlue,
-                            modifier = Modifier.fillMaxHeight().padding(end = 10.dp).clickable {
+                    Text(
+                        text = "Remove",
+                        fontFamily = roboto,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 25.sp,
+                        letterSpacing = 0.sp,
+                        color = LightBlue,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(end = 10.dp)
+                            .clickable {
                                 onRemove()
                             }
-                        )
+                    )
                 }
-
             }
             Row(
                 modifier = Modifier.weight(0.2f),
@@ -110,12 +118,7 @@ fun ComposableBottomBar(
                         .fillMaxHeight()
                         .padding(horizontal = 10.dp)
                 )
-                //      Text(
-                //          text = "TREE VISUALIZER",
-//
-                //    )
             }
         }
-
     }
 }
