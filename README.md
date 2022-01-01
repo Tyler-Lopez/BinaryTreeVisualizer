@@ -4,7 +4,7 @@
 </center>
 
 ## About
-An Android application which allows the user to construct, insert into, remove from, and visualize a binary tree data structure which contains integer values from 0-999. Balancing of type AVL or Red-Black may be toggled. Upon change of balance type, the tree is retroactively balanced as necessary. More unique to this app, the user-interface experience is intended to be very strong, featuring zoom-in, zoom-out, pan, and tap-selection.
+An Android application which allows the user to construct, insert into, remove from, and visualize a binary tree data structure which contains integer values from 0-999. Balancing of type AVL may be toggled. Upon change of balance type, the tree is retroactively balanced as necessary. More unique to this app, the user-interface experience is intended to be very strong, featuring zoom-in, zoom-out, pan, and tap-selection.
 
 ## Features
 * Balancing of tree may be toggled
