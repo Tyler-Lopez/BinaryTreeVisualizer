@@ -9,7 +9,7 @@ typealias ComposableNodeVisitor = (NodeComposableData) -> Unit
 typealias OffsetVisitor = (Offset, BinaryNode?, Offset?) -> Unit
 
 data class BinaryNode(
-    val value: Int
+    var value: Int
 ) {
     // CONSIDERING PUTTING THIS IN A DIFFERENT CLASS...
     var leftChild: BinaryNode? = null

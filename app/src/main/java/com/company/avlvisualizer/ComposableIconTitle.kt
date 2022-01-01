@@ -1,5 +1,6 @@
 package com.company.avlvisualizer
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -38,18 +39,17 @@ fun ComposableIconTitle(
                 imageVector = icon,
                 contentDescription = title,
                 modifier = Modifier
-                    .size(boxWithConstraintsScope.maxHeight.times(0.7f))
-                    .padding(end = 4.dp),
+                    .size(boxWithConstraintsScope.maxHeight.times(0.7f)),
                 tint = LightGrey
             )
             if (title != null)
                 Text(
-                    text = "$title:",
+                    text = "$title",
                     color = LightGrey,
                     fontFamily = roboto,
-                    fontSize = 18.sp
+                    fontSize = 22.sp
                 )
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.padding(start=5.dp).width(2.dp).fillMaxHeight().background(LightGrey))
             content(boxWithConstraintsScope.maxHeight)
         }
     }

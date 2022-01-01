@@ -60,10 +60,8 @@ fun ComposableSnackbar(
             )
         },
         modifier = modifier
-            .padding(5.dp)
             .fillMaxWidth()
             .background(DarkGrey)
-            .border(width = 1.dp, LightGrey)
             .shadow(5.dp)
             .wrapContentHeight(Alignment.Bottom)
     )

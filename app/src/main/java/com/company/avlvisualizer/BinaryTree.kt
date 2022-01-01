@@ -8,6 +8,10 @@ import kotlin.math.max
 class BinaryTree {
 
     var root: BinaryNode? = null
+
+    var size: Int = 0
+        private set
+
     override fun toString() = root?.toString() ?: "Empty"
 
     fun insert(value: Int, avlInsert: Boolean = false) {
@@ -16,6 +20,7 @@ class BinaryTree {
         } else {
             insertUnbalanced(root, value)
         }
+        size++
     }
 
     private fun insertUnbalanced(
@@ -105,12 +110,82 @@ class BinaryTree {
     }
 
     fun contains(value: Int): Boolean {
-        forEachLevelOrder {
-            if (value == it?.value) {
-                return@forEachLevelOrder
+        root ?: return false
+
+        var found = false
+        root?.traverseInOrder {
+            if (value == it.value) {
+                found = true
             }
         }
-        return false
+        return found
+    }
+
+
+    fun remove(value: Int, avlInsert: Boolean = false) {
+        root = if (avlInsert) removeAVL(root, value)
+        else removeUnbalanced(root, value)
+    }
+
+    private fun removeUnbalanced(node: BinaryNode?, value: Int): BinaryNode? {
+        node ?: return null
+
+        when {
+            value == node.value -> {
+                if (node.leftChild == null && node.rightChild == null) {
+                    return null
+                }
+                if (node.leftChild == null) {
+                    return node.rightChild
+                }
+                if (node.rightChild == null) {
+                    return node.leftChild
+                }
+                node.rightChild?.min?.value?.let {
+                    node.value = it
+                }
+                node.rightChild = removeUnbalanced(node.rightChild, node.value)
+                // Targeted value has been found
+            }
+            value < node.value -> node.leftChild = removeUnbalanced(node.leftChild, value)
+            else -> node.rightChild = removeUnbalanced(node.rightChild, value)
+        }
+        return node
+    }
+
+    private fun removeAVL(node: BinaryNode?, value: Int): BinaryNode? {
+        node ?: return null
+
+        when {
+            value == node.value -> {
+                // 1
+                if (node.leftChild == null && node.rightChild == null) {
+                    return null
+                }
+                // 2
+                if (node.leftChild == null) {
+                    return node.rightChild
+                }
+                // 3
+                if (node.rightChild == null) {
+                    return node.leftChild
+                }
+                // 4
+                node.rightChild?.min?.value?.let {
+                    node.value = it
+                }
+
+                node.rightChild = removeAVL(node.rightChild, node.value)
+            }
+            value < node.value -> node.leftChild = removeAVL(node.leftChild, value)
+            else -> node.rightChild = removeAVL(node.rightChild, value)
+        }
+        val balancedNode = balanced(node)
+        balancedNode.height = max(
+            balancedNode.leftHeight,
+            balancedNode.rightHeight
+        ) + 1
+        return balancedNode
     }
 
     // AVL FUNCTIONS

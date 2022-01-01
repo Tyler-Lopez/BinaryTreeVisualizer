@@ -90,13 +90,13 @@ fun ComposableTree(
                         )
                         // Click was within a node
                         if (distance <= (style.nodeSize * scale * 2)) {
-                            onNodeSelect(i)
+                            onNodeSelect(node.value)
                             selectedValue = node.value
                             return@detectTapGestures
                         }
                     }
                     onNodeSelect(null)
-                   // selectedValue = -1
+                    selectedValue = -1
 
                 }
             }
@@ -178,7 +178,7 @@ fun ComposableTree(
                 }
             } // End initial iteration
 
-
+            var selectedFound = false
             for (i in 0..nodePosInfo.lastIndex) {
 
                 val centerPos = nodePosInfo[i].first
@@ -186,7 +186,7 @@ fun ComposableTree(
 
                 // TEMPORARY ADD SELECTED LOGIC HERE
                 val isSelected = node.value == selectedValue
-
+                if (isSelected) selectedFound = true
                 // Draw Node and border if selected
                 drawCircle(
                     center = centerPos,
@@ -210,6 +210,7 @@ fun ComposableTree(
                 }
 
             }
+            if (!selectedFound) selectedValue = -1
         }
     }
 }

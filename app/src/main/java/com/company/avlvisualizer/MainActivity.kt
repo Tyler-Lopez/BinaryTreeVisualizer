@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.support.v4.app.INotificationSideChannel
 import android.view.HapticFeedbackConstants
 import android.view.SoundEffectConstants
 import androidx.activity.ComponentActivity
@@ -48,6 +49,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 import java.lang.Float.max
+import java.lang.NumberFormatException
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -61,14 +63,13 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
-   //         val mp: MediaPlayer = MediaPlayer.create(this, R.raw.audio)
+            //         val mp: MediaPlayer = MediaPlayer.create(this, R.raw.audio)
 
             val mp: MediaPlayer = MediaPlayer.create(this, R.raw.node_select)
             val clickMp: MediaPlayer = MediaPlayer.create(this, R.raw.click_sound)
 
             val context = LocalContext.current
             val vibrator: Vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
             // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
             var tree by remember { mutableStateOf(BinaryTree()) }
@@ -83,6 +84,9 @@ class MainActivity : ComponentActivity() {
                 }
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
+                }
+                var selectedIndex by remember {
+                    mutableStateOf(-1)
                 }
 
                 // https://levelup.gitconnected.com/implement-android-snackbar-in-jetpack-compose-d83df5ff5b47
@@ -127,25 +131,47 @@ class MainActivity : ComponentActivity() {
                                 treeStyle.theme = it
                             },
                             onRandomNumber = {
-                                tree.insert(
-                                    value = Random.nextInt(0, 999),
-                                    avlInsert = balanceType == BinaryTreeBalanceType.AVL_TREE
-                                )
+                                if (tree.size > 513) {
+                                    scope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "Maximum tree size reached"
+                                        )
+                                    }
+                                }
+                                for (i in 1..it) {
+                                    if (tree.size <= 512) {
+                                        var randomNumber = Random.nextInt(0, 999)
+                                        while (tree.contains(randomNumber)) randomNumber =
+                                            Random.nextInt(0, 999)
+                                        tree.insert(
+                                            value = randomNumber,
+                                            avlInsert = balanceType == BinaryTreeBalanceType.AVL_TREE
+                                        )
+                                    }
+                                }
                                 nodeComposableDataList = tree.returnComposableData()
                             },
                             onInsert = {
                                 try {
                                     val inputVal = it.toInt()
+                                    if (tree.contains(inputVal)) throw Exception("$inputVal is already present in this Tree")
                                     if (inputVal < 0 || inputVal > 999) throw Exception()
                                     tree.insert(
                                         inputVal,
                                         balanceType == BinaryTreeBalanceType.AVL_TREE
                                     )
                                     nodeComposableDataList = tree.returnComposableData()
+                                } catch (e: NumberFormatException) {
+                                    scope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "Input must be an integer in the range of 0 to 999"
+                                        )
+                                    }
                                 } catch (e: Exception) {
                                     scope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Input must be an integer in the range of 0 to 999."
+                                            message = e.message
+                                                ?: "Input must be an integer in the range of 0 to 999"
                                         )
                                     }
                                 }
@@ -154,6 +180,31 @@ class MainActivity : ComponentActivity() {
                                 vibrate(vibrator, clickMp)
                             }
                         )
+                    },
+                    bottomBar = {
+                        if (nodeComposableDataList.isNotEmpty()) {
+                            ComposableBottomBar(
+                                selected = selectedIndex,
+                                onReset = {
+                                    selectedIndex = -1
+                                    vibrate(vibrator, mp)
+                                    tree = BinaryTree()
+                                    val tmpTheme = treeStyle.theme
+                                    treeStyle = ComposableTreeStyle()
+                                    treeStyle.theme = tmpTheme
+                                    nodeComposableDataList = tree.returnComposableData()
+                                },
+                                onRemove = {
+                                    vibrate(vibrator, mp)
+                                    tree.remove(
+                                        selectedIndex,
+                                        balanceType == BinaryTreeBalanceType.AVL_TREE
+                                    )
+                                    selectedIndex = -1
+                                    nodeComposableDataList = tree.returnComposableData()
+                                }
+                            )
+                        }
                     },
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
@@ -164,49 +215,18 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Grey)
+                            .padding(bottom = if (nodeComposableDataList.isNotEmpty()) 55.dp else 0.dp)
                     ) {
                         val boxWithConstraintsScope = this
                         if (nodeComposableDataList.isNotEmpty()) {
-
                             ComposableTree(
                                 data = nodeComposableDataList,
                                 style = treeStyle,
                                 onNodeSelect = {
-                                    println("here")
                                     if (it != null) vibrate(vibrator, mp)
-                                    //  audioManager.playSoundEffect(SoundEffectConstants.CLICK,1.0f)
-                                    //
-                                    //        vibrate(vibrator, audioManager)
+                                    selectedIndex = it ?: -1
                                 }
                             )
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(55.dp)
-                                    .offset(y = maxHeight - 55.dp)
-                                    //       .shadow(5.dp)
-                                    .padding(5.dp),
-                            ) {
-                                Button(modifier = Modifier
-                                    .fillMaxHeight(),
-                                    // .border(1.dp, LightBlue),
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
-                                    onClick = {
-                                        vibrate(vibrator, mp)
-                                        tree = BinaryTree()
-                                        val tmpTheme = treeStyle.theme
-                                        treeStyle = ComposableTreeStyle()
-                                        treeStyle.theme = tmpTheme
-                                        nodeComposableDataList = tree.returnComposableData()
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Replay,
-                                        contentDescription = "Reset tree nodes, y-spacing and thickness",
-                                        tint = Color.White
-                                    )
-                                }
-                            }
                         } else {
 
                             BoxWithConstraints(
@@ -245,7 +265,9 @@ class MainActivity : ComponentActivity() {
 
                         ComposableSnackbar(
                             snackbarHostState = scaffoldState.snackbarHostState,
-                            modifier = Modifier.align(Alignment.BottomCenter),
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 5.dp),
                         )
                     }
                 }

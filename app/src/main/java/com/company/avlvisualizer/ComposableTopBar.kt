@@ -42,7 +42,7 @@ fun ComposableTopBar(
     onWeightChange: (Int) -> Unit,
     onBalanceChange: (BinaryTreeBalanceType) -> Unit,
     onThemeChange: (ComposableTreeTheme) -> Unit,
-    onRandomNumber: () -> Unit,
+    onRandomNumber: (Int) -> Unit,
     onInsert: (String) -> Unit,
     onHapticFeedback: () -> Unit
 ) {
@@ -80,7 +80,7 @@ fun ComposableTopBar(
         Column {
             Row(
                 modifier = Modifier
-                    .height(60.dp)
+                    .height(75.dp)
                     .padding(bottom = 5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -96,61 +96,60 @@ fun ComposableTopBar(
                     contentAlignment = CenterStart
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxHeight(),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(start = 5.dp, top = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Add Random",
+                            text = "Random",
                             color = LightGrey,
-                            modifier = Modifier.padding(end = 10.dp)
+                            fontSize = 23.sp,
                         )
                         Row(
-                            modifier = Modifier.fillMaxHeight(),
-                            horizontalArrangement = Arrangement.Start
+                            modifier = Modifier
+                                .padding(start = 10.dp)
+                                .fillMaxHeight(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Button(
-                                modifier = Modifier
-                                    .width(40.dp)
-                                    .height(40.dp)
-                                    .padding(end = 5.dp),
-                                // .border(1.dp, LightBlue),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
-                                onClick = {
-                                    onHapticFeedback()
-                                    onRandomNumber()
-                                }, contentPadding = PaddingValues(1.dp)
-                            ) {
-                                Text(
-                                    text = "1",
-                                    textAlign = TextAlign.Center,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 20.sp,
-                                    color = Color.White,
-                                    fontFamily = roboto, modifier = Modifier
-                                )
-                            }
-                            Button(
+
+                            Text(
+                                text = "1",
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 25.sp,
+                                color = LightBlue,
+                                fontFamily = roboto,
                                 modifier = Modifier
                                     .width(50.dp)
-                                    .height(40.dp)
-                                    .padding(start = 5.dp),
-                                //  .border(1.dp, LightBlue),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = DarkGrey),
-                                onClick = {
-                                    onHapticFeedback()
-                                    for (i in 1..10) onRandomNumber()
-                                }, contentPadding = PaddingValues(1.dp)
-                            ) {
-                                Text(
-                                    text = "10",
-                                    textAlign = TextAlign.Center,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 20.sp,
-                                    color = Color.White,
-                                    fontFamily = roboto, modifier = Modifier,
-                                    letterSpacing = TextUnit(0f, TextUnitType.Sp)
-                                )
-                            }
+                                    .clickable {
+                                        onHapticFeedback()
+                                        onRandomNumber(1)
+                                    }
+                                    .padding(horizontal = 5.dp)
+                                    .shadow(3.dp)
+                                    .background(DarkGrey)
+                                    .padding(horizontal = 5.dp)
+                            )
+                            Text(
+                                text = "10",
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 25.sp,
+                                color = LightBlue,
+                                fontFamily = roboto,
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .clickable {
+                                        onHapticFeedback()
+                                        onRandomNumber(10)
+                                    }
+                                    .padding(horizontal = 5.dp)
+                                    .shadow(3.dp)
+                                    .background(DarkGrey)
+                                    .padding(horizontal = 5.dp)
+                            )
                         }
                     }
                 }
@@ -165,6 +164,8 @@ fun ComposableTopBar(
                         value = inputStr,
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(Grey)
+                            .padding(top = 10.dp)
                             .background(Grey)
                             .clickable {
                                 onHapticFeedback()
@@ -187,12 +188,19 @@ fun ComposableTopBar(
                         },
                         singleLine = true,
                         label = {
-                            Text(text = "Insert Number", color = LightGrey)
+                            Text(
+                                text = "Insert Number",
+                                color = LightGrey,
+                                fontSize = 23.sp
+                            )
                         },
                         placeholder = {
                             Text(text = "(0 - 999)", color = White)
                         },
-                        colors = TextFieldDefaults.textFieldColors(textColor = White)
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = White,
+                            backgroundColor = Grey
+                        )
                     )
                 }
 
@@ -214,10 +222,12 @@ fun ComposableTopBar(
                             modifier = Modifier
                                 .fillMaxHeight()
                         ) {
-                            Icon(
+
+                        Icon(
                                 imageVector = Icons.Default.ArrowUpward,
                                 contentDescription = "Increase",
                                 modifier = Modifier
+                                    .padding(start = 5.dp)
                                     .weight(0.5f)
                                     .size(it.times(0.7f))
                                     .clickable {
@@ -259,6 +269,7 @@ fun ComposableTopBar(
                                 imageVector = Icons.Default.ArrowUpward,
                                 contentDescription = "Increase",
                                 modifier = Modifier
+                                    .padding(start = 5.dp)
                                     .weight(0.5f)
                                     .size(it.times(0.7f))
                                     .clickable {
@@ -333,8 +344,8 @@ fun ComposableTopBar(
                     contentAlignment = Center
                 ) {
                     ComposableIconTitle(
-                        icon = Icons.Default.Insights,
-                        title = "BALANCE"
+                        icon = null,
+                        title = "Balance"
                     ) {
                         BoxWithConstraints(
                             modifier = Modifier
