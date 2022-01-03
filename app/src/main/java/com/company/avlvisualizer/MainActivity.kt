@@ -15,14 +15,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
@@ -77,7 +72,6 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         ComposableTopBar(
-                            message = "",
                             onSpacingChange = {
                                 if (treeStyle.ySpacing <= 10 && it < 0) {
                                     scope.launch {
@@ -188,15 +182,22 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     snackbarHost = { scaffoldState.snackbarHostState }
                 ) {
-
-
+                    // Contains either the tree or a placeholder message
                     BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Grey)
-                            .padding(bottom = if (nodeComposableDataList.isNotEmpty()) 55.dp else 0.dp)
+                            .padding(
+                                bottom =
+                                if (nodeComposableDataList.isNotEmpty())
+                                    55.dp
+                                else
+                                    0.dp
+                            ) // Add padding if bottom bar is present
                     ) {
                         val boxWithConstraintsScope = this
+
+                        // If the tree is not empty, draw the tree
                         if (nodeComposableDataList.isNotEmpty()) {
                             ComposableTree(
                                 data = nodeComposableDataList,
@@ -207,9 +208,11 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         } else {
-                            ComposableEmptyTree()
+                            // If empty, display placeholder message
+                            ComposableEmptyTree(boxWithConstraintsScope)
                         }
 
+                        // Snackbar used to display error messages
                         ComposableSnackbar(
                             snackbarHostState = scaffoldState.snackbarHostState,
                             modifier = Modifier
