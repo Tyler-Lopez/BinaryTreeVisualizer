@@ -1,5 +1,5 @@
 package com.company.avlvisualizer
 
-enum class BinaryNodeChild {
+enum class NodeChildType {
     LEFT, RIGHT
 }

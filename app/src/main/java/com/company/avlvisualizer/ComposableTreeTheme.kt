@@ -1,34 +1,36 @@
 package com.company.avlvisualizer
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.company.avlvisualizer.ui.theme.*
 
+// This is selectable from a drop-down, thus implements dropdownable
+// Overrides .thumbnail to display a picture thumbnail
 data class ComposableTreeTheme(
     val nodeColor: Color,
     val lineColor: Color,
-    val selectedNodeColor: Color
+    val selectedNodeColor: Color,
+    // Used to make a more complicated thumbnail with Canvas if desired
+    val drawSpecial: (DrawScope.() -> Unit)? = null
 ) : Dropdownable {
 
     @Composable
     override fun thumbnail() {
         val theme = this
-        Box(modifier = Modifier.shadow(3.dp)) {
+        Box(modifier = Modifier
+            .shadow(3.dp)
+            .drawBehind {
+                drawSpecial
+            }) {
             Text(
                 text = "C",
                 fontSize = 0.sp,
@@ -48,7 +50,7 @@ data class ComposableTreeTheme(
                 ComposableTreeTheme(
                     Color(16, 90, 201),
                     LightBlue,
-                    Color(180, 104, 5)
+                    Color(180, 104, 5),
                 ),
                 // GREEN
                 ComposableTreeTheme(
@@ -74,6 +76,14 @@ data class ComposableTreeTheme(
                     Color(251, 62, 173),
                     Color(11, 143, 154)
                 ),
+                // HEART
+                ComposableTreeTheme(
+                    Color(221, 36, 144),
+                    Color(251, 62, 173),
+                    Color(11, 143, 154)
+                ) {
+
+                },
             )
         }
     }

@@ -1,5 +1,7 @@
 package com.company.avlvisualizer
 
+// This is selectable from a drop-down, thus implements dropdownable
+// Does not override .thumbnail() in parent
 enum class BinaryTreeBalanceType : Dropdownable {
     UNBALANCED {
         override fun toString(): String = "None"

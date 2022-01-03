@@ -39,7 +39,6 @@ import kotlin.random.Random
 @ExperimentalUnitApi
 @Composable
 fun ComposableTopBar(
-    message: String,
     onSpacingChange: (Int) -> Unit,
     onWeightChange: (Int) -> Unit,
     onBalanceChange: (BinaryTreeBalanceType) -> Unit,
@@ -312,12 +311,10 @@ fun ComposableTopBar(
                     ) {
                         BoxWithConstraints(
                             modifier = Modifier
-                                //          .fillMaxWidth()
                                 .height(it),
                             contentAlignment = Alignment.CenterStart
                         ) {
                             ComposeMenu(
-                                //      width = this.maxWidth,
                                 menuItems = itemsColors,
                                 menuExpandedState = expandedColor,
                                 selectedIndex = selectedIndexColor,

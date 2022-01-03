@@ -1,86 +1,61 @@
 package com.company.avlvisualizer
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Paint
-import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.PlaybackParams
-import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.support.v4.app.INotificationSideChannel
-import android.view.HapticFeedbackConstants
-import android.view.SoundEffectConstants
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
-import java.lang.Float.max
 import java.lang.NumberFormatException
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("WrongConstant")
     @ExperimentalUnitApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
-        // https://stackoverflow.com/questions/68980068/jetpack-compose-status-bar-color-not-updated-in-dark-theme
-        this.window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
-
+        // Invoke the onCreate function in the superclass
         super.onCreate(savedInstanceState)
+
         setContent {
-            //         val mp: MediaPlayer = MediaPlayer.create(this, R.raw.audio)
-
-            val mp: MediaPlayer = MediaPlayer.create(this, R.raw.node_select)
-            val clickMp: MediaPlayer = MediaPlayer.create(this, R.raw.click_sound)
-
             val context = LocalContext.current
-            val vibrator: Vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-            // Generate the Tree Data Structure... this is not ideal - must be up here to avoid constantly regenerated on recompose
+            // Define MediaPlayer objects with click and select sounds
+            val applicationContext = this
+            val selectMp: MediaPlayer = MediaPlayer.create(applicationContext, R.raw.node_select)
+            val clickMp: MediaPlayer = MediaPlayer.create(applicationContext, R.raw.click_sound)
+
+            // Define vibrator object
+            val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+            // Define the tree as a mutable BinaryTree object
             var tree by remember { mutableStateOf(BinaryTree()) }
-            // End tree data structure
+
 
             AVLVisualizerTheme {
+
+                // Define mutable variables which impact selection and style
                 var balanceType by remember {
                     mutableStateOf(BinaryTreeBalanceType.UNBALANCED)
-                }
-                var nodeComposableDataList by remember {
-                    mutableStateOf(tree.returnComposableData())
                 }
                 var treeStyle by remember {
                     mutableStateOf(ComposableTreeStyle())
@@ -89,11 +64,15 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(-1)
                 }
 
+                // Passed into composable which draws the tree
+                var nodeComposableDataList by remember {
+                    mutableStateOf(tree.returnComposableData())
+                }
+
                 // https://levelup.gitconnected.com/implement-android-snackbar-in-jetpack-compose-d83df5ff5b47
                 // https://www.devbitsandbytes.com/configuring-snackbar-jetpack-compose-using-scaffold-with-bottom-navigation/
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
-
 
                 Scaffold(
                     topBar = {
@@ -187,7 +166,7 @@ class MainActivity : ComponentActivity() {
                                 selected = selectedIndex,
                                 onReset = {
                                     selectedIndex = -1
-                                    vibrate(vibrator, mp)
+                                    vibrate(vibrator, selectMp)
                                     tree = BinaryTree()
                                     val tmpTheme = treeStyle.theme
                                     treeStyle = ComposableTreeStyle()
@@ -195,7 +174,7 @@ class MainActivity : ComponentActivity() {
                                     nodeComposableDataList = tree.returnComposableData()
                                 },
                                 onRemove = {
-                                    vibrate(vibrator, mp)
+                                    vibrate(vibrator, selectMp)
                                     tree.remove(
                                         selectedIndex,
                                         balanceType == BinaryTreeBalanceType.AVL_TREE
@@ -223,44 +202,12 @@ class MainActivity : ComponentActivity() {
                                 data = nodeComposableDataList,
                                 style = treeStyle,
                                 onNodeSelect = {
-                                    if (it != null) vibrate(vibrator, mp)
+                                    if (it != null) vibrate(vibrator, selectMp)
                                     selectedIndex = it ?: -1
                                 }
                             )
                         } else {
-
-                            BoxWithConstraints(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                val circleRadius = (LocalDensity.current.run {
-                                    minOf(
-                                        boxWithConstraintsScope.maxWidth.toPx(),
-                                        boxWithConstraintsScope.maxHeight.toPx()
-                                    )
-                                } / 2f) * 0.4f
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Image(
-                                        painter = painterResource(R.drawable.binarytreevisualizerapp_logo),
-                                        contentDescription = "App Logo",
-                                        modifier = Modifier.size(circleRadius.dp.times(0.8f))
-                                    )
-                                    Text(
-                                        text = "TREE IS EMPTY",
-                                        fontSize = 25.sp,
-                                        fontFamily = roboto,
-                                        textAlign = TextAlign.Center,
-                                        color = Color(232, 179, 21)
-                                    )
-                                    Text(
-                                        text = "Insert a number to begin",
-                                        fontSize = 20.sp,
-                                        fontFamily = roboto,
-                                        textAlign = TextAlign.Center,
-                                        color = LightGrey
-                                    )
-                                }
-                            }
+                            ComposableEmptyTree()
                         }
 
                         ComposableSnackbar(
@@ -276,7 +223,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@SuppressLint("WrongConstant")
+// Function invoked to vibrate and play MediaPlayer sound
 fun vibrate(vibrator: Vibrator, mp: MediaPlayer) {
     mp.start()
     if (vibrator.hasVibrator()) { // Vibrator availability checking
@@ -292,17 +239,3 @@ fun vibrate(vibrator: Vibrator, mp: MediaPlayer) {
         }
     }
 }
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AVLVisualizerTheme {
-        Greeting("Android")
-    }
-}
-

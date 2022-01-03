@@ -2,7 +2,6 @@ package com.company.avlvisualizer
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -12,9 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
@@ -144,10 +141,10 @@ fun ComposableTree(
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
-                        BinaryNodeChild.LEFT -> xShift -= ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
+                        NodeChildType.LEFT -> xShift -= ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
-                        BinaryNodeChild.RIGHT -> xShift += ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
+                        NodeChildType.RIGHT -> xShift += ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
                     }
