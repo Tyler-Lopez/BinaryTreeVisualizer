@@ -18,10 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import com.company.avlvisualizer.domain.BinaryTreeBalanceType
-import com.company.avlvisualizer.domain.ComposableTreeStyle
-import com.company.avlvisualizer.domain.BinaryNodeTree
-import com.company.avlvisualizer.domain.BinaryTree
+import com.company.avlvisualizer.domain.*
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
@@ -53,7 +50,6 @@ class MainActivity : ComponentActivity() {
 
 
             AVLVisualizerTheme {
-
                 // Define mutable variables which impact selection and style
                 var balanceType by remember {
                     mutableStateOf(BinaryTreeBalanceType.UNBALANCED)
@@ -100,6 +96,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             onBalanceChange = {
+                                if (balanceType == it)
+                                    return@ComposableTopBar
+                                // We are converting tree to balance type
                                 balanceType = it
                                 when (balanceType) {
                                     BinaryTreeBalanceType.UNBALANCED -> {
@@ -109,30 +108,23 @@ class MainActivity : ComponentActivity() {
                                         }
                                         // Otherwise, it is a heap
                                         else {
-                                            TODO()
+                                            // Convert tree to an unbalanced binary tree
+                                            tree = (tree as HeapTree).asUnbalancedTree()
                                         }
-
                                     }
                                     BinaryTreeBalanceType.AVL_TREE -> {
                                         // Is the tree already a BinaryNodeTree?
                                         if (tree is BinaryNodeTree) {
                                             (tree as BinaryNodeTree).isAVL = true
-                                            tree = tree.balanceTree()
-                                            nodeComposableDataList = tree.returnComposableData()
                                         }
-                                        // Otherwise, it is a heap
-                                        else {
-                                            TODO()
-                                        }
+                                        tree = tree.asBalancedTree()
+                                    }
+                                    BinaryTreeBalanceType.MIN_HEAP -> tree = tree.heapify(true)
 
-                                    }
-                                    BinaryTreeBalanceType.MIN_HEAP -> {
-                                        TODO()
-                                    }
-                                    BinaryTreeBalanceType.MAX_HEAP -> {
-                                        TODO()
-                                    }
+                                    BinaryTreeBalanceType.MAX_HEAP -> tree = tree.heapify(false)
                                 }
+                                // Update composable with new tree
+                                nodeComposableDataList = tree.returnComposableData()
                             },
                             onThemeChange = {
                                 treeStyle.theme = it

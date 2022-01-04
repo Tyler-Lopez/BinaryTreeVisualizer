@@ -3,10 +3,8 @@ package com.company.avlvisualizer.domain
 import java.util.*
 import kotlin.math.max
 
-class BinaryNodeTree : BinaryTree() {
-
+class BinaryNodeTree(var isAVL: Boolean = false) : BinaryTree() {
     private var root: BinaryNode? = null
-    var isAVL: Boolean = false
 
     override fun toString() = root?.toString() ?: "Empty"
 
@@ -221,12 +219,16 @@ class BinaryNodeTree : BinaryTree() {
         return balancedNode
     }
 
-    override fun balanceTree(): BinaryNodeTree {
-        val toReturn = BinaryNodeTree()
-        toReturn.isAVL = true
+    override fun asBalancedTree(): BinaryNodeTree {
+        val toReturn = BinaryNodeTree(isAVL = true)
         forEachLevelOrder {
             if (it != null) toReturn.insert(it.value)
         }
         return toReturn
     }
+
+    override fun heapify(isMin: Boolean): HeapTree {
+        TODO("Not yet implemented")
+    }
+
 }

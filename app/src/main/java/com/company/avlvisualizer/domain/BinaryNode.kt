@@ -59,17 +59,17 @@ data class BinaryNode(
         rightChild?.traverseInOrder(visit)
     }
 
-    fun traverseInOrderWithPath(path: List<NodeChildType>, visit: ComposableNodeVisitor) {
+    fun traverseInOrderWithPath(path: List<BinaryNodeChildType>, visit: ComposableNodeVisitor) {
         visit(NodeComposableData(path, value, height))
-        leftChild?.traverseInOrderWithPath(clonePathWithInsert(path, NodeChildType.LEFT), visit)
-        rightChild?.traverseInOrderWithPath(clonePathWithInsert(path, NodeChildType.RIGHT), visit)
+        leftChild?.traverseInOrderWithPath(clonePathWithInsert(path, BinaryNodeChildType.LEFT), visit)
+        rightChild?.traverseInOrderWithPath(clonePathWithInsert(path, BinaryNodeChildType.RIGHT), visit)
     }
 
     fun clonePathWithInsert(
-        path: List<NodeChildType>,
-        newMove: NodeChildType
-    ): List<NodeChildType> {
-        val toReturn = mutableListOf<NodeChildType>()
+        path: List<BinaryNodeChildType>,
+        newMove: BinaryNodeChildType
+    ): List<BinaryNodeChildType> {
+        val toReturn = mutableListOf<BinaryNodeChildType>()
         for (move in path) {
             toReturn.add(move)
         }

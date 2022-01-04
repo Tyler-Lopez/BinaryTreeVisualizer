@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.company.avlvisualizer.domain.ComposableTreeStyle
-import com.company.avlvisualizer.domain.NodeChildType
+import com.company.avlvisualizer.domain.BinaryNodeChildType
 import com.company.avlvisualizer.domain.NodeComposableData
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -144,10 +144,10 @@ fun ComposableTree(
                 for (child in node.path) {
                     parentPosition = Offset(xShift, yShift)
                     when (child) {
-                        NodeChildType.LEFT -> xShift -= ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
+                        BinaryNodeChildType.LEFT -> xShift -= ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
-                        NodeChildType.RIGHT -> xShift += ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
+                        BinaryNodeChildType.RIGHT -> xShift += ((nodeSize * 0.2f) + 80) * 0.05f * 2f.pow(
                             nodeHeight + 4
                         )
                     }
