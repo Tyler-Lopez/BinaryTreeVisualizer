@@ -9,7 +9,7 @@ import com.company.avlvisualizer.ui.theme.LightGrey
 
 interface Dropdownable {
     @Composable
-    fun thumbnail() {
+    fun Thumbnail() {
         Text(
             text = "$this",
             color = Color.White

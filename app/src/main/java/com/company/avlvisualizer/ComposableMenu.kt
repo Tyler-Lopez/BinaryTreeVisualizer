@@ -49,7 +49,7 @@ fun ComposeMenu(
                 .background(Grey)
                 .padding(horizontal = 10.dp)
         ) {
-            menuItems[selectedIndex].thumbnail()
+            menuItems[selectedIndex].Thumbnail()
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "Open or close the dropdown",
@@ -77,7 +77,7 @@ fun ComposeMenu(
                        // .background(Grey)
                         .clip(RectangleShape)
                 ) {
-                    title.thumbnail()
+                    title.Thumbnail()
                 }
             }
         }

@@ -1,36 +1,49 @@
 package com.company.avlvisualizer.domain
 
+
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.imageResource
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.company.avlvisualizer.R
 import com.company.avlvisualizer.ui.theme.*
 
 // This is selectable from a drop-down, thus implements dropdownable
-// Overrides .thumbnail to display a picture thumbnail
+// Overrides .Thumbnail to display a picture Thumbnail
 data class ComposableTreeTheme(
     val nodeColor: Color,
     val lineColor: Color,
     val selectedNodeColor: Color,
-    // Used to make a more complicated thumbnail with Canvas if desired
-    val drawSpecial: (DrawScope.() -> Unit)? = null
+    // Used to make a more complicated Thumbnail with Canvas if desired
+    val imageId: Int? = null
 ) : Dropdownable {
-
     @Composable
-    override fun thumbnail() {
+    override fun Thumbnail() {
         val theme = this
-        Box(modifier = Modifier
-            .shadow(3.dp)
-            .drawBehind {
-                drawSpecial
-            }) {
+        Box(
+            modifier = Modifier
+                .shadow(3.dp)
+        ) {
             Text(
                 text = "C",
                 fontSize = 0.sp,
@@ -40,6 +53,28 @@ data class ComposableTreeTheme(
                     .height(15.dp)
                     .background(theme.lineColor)
             )
+            if (imageId != null) {
+                val image = ImageBitmap.imageResource(id = imageId)
+                val aspectRatio = (image.width.toFloat()) / image.height
+
+                Canvas(
+                    modifier = Modifier
+                        .width(25.dp)
+                        .height(15.dp),
+                ) {
+                    drawImage(
+                        image = image,
+                        dstOffset = IntOffset(
+                            x = ((15.dp.toPx() * aspectRatio) / 3.0).toInt(),
+                            y = 0
+                        ),
+                        dstSize = IntSize(
+                            width = (15.dp.toPx() * aspectRatio).toInt(),
+                            height = (15.dp.toPx() * aspectRatio).toInt()
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -76,6 +111,16 @@ data class ComposableTreeTheme(
                     Color(251, 62, 173),
                     Color(11, 143, 154)
                 ),
+                // HEART
+                /*
+                ComposableTreeTheme(
+                    Grey,
+                    DarkGrey,
+                    Color(11, 143, 154),
+                    R.drawable.heart_icon
+                ),
+
+                 */
             )
         }
     }
