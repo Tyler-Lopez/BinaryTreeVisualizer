@@ -26,7 +26,7 @@ fun ComposableEmptyTree(boxWithConstraintsScope: BoxWithConstraintsScope) {
         )
     } / 2f) * 0.4f
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.binarytreevisualizerapp_logo),
             contentDescription = "App Logo",

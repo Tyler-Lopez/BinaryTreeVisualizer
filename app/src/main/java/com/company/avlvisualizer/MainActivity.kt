@@ -8,6 +8,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -18,18 +19,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     @ExperimentalUnitApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Invoke the onCreate function in the superclass
         super.onCreate(savedInstanceState)
+
+        // Splash screen
+        // https://www.youtube.com/watch?v=Loo4i5IrZ4Y
+        installSplashScreen().apply {
+            setKeepVisibleCondition {
+                viewModel.isLoading.value
+            }
+        }
 
         setContent {
             val context = LocalContext.current
