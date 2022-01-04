@@ -44,8 +44,7 @@ fun ComposableSnackbar(
                             color = Red,
                             textAlign = TextAlign.Left,
                             fontFamily = roboto,
-                            fontWeight = SemiBold,
-                            fontSize = 35.sp
+                            fontSize = 25.sp
                         )
                         Text(
                             text = data.message,
@@ -53,7 +52,7 @@ fun ComposableSnackbar(
                             textAlign = TextAlign.Left,
                             fontFamily = roboto,
                             fontWeight = Light,
-                            fontSize = 30.sp
+                            fontSize = 20.sp
                         )
                     }
                 },

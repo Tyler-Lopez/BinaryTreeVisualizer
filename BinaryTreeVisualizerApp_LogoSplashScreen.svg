@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 946 946">
+  <g id="Layer_2" data-name="Layer 2">
+    <circle cx="473" cy="473" r="472.5" style="fill: #2d2d30;stroke: #000;stroke-miterlimit: 10"/>
+  </g>
+  <g id="Layer_1" data-name="Layer 1">
+    <circle cx="199.95" cy="685.51" r="80.44" style="fill: #f1f2f2"/>
+    <circle cx="212.85" cy="659.99" r="49.31" style="fill: #d1d3d4"/>
+    <rect x="195.05" y="589.59" width="240.79" height="56.83" rx="28.41" transform="translate(-440.88 605.87) rotate(-66.06)" style="fill: #bcbec0"/>
+    <circle cx="312.67" cy="443.03" r="88.39" style="fill: #ffde17"/>
+    <circle cx="332.7" cy="418.82" r="54.18" style="fill: #d5b718"/>
+    <path d="M690.21,486h0a31.22,31.22,0,0,1-43.69-6.35l-120.86-162A31.22,31.22,0,0,1,532,273.94h0a31.22,31.22,0,0,1,43.69,6.35l120.86,162A31.21,31.21,0,0,1,690.21,486Z" transform="translate(-63.48 -49.66)" style="fill: #bcbec0"/>
+    <rect x="727.61" y="497.8" width="56.83" height="240.79" rx="28.41" transform="translate(-249.3 310.3) rotate(-23.94)" style="fill: #bcbec0"/>
+    <path d="M539.44,273.74h0a31.22,31.22,0,0,1,6.36,43.69l-120.86,162a31.22,31.22,0,0,1-43.69,6.36h0a31.22,31.22,0,0,1-6.36-43.69l120.86-162A31.22,31.22,0,0,1,539.44,273.74Z" transform="translate(-63.48 -49.66)" style="fill: #bcbec0"/>
+    <circle cx="473" cy="228.06" r="109.72" style="fill: #497bbe"/>
+    <circle cx="744.56" cy="685.68" r="80.44" style="fill: #f1f2f2"/>
+    <circle cx="521.97" cy="680.23" r="80.44" style="fill: #f1f2f2"/>
+    <circle cx="534.88" cy="654.72" r="49.31" style="fill: #d1d3d4"/>
+    <rect x="517.07" y="584.32" width="240.79" height="56.83" rx="28.41" transform="translate(-244.71 897.07) rotate(-66.06)" style="fill: #bcbec0"/>
+    <circle cx="631.83" cy="443.2" r="88.39" style="fill: #ffde17"/>
+  </g>
+</svg>

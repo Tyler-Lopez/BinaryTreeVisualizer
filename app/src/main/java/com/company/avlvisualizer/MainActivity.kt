@@ -27,7 +27,6 @@ import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
 
     @ExperimentalUnitApi
     @ExperimentalComposeUiApi
@@ -35,14 +34,6 @@ class MainActivity : ComponentActivity() {
 
         // Invoke the onCreate function in the superclass
         super.onCreate(savedInstanceState)
-
-        // Splash screen
-        // https://www.youtube.com/watch?v=Loo4i5IrZ4Y
-        installSplashScreen().apply {
-            setKeepVisibleCondition {
-                viewModel.isLoading.value
-            }
-        }
 
         setContent {
             val context = LocalContext.current

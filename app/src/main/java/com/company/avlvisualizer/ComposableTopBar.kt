@@ -67,7 +67,7 @@ fun ComposableTopBar(
         .shadow(3.dp)
         .background(DarkGrey)
         .padding(bottom = 5.dp)
-        .drawBehind {
+    /*    .drawBehind {
             drawLine(
                 color = LightGrey,
                 strokeWidth = 5f,
@@ -75,8 +75,8 @@ fun ComposableTopBar(
                 end = Offset(size.width, size.height.plus(10))
             )
         }
+     */
     ) {
-        val maxHeight = this.maxHeight
         val maxWidth = this.maxWidth
         Column {
             Row(

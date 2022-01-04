@@ -30,7 +30,7 @@ fun ComposableEmptyTree(boxWithConstraintsScope: BoxWithConstraintsScope) {
         Image(
             painter = painterResource(R.drawable.binarytreevisualizerapp_logo),
             contentDescription = "App Logo",
-            modifier = Modifier.size(respWidth.dp.times(0.8f))
+            modifier = Modifier.size(respWidth.dp.times(0.5f))
         )
         Text(
             text = "TREE IS EMPTY",
