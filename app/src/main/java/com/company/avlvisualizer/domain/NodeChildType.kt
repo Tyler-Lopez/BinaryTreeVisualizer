@@ -1,4 +1,4 @@
-package com.company.avlvisualizer
+package com.company.avlvisualizer.domain
 
 enum class NodeChildType {
     LEFT, RIGHT

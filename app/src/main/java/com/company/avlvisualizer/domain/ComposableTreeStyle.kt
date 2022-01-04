@@ -1,6 +1,7 @@
-package com.company.avlvisualizer
+package com.company.avlvisualizer.domain
 
 import androidx.compose.ui.graphics.Color
+import com.company.avlvisualizer.domain.ComposableTreeTheme
 import com.company.avlvisualizer.ui.theme.*
 
 data class ComposableTreeStyle(

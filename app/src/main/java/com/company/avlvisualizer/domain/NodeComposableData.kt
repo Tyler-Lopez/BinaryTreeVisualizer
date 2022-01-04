@@ -1,4 +1,6 @@
-package com.company.avlvisualizer
+package com.company.avlvisualizer.domain
+
+import com.company.avlvisualizer.domain.NodeChildType
 
 // We will traverse a list of node data, and return a list of node composable data
 

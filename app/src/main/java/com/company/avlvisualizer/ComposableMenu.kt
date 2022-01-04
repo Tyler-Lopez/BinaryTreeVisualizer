@@ -1,7 +1,6 @@
 package com.company.avlvisualizer
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
@@ -14,17 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.widget.ConstraintLayout
+import com.company.avlvisualizer.domain.Dropdownable
 import com.company.avlvisualizer.ui.theme.Grey
 import com.company.avlvisualizer.ui.theme.LightBlue
-import com.company.avlvisualizer.ui.theme.LightGrey
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 @Composable
 fun ComposeMenu(

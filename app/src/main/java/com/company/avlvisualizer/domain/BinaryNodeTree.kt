@@ -1,21 +1,17 @@
-package com.company.avlvisualizer
+package com.company.avlvisualizer.domain
 
-import androidx.compose.ui.geometry.Offset
 import java.util.*
-import kotlin.math.pow
 import kotlin.math.max
 
-class BinaryTree {
+class BinaryNodeTree : BinaryTree() {
 
-    var root: BinaryNode? = null
-
-    var size: Int = 0
-        private set
+    private var root: BinaryNode? = null
+    var isAVL: Boolean = false
 
     override fun toString() = root?.toString() ?: "Empty"
 
-    fun insert(value: Int, avlInsert: Boolean = false) {
-        root = if (avlInsert) {
+    override fun insert(value: Int) {
+        root = if (isAVL) {
             insertAVL(root, value)
         } else {
             insertUnbalanced(root, value)
@@ -37,12 +33,8 @@ class BinaryTree {
         return node
     }
 
-    fun traversePreOrder(offsetVisit: OffsetVisitor) {
-        traversePreOrder(offsetVisit, Offset(0f, 0f), root, 0)
-    }
-
     // 2nd value is the max height of tree
-    fun returnComposableData(): List<NodeComposableData> {
+    override fun returnComposableData(): List<NodeComposableData> {
         val toReturn = mutableListOf<NodeComposableData>()
         root?.traverseInOrderWithPath(
             path = listOf(),
@@ -51,37 +43,6 @@ class BinaryTree {
             }
         )
         return toReturn
-    }
-
-
-    private fun traversePreOrder(
-        offsetVisit: OffsetVisitor,
-        offset: Offset,
-        node: BinaryNode?,
-        depth: Int,
-        parentOffset: Offset? = null
-    ) {
-        offsetVisit(offset, node, parentOffset)
-        if (node?.leftChild != null) traversePreOrder(
-            offsetVisit,
-            Offset(
-                x = offset.x - 1000f - ((node.height * node.height).toDouble().pow(3).toFloat()),
-                y = offset.y + 80000f
-            ),
-            node?.leftChild,
-            depth + 1,
-            offset
-        )
-        if (node?.rightChild != null) traversePreOrder(
-            offsetVisit,
-            Offset(
-                x = offset.x + 1000f + ((node.height * node.height).toDouble().pow(3).toFloat()),
-                y = offset.y + 80000f
-            ),
-            node?.rightChild,
-            depth + 1,
-            offset
-        )
     }
 
     // Breadth-first traversal
@@ -109,7 +70,7 @@ class BinaryTree {
         // Move on to either next child or next level w/e first
     }
 
-    fun contains(value: Int): Boolean {
+    override fun contains(value: Int): Boolean {
         root ?: return false
 
         var found = false
@@ -122,9 +83,10 @@ class BinaryTree {
     }
 
 
-    fun remove(value: Int, avlInsert: Boolean = false) {
-        root = if (avlInsert) removeAVL(root, value)
+    override fun remove(value: Int) {
+        root = if (isAVL) removeAVL(root, value)
         else removeUnbalanced(root, value)
+        size--
     }
 
     private fun removeUnbalanced(node: BinaryNode?, value: Int): BinaryNode? {
@@ -259,10 +221,11 @@ class BinaryTree {
         return balancedNode
     }
 
-    fun balanceTree(): BinaryTree {
-        val toReturn = BinaryTree()
+    override fun balanceTree(): BinaryNodeTree {
+        val toReturn = BinaryNodeTree()
+        toReturn.isAVL = true
         forEachLevelOrder {
-            if (it != null) toReturn.insert(it.value, true)
+            if (it != null) toReturn.insert(it.value)
         }
         return toReturn
     }

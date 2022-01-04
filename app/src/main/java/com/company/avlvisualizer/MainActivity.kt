@@ -8,7 +8,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -19,7 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.company.avlvisualizer.domain.BinaryTreeBalanceType
+import com.company.avlvisualizer.domain.ComposableTreeStyle
+import com.company.avlvisualizer.domain.BinaryNodeTree
+import com.company.avlvisualizer.domain.BinaryTree
 import com.company.avlvisualizer.ui.theme.*
 import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
@@ -46,8 +48,8 @@ class MainActivity : ComponentActivity() {
             // Define vibrator object
             val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-            // Define the tree as a mutable BinaryTree object
-            var tree by remember { mutableStateOf(BinaryTree()) }
+            // Define the tree as a mutable BinaryNodeTree object
+            var tree: BinaryTree by remember { mutableStateOf(BinaryNodeTree()) }
 
 
             AVLVisualizerTheme {
@@ -99,9 +101,37 @@ class MainActivity : ComponentActivity() {
                             },
                             onBalanceChange = {
                                 balanceType = it
-                                if (balanceType == BinaryTreeBalanceType.AVL_TREE) {
-                                    tree = tree.balanceTree()
-                                    nodeComposableDataList = tree.returnComposableData()
+                                when (balanceType) {
+                                    BinaryTreeBalanceType.UNBALANCED -> {
+                                        // Is the tree already a BinaryNodeTree?
+                                        if (tree is BinaryNodeTree) {
+                                            (tree as BinaryNodeTree).isAVL = false
+                                        }
+                                        // Otherwise, it is a heap
+                                        else {
+                                            TODO()
+                                        }
+
+                                    }
+                                    BinaryTreeBalanceType.AVL_TREE -> {
+                                        // Is the tree already a BinaryNodeTree?
+                                        if (tree is BinaryNodeTree) {
+                                            (tree as BinaryNodeTree).isAVL = true
+                                            tree = tree.balanceTree()
+                                            nodeComposableDataList = tree.returnComposableData()
+                                        }
+                                        // Otherwise, it is a heap
+                                        else {
+                                            TODO()
+                                        }
+
+                                    }
+                                    BinaryTreeBalanceType.MIN_HEAP -> {
+                                        TODO()
+                                    }
+                                    BinaryTreeBalanceType.MAX_HEAP -> {
+                                        TODO()
+                                    }
                                 }
                             },
                             onThemeChange = {
@@ -120,10 +150,7 @@ class MainActivity : ComponentActivity() {
                                         var randomNumber = Random.nextInt(0, 999)
                                         while (tree.contains(randomNumber)) randomNumber =
                                             Random.nextInt(0, 999)
-                                        tree.insert(
-                                            value = randomNumber,
-                                            avlInsert = balanceType == BinaryTreeBalanceType.AVL_TREE
-                                        )
+                                        tree.insert(value = randomNumber)
                                     }
                                 }
                                 nodeComposableDataList = tree.returnComposableData()
@@ -133,10 +160,7 @@ class MainActivity : ComponentActivity() {
                                     val inputVal = it.toInt()
                                     if (tree.contains(inputVal)) throw Exception("$inputVal is already present in this Tree")
                                     if (inputVal < 0 || inputVal > 999) throw Exception()
-                                    tree.insert(
-                                        inputVal,
-                                        balanceType == BinaryTreeBalanceType.AVL_TREE
-                                    )
+                                    tree.insert(inputVal)
                                     nodeComposableDataList = tree.returnComposableData()
                                 } catch (e: NumberFormatException) {
                                     scope.launch {
@@ -165,7 +189,7 @@ class MainActivity : ComponentActivity() {
                                 onReset = {
                                     selectedIndex = -1
                                     vibrate(vibrator, selectMp)
-                                    tree = BinaryTree()
+                                    tree = BinaryNodeTree()
                                     val tmpTheme = treeStyle.theme
                                     treeStyle = ComposableTreeStyle()
                                     treeStyle.theme = tmpTheme
@@ -173,10 +197,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onRemove = {
                                     vibrate(vibrator, selectMp)
-                                    tree.remove(
-                                        selectedIndex,
-                                        balanceType == BinaryTreeBalanceType.AVL_TREE
-                                    )
+                                    tree.remove(selectedIndex)
                                     selectedIndex = -1
                                     nodeComposableDataList = tree.returnComposableData()
                                 }

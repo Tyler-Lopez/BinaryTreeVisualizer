@@ -1,4 +1,4 @@
-package com.company.avlvisualizer
+package com.company.avlvisualizer.domain
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
