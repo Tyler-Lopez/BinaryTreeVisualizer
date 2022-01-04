@@ -228,7 +228,8 @@ class BinaryNodeTree(var isAVL: Boolean = false) : BinaryTree() {
     }
 
     override fun heapify(isMin: Boolean): HeapTree {
-        TODO("Not yet implemented")
+        return HeapTree()
+        // TODO
     }
 
 }

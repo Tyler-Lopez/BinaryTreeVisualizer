@@ -3,21 +3,23 @@ package com.company.avlvisualizer.domain
 
 class HeapTree(var isMin: Boolean = false) : BinaryTree() {
 
-    var values: ArrayList<Int> = ArrayList()
+    var elements: ArrayList<Int> = ArrayList()
 
     override var size: Int = 0
-        get() = values.size
+        get() = elements.size
 
 
     override fun insert(value: Int) {
-        TODO("Not yet implemented")
+        elements.add(value) // 1
+        siftUp(size - 1) // 2
+        //
     }
 
 
     private fun siftUp(index: Int) {
         var child = index
         var parent = parentIndex(child)
-        while (child > 0 && compare(values[child], values[parent]) > 0) {
+        while (child > 0 && compare(elements[child], elements[parent]) > 0) {
             swap(child, parent)
             child = parent
             parent = parentIndex(child)
@@ -31,12 +33,12 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
             val right = rightChildIndex(parent)
             var candidate = parent // 4
             if (left < size &&
-                compare(values[left], values[candidate]) > 0
+                compare(elements[left], elements[candidate]) > 0
             ) {
                 candidate = left //5
             }
             if (right < size &&
-                compare(values[right], values[candidate]) > 0
+                compare(elements[right], elements[candidate]) > 0
             ) {
                 candidate = right // 6
             }
@@ -49,12 +51,32 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
     }
 
     override fun remove(value: Int) {
-        TODO("Not yet implemented")
+        val index = indexAt(value)
+        if (index >= size)
+            return // 1
+
+        if (index == size - 1) {
+            elements.removeAt(size - 1) // 2
+        } else {
+            swap(index, size - 1) // 3
+            val item = elements.removeAt(size - 1) // 4
+            siftDown(index) // 5
+            siftUp(index)
+            item
+        }
+    }
+
+    fun indexAt(value: Int): Int {
+        for ((index, element) in elements.withIndex()) {
+            if (value == element)
+                return index
+        }
+        return -1
     }
 
     override fun contains(value: Int): Boolean {
-        for (value in values) {
-            if (value == value)
+        for (element in elements) {
+            if (value == element)
                 return true
         }
         return false
@@ -69,27 +91,27 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
         return toReturn
     }
 
-    private fun traverseWithPath(curr: Int, height: Int, path: List<BinaryNodeChildType>, visit: ComposableNodeVisitor) {
-
-        if (curr > values.lastIndex)
+    private fun traverseWithPath(
+        curr: Int,
+        height: Int,
+        path: List<BinaryNodeChildType>,
+        visit: ComposableNodeVisitor
+    ) {
+        if (curr > elements.lastIndex)
             return
-
-        visit(NodeComposableData(path, values[curr], height))
-
+        visit(NodeComposableData(path, elements[curr], height))
         traverseWithPath(
             curr = leftChildIndex(curr),
             height = height - 1,
             clonePathWithInsert(path, BinaryNodeChildType.LEFT),
             visit
         )
-
         traverseWithPath(
             curr = rightChildIndex(curr),
             height = height - 1,
             clonePathWithInsert(path, BinaryNodeChildType.LEFT),
             visit
         )
-
     }
 
     private fun clonePathWithInsert(
@@ -105,22 +127,31 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
     }
 
     override fun asBalancedTree(): BinaryNodeTree {
-        TODO("Not yet implemented")
+        return BinaryNodeTree()
+        // TODO
     }
 
     fun asUnbalancedTree(): BinaryNodeTree {
-        TODO()
+        return BinaryNodeTree()
+        // TODO
     }
 
     override fun heapify(isMin: Boolean): HeapTree {
-        TODO("Not yet implemented")
+        this.isMin = isMin
+
+        if (elements.isNotEmpty()) {
+            (size / 2 downTo 0).forEach {
+                siftDown(it)
+            }
+        }
+        return this
     }
 
     // Accepts indices
     private fun swap(i: Int, j: Int) {
-        val tmp = values[i]
-        values[i] = values[j]
-        values[j] = tmp
+        val tmp = elements[i]
+        elements[i] = elements[j]
+        elements[j] = tmp
     }
 
 
@@ -129,7 +160,7 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
 
     private fun getMaxHeight(): Int {
         var height = 0
-        var curr = values.lastIndex
+        var curr = elements.lastIndex
         while (curr != 0) {
             height++
             curr = parentIndex(curr)
