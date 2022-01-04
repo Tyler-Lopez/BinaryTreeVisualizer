@@ -228,8 +228,11 @@ class BinaryNodeTree(var isAVL: Boolean = false) : BinaryTree() {
     }
 
     override fun heapify(isMin: Boolean): HeapTree {
-        return HeapTree()
-        // TODO
+        val toReturn = HeapTree(isMin)
+        root?.traverseInOrder {
+            toReturn.insert(it.value)
+        }
+        return toReturn
     }
 
 }

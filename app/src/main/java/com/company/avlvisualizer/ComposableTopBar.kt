@@ -97,7 +97,7 @@ fun ComposableTopBar(
                         Text(
                             text = "Random",
                             color = LightGrey,
-                            fontSize = 23.sp,
+                            fontSize = 20.sp,
                         )
                         Row(
                             modifier = Modifier
@@ -111,7 +111,7 @@ fun ComposableTopBar(
                                 text = "1",
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.Normal,
-                                fontSize = 25.sp,
+                                fontSize = 23.sp,
                                 color = LightBlue,
                                 fontFamily = roboto,
                                 modifier = Modifier
@@ -131,7 +131,7 @@ fun ComposableTopBar(
                                 text = "10",
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.Normal,
-                                fontSize = 25.sp,
+                                fontSize = 23.sp,
                                 color = LightBlue,
                                 fontFamily = roboto,
                                 modifier = Modifier

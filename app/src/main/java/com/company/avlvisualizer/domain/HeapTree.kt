@@ -109,9 +109,19 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
         traverseWithPath(
             curr = rightChildIndex(curr),
             height = height - 1,
-            clonePathWithInsert(path, BinaryNodeChildType.LEFT),
+            clonePathWithInsert(path, BinaryNodeChildType.RIGHT),
             visit
         )
+    }
+    private fun traverse(
+        curr: Int,
+        visit: (Int) -> Unit
+    ) {
+        if (curr > elements.lastIndex)
+            return
+        visit(elements[curr])
+        traverse(curr = leftChildIndex(curr), visit = visit)
+        traverse(curr = rightChildIndex(curr), visit = visit)
     }
 
     private fun clonePathWithInsert(
@@ -127,13 +137,17 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
     }
 
     override fun asBalancedTree(): BinaryNodeTree {
-        return BinaryNodeTree()
-        // TODO
+        val toReturn = BinaryNodeTree(isAVL = true)
+        for (element in elements) toReturn.insert(element)
+        return toReturn
     }
 
     fun asUnbalancedTree(): BinaryNodeTree {
-        return BinaryNodeTree()
-        // TODO
+        val toReturn = BinaryNodeTree(isAVL = false)
+        traverse(0) {
+            toReturn.insert(it)
+        }
+        return toReturn
     }
 
     override fun heapify(isMin: Boolean): HeapTree {
@@ -156,7 +170,7 @@ class HeapTree(var isMin: Boolean = false) : BinaryTree() {
 
 
     // Accepts values
-    private fun compare(i: Int, j: Int): Int = if (isMin) i - j else j - i
+    private fun compare(i: Int, j: Int): Int = if (isMin) j - i else i - j
 
     private fun getMaxHeight(): Int {
         var height = 0

@@ -76,14 +76,6 @@ data class ComposableTreeTheme(
                     Color(251, 62, 173),
                     Color(11, 143, 154)
                 ),
-                // HEART
-                ComposableTreeTheme(
-                    Color(221, 36, 144),
-                    Color(251, 62, 173),
-                    Color(11, 143, 154)
-                ) {
-
-                },
             )
         }
     }
