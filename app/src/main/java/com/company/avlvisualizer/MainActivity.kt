@@ -62,6 +62,10 @@ class MainActivity : ComponentActivity() {
                 var selectedIndex by remember {
                     mutableStateOf(-1)
                 }
+                // NOT IDEAL... FIGURE OUT WHY NOT RECOMPOSING!
+                var drawPicture by remember {
+                    mutableStateOf(false)
+                }
 
                 // Passed into composable which draws the tree
                 var nodeComposableDataList by remember {
@@ -130,6 +134,7 @@ class MainActivity : ComponentActivity() {
                             },
                             onThemeChange = {
                                 treeStyle.theme = it
+                                drawPicture = treeStyle.theme.imageId != -1
                             },
                             onRandomNumber = {
                                 if (tree.size > 513) {
@@ -222,6 +227,7 @@ class MainActivity : ComponentActivity() {
                             ComposableTree(
                                 data = nodeComposableDataList,
                                 style = treeStyle,
+                                drawPicture = drawPicture, // NOT IDEAL... FIGURE OUT WHY NOT RECOMPOSING!
                                 onNodeSelect = {
                                     if (it != null) vibrate(vibrator, selectMp)
                                     selectedIndex = it ?: -1

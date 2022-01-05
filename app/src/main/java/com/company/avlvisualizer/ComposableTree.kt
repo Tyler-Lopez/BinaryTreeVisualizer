@@ -35,10 +35,12 @@ import kotlinx.coroutines.delay
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ComposableTree(
     data: List<NodeComposableData>,
     modifier: Modifier = Modifier,
+    drawPicture: Boolean = false,
     style: ComposableTreeStyle = ComposableTreeStyle(), // Dependency Injection
     onNodeSelect: (Int?) -> Unit, // When a node is selected, return String to caller
 ) {
@@ -53,15 +55,10 @@ fun ComposableTree(
         mutableStateOf(-1)
     }
 
-    var imageId = style.theme.imageId
-    val image: ImageBitmap? = if (imageId != -1) ImageBitmap.imageResource(id = imageId) else null
-    var selImage: ImageBitmap? = if (imageId != -1) ImageBitmap.imageResource(id = style.theme.selectedImageId) else null
-    println("HERE ${style.theme.imageId}")
-    val context = LocalContext.current
-
-    // https://developer.android.com/jetpack/compose/side-effects
-
-
+    val image = if (style.theme.imageId != -1)
+        ImageBitmap.imageResource(id = style.theme.imageId) else null
+    val selImage = if (style.theme.selectedImageId != -1)
+        ImageBitmap.imageResource(id = style.theme.selectedImageId) else null
 
     // List of pairs
     // .first = the position of the node
@@ -210,26 +207,25 @@ fun ComposableTree(
                 if (isSelected) selectedFound = true
                 // Draw Node and border if selected
                 // println(style.theme.imageId)
-                if (style.theme.imageId == -1) {
+                if (drawPicture && image != null && selImage != null) {
+                    drawImage(
+                        image = if (isSelected) selImage else image,
+                        dstOffset = IntOffset(
+                            centerPos.x.toInt() - (2 * nodeSize).toInt(),
+                            centerPos.y.toInt() - (2 * nodeSize).toInt()
+                        ),
+                        dstSize = IntSize(
+                            (4 * nodeSize).toInt(), (4 * nodeSize).toInt()
+                        ),
+                    )
+                } else {
                     drawCircle(
                         center = centerPos,
                         color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
                         radius = if (isSelected) nodeSize * 1.3f else nodeSize
                     )
-                } else {
-                  if (image != null)
-                        drawImage(
-                            image = image!!,
-                            dstOffset = IntOffset(
-                                centerPos.x.toInt() - (2 * nodeSize).toInt(),
-                                centerPos.y.toInt() - (2 * nodeSize).toInt()
-                            ),
-                            dstSize = IntSize(
-                                (4 * nodeSize).toInt(), (4 * nodeSize).toInt()
-                            ),
-                      )
+                }
 
-             }
 
                 // Draw Text
                 val paint = Paint()
@@ -253,27 +249,3 @@ fun ComposableTree(
         }
     }
 }
-
-// https://www.youtube.com/watch?v=ktOWiLx83bQ
-@SuppressLint("UnrememberedMutableState")
-fun loadImage(
-    context: Context,
-    id: Int
-): MutableState<Bitmap?> {
-    val bitmapState: MutableState<Bitmap?> = mutableStateOf(null)
-    // "btw the Glide logic should be wrapped by LaunchedEffect(picUri) to avoid duplicated calls when re-compositing"
-    Glide.with(context)
-        .asBitmap()
-        .load(id)
-        .into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                bitmapState.value = resource
-            }
-
-            override fun onLoadCleared(placeholder: Drawable?) {
-            }
-        })
-
-    return bitmapState
-}
-
