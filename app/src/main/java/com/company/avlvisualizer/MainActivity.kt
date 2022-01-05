@@ -15,7 +15,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import com.company.avlvisualizer.domain.*
@@ -181,7 +183,8 @@ class MainActivity : ComponentActivity() {
                                 onReset = {
                                     selectedIndex = -1
                                     vibrate(vibrator, selectMp)
-                                    tree = BinaryNodeTree()
+                                    val special = (balanceType == BinaryTreeBalanceType.AVL_TREE || balanceType == BinaryTreeBalanceType.MIN_HEAP)
+                                    tree = if (tree is BinaryNodeTree) BinaryNodeTree(special) else HeapTree(special)
                                     val tmpTheme = treeStyle.theme
                                     treeStyle = ComposableTreeStyle()
                                     treeStyle.theme = tmpTheme

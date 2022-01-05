@@ -35,7 +35,9 @@ data class ComposableTreeTheme(
     val lineColor: Color,
     val selectedNodeColor: Color,
     // Used to make a more complicated Thumbnail with Canvas if desired
-    val imageId: Int? = null
+    val imageId: Int = -1,
+    val selectedImageId: Int = -1
+
 ) : Dropdownable {
     @Composable
     override fun Thumbnail() {
@@ -50,27 +52,23 @@ data class ComposableTreeTheme(
                 color = theme.lineColor,
                 modifier = Modifier
                     .width(25.dp)
-                    .height(15.dp)
+                    .height(25.dp)
                     .background(theme.lineColor)
             )
-            if (imageId != null) {
+            if (imageId != -1) {
                 val image = ImageBitmap.imageResource(id = imageId)
                 val aspectRatio = (image.width.toFloat()) / image.height
 
                 Canvas(
                     modifier = Modifier
                         .width(25.dp)
-                        .height(15.dp),
+                        .height(25.dp),
                 ) {
                     drawImage(
                         image = image,
-                        dstOffset = IntOffset(
-                            x = ((15.dp.toPx() * aspectRatio) / 3.0).toInt(),
-                            y = 0
-                        ),
                         dstSize = IntSize(
-                            width = (15.dp.toPx() * aspectRatio).toInt(),
-                            height = (15.dp.toPx() * aspectRatio).toInt()
+                            width = (25.dp.toPx() * aspectRatio).toInt(),
+                            height = (25.dp.toPx() * aspectRatio).toInt()
                         )
                     )
                 }
@@ -109,18 +107,17 @@ data class ComposableTreeTheme(
                 ComposableTreeTheme(
                     Color(221, 36, 144),
                     Color(251, 62, 173),
-                    Color(11, 143, 154)
+                    Color(11, 143, 154),
                 ),
                 // HEART
-                /*
+
                 ComposableTreeTheme(
                     Grey,
                     DarkGrey,
                     Color(11, 143, 154),
-                    R.drawable.heart_icon
-                ),
-
-                 */
+                    R.drawable.peach,
+                    R.drawable.eggplant
+               ),
             )
         }
     }

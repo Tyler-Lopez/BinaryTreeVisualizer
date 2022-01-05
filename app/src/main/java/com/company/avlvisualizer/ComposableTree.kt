@@ -1,6 +1,11 @@
 package com.company.avlvisualizer
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Paint
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -11,15 +16,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.setBlendMode
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.company.avlvisualizer.domain.ComposableTreeStyle
 import com.company.avlvisualizer.domain.BinaryNodeChildType
 import com.company.avlvisualizer.domain.NodeComposableData
+import kotlinx.coroutines.delay
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -41,6 +53,16 @@ fun ComposableTree(
         mutableStateOf(-1)
     }
 
+    var imageId = style.theme.imageId
+    val image: ImageBitmap? = if (imageId != -1) ImageBitmap.imageResource(id = imageId) else null
+    var selImage: ImageBitmap? = if (imageId != -1) ImageBitmap.imageResource(id = style.theme.selectedImageId) else null
+    println("HERE ${style.theme.imageId}")
+    val context = LocalContext.current
+
+    // https://developer.android.com/jetpack/compose/side-effects
+
+
+
     // List of pairs
     // .first = the position of the node
     // .second = the node information such as height, path, & value
@@ -48,7 +70,6 @@ fun ComposableTree(
     val nodePosInfo by remember {
         mutableStateOf(mutableStateListOf<Pair<Offset, NodeComposableData>>())
     }
-
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         var center by remember {
@@ -188,17 +209,35 @@ fun ComposableTree(
                 val isSelected = node.value == selectedValue
                 if (isSelected) selectedFound = true
                 // Draw Node and border if selected
-                drawCircle(
-                    center = centerPos,
-                    color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
-                    radius = if (isSelected) nodeSize * 1.3f else nodeSize
-                )
+                // println(style.theme.imageId)
+                if (style.theme.imageId == -1) {
+                    drawCircle(
+                        center = centerPos,
+                        color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
+                        radius = if (isSelected) nodeSize * 1.3f else nodeSize
+                    )
+                } else {
+                  if (image != null)
+                        drawImage(
+                            image = image!!,
+                            dstOffset = IntOffset(
+                                centerPos.x.toInt() - (2 * nodeSize).toInt(),
+                                centerPos.y.toInt() - (2 * nodeSize).toInt()
+                            ),
+                            dstSize = IntSize(
+                                (4 * nodeSize).toInt(), (4 * nodeSize).toInt()
+                            ),
+                      )
+
+             }
 
                 // Draw Text
                 val paint = Paint()
                 paint.textAlign = Paint.Align.CENTER
                 paint.textSize = if (isSelected) nodeSize * 1.2f else nodeSize
-                paint.color = 0xffffffff.toInt()
+                paint.color =
+                    if (style.theme.imageId != -1) 0xffffffff.toInt() else 0xff000000.toInt()
+                paint.typeface = Typeface.create("Arial", Typeface.BOLD);
 
                 drawIntoCanvas {
                     it.nativeCanvas.drawText(
@@ -215,5 +254,26 @@ fun ComposableTree(
     }
 }
 
+// https://www.youtube.com/watch?v=ktOWiLx83bQ
+@SuppressLint("UnrememberedMutableState")
+fun loadImage(
+    context: Context,
+    id: Int
+): MutableState<Bitmap?> {
+    val bitmapState: MutableState<Bitmap?> = mutableStateOf(null)
+    // "btw the Glide logic should be wrapped by LaunchedEffect(picUri) to avoid duplicated calls when re-compositing"
+    Glide.with(context)
+        .asBitmap()
+        .load(id)
+        .into(object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                bitmapState.value = resource
+            }
 
+            override fun onLoadCleared(placeholder: Drawable?) {
+            }
+        })
+
+    return bitmapState
+}
 
