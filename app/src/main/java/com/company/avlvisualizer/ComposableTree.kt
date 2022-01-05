@@ -219,6 +219,13 @@ fun ComposableTree(
                         ),
                     )
                 } else {
+                    if (isSelected) {
+                        drawCircle(
+                            center = centerPos,
+                            color = style.theme.lineColor,
+                            radius = nodeSize * 1.7f
+                        )
+                    }
                     drawCircle(
                         center = centerPos,
                         color = if (isSelected) style.theme.selectedNodeColor else style.theme.nodeColor,
