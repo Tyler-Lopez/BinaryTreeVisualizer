@@ -113,7 +113,7 @@ data class ComposableTreeTheme(
 
                 ComposableTreeTheme(
                     Grey,
-                    DarkGrey,
+                    Color(22, 77, 16),
                     Color(11, 143, 154),
                     R.drawable.peach,
                     R.drawable.eggplant

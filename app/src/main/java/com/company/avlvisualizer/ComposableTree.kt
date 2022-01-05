@@ -1,11 +1,8 @@
 package com.company.avlvisualizer
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -16,22 +13,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.setBlendMode
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.company.avlvisualizer.domain.ComposableTreeStyle
 import com.company.avlvisualizer.domain.BinaryNodeChildType
 import com.company.avlvisualizer.domain.NodeComposableData
-import kotlinx.coroutines.delay
+import com.company.avlvisualizer.ui.theme.DarkGrey
+import com.company.avlvisualizer.ui.theme.LightGrey
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -211,11 +206,16 @@ fun ComposableTree(
                     drawImage(
                         image = if (isSelected) selImage else image,
                         dstOffset = IntOffset(
-                            centerPos.x.toInt() - (2 * nodeSize).toInt(),
-                            centerPos.y.toInt() - (2 * nodeSize).toInt()
+                            x = centerPos.x.toInt() - (2 * nodeSize).toInt()
+                                    - if (isSelected) (2 * nodeSize).toInt() else 0,
+                            y = centerPos.y.toInt() - (2 * nodeSize).toInt()
+                                    - if (isSelected) (2 * nodeSize).toInt() else 0
                         ),
                         dstSize = IntSize(
-                            (4 * nodeSize).toInt(), (4 * nodeSize).toInt()
+                            width = (4 * nodeSize).toInt()
+                                    * if (isSelected) 2 else 1,
+                            height = (4 * nodeSize).toInt()
+                                    * if (isSelected) 2 else 1
                         ),
                     )
                 } else {
@@ -227,23 +227,41 @@ fun ComposableTree(
                 }
 
 
-                // Draw Text
-                val paint = Paint()
-                paint.textAlign = Paint.Align.CENTER
-                paint.textSize = if (isSelected) nodeSize * 1.2f else nodeSize
-                paint.color =
-                    if (style.theme.imageId != -1) 0xffffffff.toInt() else 0xff000000.toInt()
-                paint.typeface = Typeface.create("Arial", Typeface.BOLD);
+
 
                 drawIntoCanvas {
+
+                    // Draw Text
+                    val stroke = Paint()
+                    stroke.textAlign = Paint.Align.CENTER
+                    stroke.textSize = if (isSelected) nodeSize * 1.4f else nodeSize * 1.15f
+                    stroke.style = Paint.Style.STROKE
+                    stroke.strokeJoin = Paint.Join.ROUND;
+                    stroke.strokeMiter = 10.0f;
+                    stroke.strokeWidth = 12f; // about 12
+                    stroke.color = DarkGrey.toArgb()
+                    stroke.typeface = Typeface.create("Arial", Typeface.BOLD)
+
+                    val fill = Paint()
+                    fill.textAlign = Paint.Align.CENTER
+                    fill.textSize = if (isSelected) nodeSize * 1.4f else nodeSize * 1.15f
+                    fill.color = 0xffffffff.toInt()
+                    fill.typeface = Typeface.create("Arial", Typeface.BOLD)
+
+
                     it.nativeCanvas.drawText(
                         "${node.value}",
                         centerPos.x,
                         centerPos.y + (nodeSize / 2.5f),
-                        paint
+                        stroke
+                    )
+                    it.nativeCanvas.drawText(
+                        "${node.value}",
+                        centerPos.x,
+                        centerPos.y + (nodeSize / 2.5f),
+                        fill
                     )
                 }
-
             }
             if (!selectedFound) selectedValue = -1
         }
