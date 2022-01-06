@@ -6,7 +6,7 @@
 ## About
 An Android application which allows the user to construct, insert into, remove from, and visualize a binary tree data structure which contains integer values from 0-999. Balancing of type AVL or Heap may be toggled. Upon change of balance type, the tree is retroactively balanced as necessary. More unique to this app, the user-interface experience is intended to be very strong, featuring zoom-in, zoom-out, pan, and tap-selection.
 
-https://play.google.com/store/apps/details?id=com.company.avlvisualizer
+<a href='https://play.google.com/store/apps/details?id=com.company.avlvisualizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img height="75"  alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 ## Features
 * Balancing of tree may be toggled
