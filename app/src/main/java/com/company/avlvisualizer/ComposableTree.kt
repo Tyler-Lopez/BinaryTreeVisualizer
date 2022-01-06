@@ -234,7 +234,12 @@ fun ComposableTree(
                 }
 
 
-
+                val path = android.graphics.Path().apply {
+                    val x = centerPos.x - nodeSize * 4
+                    val y = centerPos.y + (nodeSize * .4f)
+                    moveTo(x, y)
+                    quadTo(4 * nodeSize + x, -(nodeSize * 2) + y, 8 * nodeSize + x, 0f + y)
+                }
 
                 drawIntoCanvas {
 
@@ -254,8 +259,11 @@ fun ComposableTree(
                     fill.textSize = if (isSelected) nodeSize * 1.4f else nodeSize * 1.15f
                     fill.color = 0xffffffff.toInt()
                     fill.typeface = Typeface.create("Arial", Typeface.BOLD)
+             //       fill.letterSpacing = 1f * nodeSize
 
-
+                    it.nativeCanvas.drawTextOnPath("${node.value}", path, 0f, nodeSize, stroke)
+                    it.nativeCanvas.drawTextOnPath("${node.value}", path, 0f, nodeSize, fill)
+                    /*
                     it.nativeCanvas.drawText(
                         "${node.value}",
                         centerPos.x,
@@ -268,6 +276,8 @@ fun ComposableTree(
                         centerPos.y + (nodeSize / 2.5f),
                         fill
                     )
+
+                     */
                 }
             }
             if (!selectedFound) selectedValue = -1
