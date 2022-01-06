@@ -6,7 +6,7 @@
 ## About
 An Android application which allows the user to construct, insert into, remove from, and visualize a binary tree data structure which contains integer values from 0-999. Balancing of type AVL or Heap may be toggled. Upon change of balance type, the tree is retroactively balanced as necessary. More unique to this app, the user-interface experience is intended to be very strong, featuring zoom-in, zoom-out, pan, and tap-selection.
 
-Pending Play Store Publish.
+https://play.google.com/store/apps/details?id=com.company.avlvisualizer
 
 ## Features
 * Balancing of tree may be toggled
@@ -17,9 +17,16 @@ Pending Play Store Publish.
 * Extremely large trees up to 513 elements may be visualized
 
 ## UI Examples
+<img width="250px" src="https://user-images.githubusercontent.com/77797048/148308956-6694a2c2-4935-4789-b8c4-ca9d8f9fc45d.png"> <img width="250px" src="https://user-images.githubusercontent.com/77797048/148308965-c0f4c016-4edd-41bd-ac5f-031d7579b3e3.png"> <img width="250px" src="https://user-images.githubusercontent.com/77797048/148308978-758e24c7-301e-4768-bc1b-1491db8ff9f8.png"> <img width="250px" src="https://user-images.githubusercontent.com/77797048/148308998-c9c0c530-e815-4178-8d88-dc4dae1c6b5b.png"> <img width="250px" src="https://user-images.githubusercontent.com/77797048/148309017-5aa754b5-3407-46ce-a983-548524573d11.png"> 
+<img width="500px" src="https://user-images.githubusercontent.com/77797048/148309028-1b0db4ef-34f5-448d-9fb8-178582af492f.png"> 
+<img width="500px" src="https://user-images.githubusercontent.com/77797048/148309041-8dd3394e-f38a-4ec1-bfe9-07e610d963a1.png"> 
+<img width="350px" src="https://user-images.githubusercontent.com/77797048/148308465-a12b821a-21d2-4aed-b572-363ed82d8fd8.png">
+<img width="350px" src="https://user-images.githubusercontent.com/77797048/148308471-0670bc1d-0655-4b5e-bd93-82f8b27433d1.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/148308480-2152080b-c2d2-496d-ab18-498764f09c36.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/148308490-15c283f9-0979-47ac-a726-adb7a5322f57.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/148308497-b6c26826-55f1-4089-ba6d-da49d9106bbc.png"> <img width="700px" src="https://user-images.githubusercontent.com/77797048/148308505-da4d23be-5862-4589-941b-3b9222042b3b.png"> <img width="700px" src="https://user-images.githubusercontent.com/77797048/148308512-f73ed2b9-86ae-4227-97be-e3c3a65b5415.png">
 
-<img width="250px" src="https://user-images.githubusercontent.com/77797048/147843801-79897d7f-9d36-4fae-8870-c69f08154c47.png">  <img width="250px" src="https://user-images.githubusercontent.com/77797048/147843802-cdad7be0-7260-48f5-9dc9-e89b0540b5d9.png">  <img width="250px" src="https://user-images.githubusercontent.com/77797048/147843803-bc33876d-4591-4436-9e51-c4cc888e18f7.png">  <img width="250px" src="https://user-images.githubusercontent.com/77797048/147843809-6f8e544e-aeb2-4ab7-a743-318414c6cc52.png">  <img width="250px" src="https://user-images.githubusercontent.com/77797048/147843813-de043175-f93b-41cf-9cb2-3e02f4a86f62.png"> 
 
-<img width="350px" src="https://user-images.githubusercontent.com/77797048/147843781-4cbeb696-0d96-4a26-90a4-d9d1d4aa4b3b.png">  <img width="350px" src="https://user-images.githubusercontent.com/77797048/147843783-a3deff61-53a7-4911-8e46-de873ea9ba90.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/147843788-ee2b2e96-8fcd-43d7-9678-0d5538271721.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/147843791-9b455b62-e10f-4cbe-8cc6-a44210759dd9.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/147843792-15210b3f-65a2-4e2a-a36b-9c1b6cd7e012.png"> <img width="350px" src="https://user-images.githubusercontent.com/77797048/147843796-0caf6194-f53c-4d08-8884-7c08f065c3a9.png">
+
+
+
+
 
 
